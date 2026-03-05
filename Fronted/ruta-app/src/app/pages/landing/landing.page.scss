@@ -1,0 +1,41 @@
+.logo {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  top: 15%;
+}
+
+.hero {
+  height: 300px;
+  background-image: url("/assets/map-background.jpg");
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-text {
+  background: rgba(0,0,0,0.5);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.description {
+  padding: 40px;
+  text-align: center;
+}
+
+.aside {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
