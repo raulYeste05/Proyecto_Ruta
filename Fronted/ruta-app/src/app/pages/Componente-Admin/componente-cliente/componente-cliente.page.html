@@ -1,0 +1,32 @@
+<div class="tabla-clientes">
+
+  <!-- CABECERA -->
+  <div class="fila tabla-cabecera">
+    <div>Email</div>
+    <div>Nombre</div>
+    <div>Apellido1</div>
+    <div>Apellido2</div>
+    <div>Teléfono</div>
+    <div>Provincia</div>
+    <div>Localidad</div>
+    <div>Acciones</div>
+  </div>
+
+  <!-- FILAS -->
+  <div class="fila tabla-fila" *ngFor="let c of clientes">
+    <div>{{ c.email }}</div>
+    <div>{{ c.nombre }}</div>
+    <div>{{ c.apellido1 }}</div>
+    <div>{{ c.apellido2 }}</div>
+    <div>{{ c.telefono }}</div>
+    <div>{{ c.provincia }}</div>
+    <div>{{ c.localidad }}</div>
+
+    <div>
+      <ion-button size="small" (click)="nuevocliente()">Nuevo</ion-button>
+      <ion-button size="small" color="warning" (click)="editarcliente(c.idCliente)">Editar</ion-button>
+      <ion-button size="small" color="danger" (click)="eliminarcliente(c.idCliente)">Eliminar</ion-button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,139 @@
+/* ========================= */
+/* CONTENEDOR GENERAL */
+/* ========================= */
+.contenedor-registro {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+/* ========================= */
+/* TARJETA */
+/* ========================= */
+.tarjeta-registro {
+  width: 100%;
+  max-width: 420px;
+  background: #1e1e2f;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* ========================= */
+/* TEXTOS */
+/* ========================= */
+h1 {
+  color: white;
+  margin-bottom: 5px;
+}
+
+.subtitulo {
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+/* ========================= */
+/* GRUPOS */
+/* ========================= */
+.grupo {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* ========================= */
+/* INPUTS */
+/* ========================= */
+.input-item {
+  --background: #2a2a40;
+  --color: white;
+  border-radius: 10px;
+  width: 100%;
+  padding: 5px 10px;
+}
+
+ion-input {
+  color: white;
+}
+
+/* ========================= */
+/* SELECT */
+/* ========================= */
+ion-select {
+  width: 100%;
+  color: white;
+}
+
+ion-select::part(text) {
+  color: white;
+}
+
+/* ========================= */
+/* ERRORES */
+/* ========================= */
+ion-note {
+  display: block;
+  color: #ff4d4d;
+  font-size: 13px;
+  margin-top: 5px;
+  text-align: left;
+}
+
+/* ========================= */
+/* BOTÓN */
+/* ========================= */
+.boton-registrar {
+  --background: #00d4ff;
+  --color: black;
+  margin-top: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.boton-registrar:hover {
+  --background: #00aacc;
+}
+
+/* ========================= */
+/* ACTION SHEET (SELECT) */
+/* ========================= */
+
+ion-action-sheet {
+  --background: #1e1e2f;
+  --color: white;
+}
+
+/* 🔥 CLAVE: grupo con scroll */
+ion-action-sheet .action-sheet-group {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* BOTONES */
+ion-action-sheet .action-sheet-button {
+  color: white !important;
+  font-size: 14px;
+  text-align: left;
+  white-space: normal;
+  padding: 12px 16px; /* 🔥 mejora visual */
+}
+
+/* CANCEL */
+ion-action-sheet .action-sheet-cancel {
+  color: #ff4d4d !important;
+  font-weight: bold;
+}
+
+/* ========================= */
+/* FIX OVERFLOW */
+/* ========================= */
+ion-content {
+  --overflow: auto;
+}
+
+html, body {
+  overflow: auto;
+}

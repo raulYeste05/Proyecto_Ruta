@@ -1,0 +1,27 @@
+# Node
+node_modules/
+Fronted/node_modules/
+
+# Angular build
+Fronted/ruta-app/dist/
+Fronted/ruta-app/.angular/
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven / Java
+Backend/target/
+
+# Docker / Datos locales
+mysql_data/
+
+# Entornos
+.env

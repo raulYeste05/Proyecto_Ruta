@@ -1,0 +1,20 @@
+.fila {
+  display: grid;
+  grid-template-columns: 
+    2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+/* CABECERA */
+.tabla-clientes .tabla-cabecera {
+  background: #eef0f3;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* FILAS */
+.tabla-clientes .tabla-fila {
+  border-top: 1px solid #eef2f7;
+  color: #1e293b;
+}

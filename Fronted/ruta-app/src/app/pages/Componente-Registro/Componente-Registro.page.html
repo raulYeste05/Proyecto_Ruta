@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="contenedor-registro">
+
+    <div class="tarjeta-registro">
+
+      <h1>Crear cuenta</h1>
+      <p class="subtitulo">Accede a todas las funcionalidades</p>
+
+      <!-- FORMULARIO -->
+      <form [formGroup]="registroUsuario" (ngSubmit)="guardar()" autocomplete="off">
+        
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="registroUsuario.get('email')?.touched && registroUsuario.get('email')?.errors">
+            <span *ngIf="registroUsuario.get('email')?.hasError('required')">El email es obligatorio</span>
+            <span *ngIf="registroUsuario.get('email')?.hasError('emailInvalido')">Formato incorrecto</span>
+            <span *ngIf="registroUsuario.get('email')?.hasError('emailDuplicado')">Este email ya está registrado</span>
+          </ion-note>
+        </div>
+
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-input type="password" placeholder="Contraseña" formControlName="password"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="registroUsuario.get('password')?.touched && registroUsuario.get('password')?.hasError('contraseñaInvalida')">
+            Mínimo 6 caracteres + una letra
+          </ion-note>
+        </div>
+
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-input type="text" placeholder="DNI" formControlName="dni"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="registroUsuario.get('dni')?.touched && registroUsuario.get('dni')?.errors">
+            <span *ngIf="registroUsuario.get('dni')?.hasError('dniInvalido')">DNI incorrecto</span>
+            <span *ngIf="registroUsuario.get('dni')?.hasError('dniDuplicado')">DNI ya registrado</span>
+          </ion-note>
+        </div>
+
+
+        <!-- NOMBRE -->
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-input type="text" placeholder="Nombre" formControlName="nombre"></ion-input>
+          </ion-item>
+
+          <ion-note color="danger" *ngIf="registroUsuario.get('nombre')?.touched && registroUsuario.get('nombre')?.hasError('soloTexto')">
+            Solo letras permitidas
+          </ion-note>
+        </div>
+
+        <!-- APELLIDOS -->
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-input type="text" placeholder="Primer apellido" formControlName="apellido1"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="registroUsuario.get('apellido1')?.touched && registroUsuario.get('apellido1')?.hasError('soloTexto')">
+            Solo letras permitidas
+          </ion-note>
+        </div>
+
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-input type="text" placeholder="Segundo apellido" formControlName="apellido2"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="registroUsuario.get('apellido2')?.touched && registroUsuario.get('apellido2')?.hasError('soloTexto')">
+            Solo letras permitidas
+          </ion-note>
+        </div>
+
+        <!-- TELÉFONO -->
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-input type="tel" placeholder="Teléfono" formControlName="telefono"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="registroUsuario.get('telefono')?.touched && registroUsuario.get('telefono')?.hasError('telefonoInvalido')">
+            Debe tener 9 dígitos
+          </ion-note>
+        </div>
+
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-label position="stacked" style="display: none;">Provincia</ion-label> 
+            <select formControlName="provincia" (change)="onProvinciaChangeNative($event)" class="select-nativo">
+              <option value="" disabled selected>Selecciona Provincia</option>
+              <option *ngFor="let p of provincias" [value]="p.CPRO">
+                {{ p.PRO || p.NOMBRE_PROVINCIA }}
+              </option>
+            </select>
+          </ion-item>
+        </div>
+
+        <div class="grupo">
+          <ion-item class="input-item" lines="none">
+            <ion-label position="stacked" style="display: none;">Localidad</ion-label>
+            <select formControlName="localidad" class="select-nativo">
+              <option value="" disabled selected>Selecciona Localidad</option>
+              <option *ngFor="let m of municipios" [value]="m.DMUN50">
+                {{ m.DMUN50 }}
+              </option>
+            </select>
+          </ion-item>
+        </div>
+
+        <!-- BOTÓN -->
+        <ion-button expand="block" class="boton-registrar"
+          type="submit" [disabled]="registroUsuario.invalid">
+          Crear cuenta
+        </ion-button>
+
+      </form>
+
+      <!-- LINK LOGIN -->
+      <ion-button routerLink="/login" fill="clear">
+        Ya tengo cuenta
+      </ion-button>
+
+    </div>
+
+  </div>
+
+</ion-content>

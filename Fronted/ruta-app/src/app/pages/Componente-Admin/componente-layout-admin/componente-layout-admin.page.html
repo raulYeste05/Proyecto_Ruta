@@ -1,0 +1,46 @@
+<div class="layout-admin">
+
+  <!-- BARRA LATERAL -->
+  <aside class="sidebar-admin">
+    <div class="sidebar-header">
+      <div class="logo-admin">RutaApp</div>
+      <h2>Administración</h2>
+    </div>
+
+    <nav class="menu-admin">
+      <a
+        routerLink="/componente-panel-admin/usuarios"
+        routerLinkActive="activo"
+        class="item-menu">
+        Usuarios
+      </a>
+
+      <a
+        routerLink="/componente-panel-admin/clientes"
+        routerLinkActive="activo"
+        class="item-menu">
+        👤 Clientes
+      </a>
+
+      <a
+        routerLink="/componente-panel-admin/rutas"
+        routerLinkActive="activo"
+        class="item-menu">
+        📍 Rutas
+      </a>
+
+      <a
+        routerLink="/componente-panel-admin/config"
+        routerLinkActive="activo"
+        class="item-menu">
+        ⚙️ Configuración
+      </a>
+    </nav>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="contenido-admin">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

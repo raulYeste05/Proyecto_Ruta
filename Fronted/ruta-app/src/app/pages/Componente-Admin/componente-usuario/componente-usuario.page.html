@@ -1,0 +1,29 @@
+<!-- Tabla de usuarios -->
+  <div class="bloque-admin">
+    <div class="bloque-header">
+      <h2>Usuarios</h2>
+    </div>
+
+    <div class="tabla-usuarios">
+
+      <div class="fila tabla-cabecera">
+        <div>Email</div>
+        <div>Rol</div>
+        <div>Acciones</div>
+      </div>
+
+      <div class="fila tabla-fila" *ngFor="let u of usuarios">
+        <div>{{ u.email }}</div>
+
+        <div>
+          <span class="rol" [ngClass]="u.rol.nombre.toLowerCase()">
+            {{ u.rol.nombre }}
+          </span>
+        </div>
+
+        <div>
+          <ion-button color="danger" size="small" (click)="eliminaruser(u.id_user)">
+            Eliminar
+          </ion-button>
+        </div>
+      </div>

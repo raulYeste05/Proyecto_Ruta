@@ -1,0 +1,97 @@
+/* CONTENEDOR GENERAL */
+.contenedor-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* BARRA NAVEGACIÓN */
+.barra-navegacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* IZQUIERDA */
+.nav-izquierda {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  height: 30px;
+}
+
+.marca {
+  font-weight: bold;
+  font-size: 18px;
+  color: white;
+}
+
+/* CENTRO (CLAVE PARA CENTRARLO DE VERDAD) */
+.nav-centro {
+  display: flex;
+  gap: 20px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-centro ion-button {
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-centro ion-button:hover {
+  color: #00d4ff;
+}
+
+/* DERECHA */
+.nav-derecha {
+  display: flex;
+}
+
+/* BOTÓN LOGIN */
+.boton-login {
+  --background: #00d4ff;
+  --color: black;
+  --border-radius: 8px;
+  font-weight: bold;
+}
+
+.boton-login:hover {
+  --background: #00aacc;
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
+  color: white;
+  padding: 60px;
+  border-radius: 20px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  opacity: 0.8;
+}
+
+/* DESCRIPCIÓN */
+.descripcion {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* VENTAJAS */
+.ventajas ion-card {
+  text-align: center;
+}

@@ -1,0 +1,93 @@
+.pagina-admin {
+  --background: #f1f3f6;
+}
+
+.cabecera-admin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: white;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.cabecera-admin h1 {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cabecera-admin p {
+  margin: 0;
+  color: #64748b;
+}
+
+.boton-sesion {
+  --background: #315d5b;
+  --color: white;
+  --border-radius: 8px;
+  font-weight: 600;
+}
+
+.bloque-admin {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.bloque-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.bloque-header h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.tabla-usuarios {
+  width: 100%;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 22px;
+}
+
+.tabla-cabecera {
+  background: #eef0f3;
+  font-weight: 700;
+  color: #334155;
+}
+
+.tabla-fila {
+  border-top: 1px solid #eef2f7;
+}
+
+.rol {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rol.admin {
+  background: #ff5a5f;
+  color: white;
+}
+
+.rol.cliente {
+  background: #22d3ee;
+  color: #0f172a;
+}

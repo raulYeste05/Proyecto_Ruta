@@ -1,0 +1,62 @@
+/* CONTENEDOR GENERAL */
+.contenedor-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* TARJETA */
+.tarjeta-login {
+  width: 100%;
+  max-width: 400px;
+  background: #1e1e2f;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* TEXTOS */
+h1 {
+  color: white;
+  margin-bottom: 5px;
+}
+
+.subtitulo {
+  color: #aaa;
+  margin-bottom: 25px;
+}
+
+/* INPUTS */
+.input-item {
+  margin-bottom: 15px;
+  border-radius: 10px;
+  --background: #2a2a40;
+  --color: white;
+  padding: 5px 10px;
+}
+
+/* BOTÓN */
+.boton-acceder {
+  --background: #00d4ff;
+  --color: black;
+  margin-top: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.boton-acceder:hover {
+  --background: #00aacc;
+}
+
+/* LINKS */
+.links {
+  margin-top: 15px;
+}
+
+.links ion-button {
+  font-size: 14px;
+  color: #ccc;
+}

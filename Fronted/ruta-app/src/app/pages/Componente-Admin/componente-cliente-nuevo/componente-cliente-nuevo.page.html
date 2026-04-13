@@ -1,0 +1,79 @@
+<ion-content class="pagina-admin">
+  <div class="bloque-admin">
+    <h2>Nuevo Cliente</h2>
+
+    <form [formGroup]="fg" class="formulario">
+      
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <input formControlName="email" type="email" placeholder="ejemplo@correo.com">
+        <ion-text color="danger" *ngIf="fg.get('email')?.touched && fg.get('email')?.hasError('emailInvalido')">
+          <p>Formato de email incorrecto</p>
+        </ion-text>
+
+        <ion-text color="danger" *ngIf="fg.get('email')?.touched && fg.get('email')?.hasError('emailDuplicado')">
+          <p>El email ya ya está registrado por otro usuario</p>
+        </ion-text>
+
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Contraseña</ion-label>
+        <input formControlName="password" type="password">
+        <ion-text color="danger" *ngIf="fg.get('password')?.touched && fg.get('password')?.hasError('contraseñaInvalida')">
+          <p>Mínimo 6 caracteres y una letra</p>
+        </ion-text>
+
+        
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">DNI</ion-label>
+        <input formControlName="dni" placeholder="12345678X">
+        <ion-text color="danger" *ngIf="fg.get('dni')?.touched && fg.get('dni')?.hasError('dniInvalido')">
+          <p>DNI no válido</p>
+        </ion-text>
+
+        <ion-text color="danger" *ngIf="fg.get('dni')?.touched && fg.get('dni')?.hasError('dniDuplicado')">
+          <p>El DNI ya está registrado por otro usuario</p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <input formControlName="nombre">
+        <ion-text color="danger" *ngIf="fg.get('nombre')?.touched && fg.get('nombre')?.hasError('soloTexto')">
+          <p>Solo se permiten letras</p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Teléfono</ion-label>
+        <input formControlName="telefono" placeholder="9 cifras">
+        <ion-text color="danger" *ngIf="fg.get('telefono')?.touched && fg.get('telefono')?.hasError('telefonoInvalido')">
+          <p>Deben ser 9 números</p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Provincia</ion-label>
+        <select formControlName="provincia" (change)="onProvinciaChange()">
+          <option value="" disabled>Selecciona provincia</option>
+          <option *ngFor="let p of provincias" [value]="p.CPRO">{{ p.PRO || p.NOMBRE_PROVINCIA }}</option>
+        </select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Localidad</ion-label>
+        <select formControlName="localidad">
+          <option value="" disabled>Selecciona localidad</option>
+          <option *ngFor="let l of localidades" [value]="l.DMUN50">{{ l.DMUN50 }}</option>
+        </select>
+      </ion-item>
+
+      <ion-button expand="block" (click)="guardar()" [disabled]="fg.invalid">
+        Crear Cliente y Usuario
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
