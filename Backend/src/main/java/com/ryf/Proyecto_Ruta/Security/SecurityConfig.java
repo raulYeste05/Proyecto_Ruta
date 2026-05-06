@@ -59,12 +59,18 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // 🔥 CLAVE
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
+                
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/clientes/**").hasAnyRole("ADMIN", "CLIENTE")
+                
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/api/geo/**").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/cliente/**").hasRole("CLIENTE")
+                .requestMatchers("/api/paradas/**").permitAll() 
+                .requestMatchers("/api/servicio_cercano/**").permitAll() // Prueba dejarlo en permitAll para testear
+                .requestMatchers("/api/comentarios/**").permitAll()
+            
                 .anyRequest().authenticated()
             );
 
@@ -75,10 +81,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of(
-            "http://localhost:4200",
-            "http://localhost:8100"
-        ));
+        config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

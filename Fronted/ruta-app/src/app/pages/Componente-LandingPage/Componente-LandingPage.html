@@ -1,89 +1,115 @@
-<ion-header>
-  <ion-toolbar>
-
+<ion-header class="ion-no-border">
+  <ion-toolbar class="nav-toolbar">
     <div class="contenedor-nav">
-
-      <!-- IZQUIERDA -->
       <div class="nav-izquierda">
-        <img src="assets/logo.png" class="logo">
+        <img src="assets/Logo-ruta.png" class="logo">
         <span class="marca">RutaApp</span>
       </div>
 
-      <!-- CENTRO -->
       <div class="nav-centro">
-        <ion-button fill="clear" routerLink="/landing">Inicio</ion-button>
-        <ion-button fill="clear" routerLink="/how-it-works">Cómo funciona</ion-button>
-        <ion-button fill="clear" routerLink="/contacto">Contacto</ion-button>
+        <ion-button fill="solid" class="btn-nav active">INICIO</ion-button>
+        <ion-button fill="solid" class="btn-nav">COMO FUNCIONA</ion-button>
+        <ion-button fill="solid" class="btn-nav">CONTACTO</ion-button>
       </div>
 
-      <!-- DERECHA -->
       <div class="nav-derecha">
-        <ion-button routerLink="/login" class="boton-login">
-          Login
-        </ion-button>
+        <ion-button variant="outline" class="btn-login" routerLink="/login">LOGIN</ion-button>
       </div>
-
     </div>
-
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="texto-hero">
-
-      <h1>Calcula la mejor ruta</h1>
-
-      <p>
-        Encuentra el camino más rápido entre dos puntos
-        con nuestra aplicación de rutas.
-      </p>
-
+<ion-content>
+  <!-- HERO SECTION CON DEGRADADO -->
+  <section class="hero-container">
+    <div class="hero-card">
+      <h1>Descubre Rutas Increíbles</h1>
+      <p>Explora miles de rutas de senderismo, ciclismo y aventura. Comparte tus experiencias y conecta con otros exploradores.</p>
+      
+      <div class="hero-buttons" routerLink="/login">
+        <ion-button class="btn-verde-oscuro">
+          <ion-icon slot="start" name="checkmark-circle-outline" ></ion-icon>
+          Crear Ruta
+        </ion-button>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- DESCRIPCIÓN -->
-  <div class="descripcion">
+  <!-- SECCIÓN DE BENEFICIOS -->
+  <section class="info-section">
+    <h2 class="titulo-pregunta">¿Por qué RutaExplorer?</h2>
 
-    <h2>¿Qué hace RutaApp?</h2>
+    <div class="cards-container">
+      <!-- Tarjeta 1 -->
+      <div class="benefit-card card-verde">
+        <div class="icon-box icon-v">
+          <ion-icon name="map-outline"></ion-icon>
+        </div>
+        <h3>Miles de Rutas</h3>
+        <p>Accede a una amplia colección de rutas verificadas y actualizadas por nuestra comunidad.</p>
+      </div>
 
-    <p>
-      RutaApp permite calcular rutas entre diferentes ubicaciones,
-      visualizar el recorrido en un mapa interactivo y conocer
-      la distancia y tiempo estimado del trayecto.
-    </p>
+      <!-- Tarjeta 2 -->
+      <div class="benefit-card card-azul">
+        <div class="icon-box icon-a">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <h3>Comunidad Activa</h3>
+        <p>Conecta con miles de exploradores, comparte experiencias y descubre nuevos lugares.</p>
+      </div>
 
-  </div>
+      <!-- Tarjeta 3 -->
+      <div class="benefit-card card-verde-claro">
+        <div class="icon-box icon-v-claro">
+          <ion-icon name="mountain-outline"></ion-icon>
+        </div>
+        <h3>Aventura Garantizada</h3>
+        <p>Desde rutas urbanas hasta montañas desafiantes, encuentra la aventura perfecta para ti.</p>
+      </div>
+    </div>
+  </section>
 
-  <!-- VENTAJAS -->
-  <div class="ventajas">
+  <!-- FOOTER OSCURO -->
+  <footer class="footer-dark">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="logo-placeholder">
+          <img src="assets/Logo-ruta.png" class="logo">
+        </div>
+        <p>La plataforma líder para descubrir y compartir rutas de aventura.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Soporte</h4>
+        <a href="#">Privacidad</a>
+      </div>
+    </div>
+  </footer>
 
-    <ion-card>
+  <!-- Boton de accesibilidad -->
+   <!-- ===== BOTÓN FLOTANTE ===== -->
+<div id="accesibilidad-btn" (click)="toggleAccesibilidad()" title="Opciones de accesibilidad">
+  <ion-icon name="accessibility-outline"></ion-icon>
+</div>
 
-      <ion-card-header>
-        <ion-card-title>Ventajas</ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-
-        ✔ Cálculo de rutas rápido <br>
-        ✔ Visualización en mapa <br>
-        ✔ Compatible con móvil y ordenador  
-
-      </ion-card-content>
-
-    </ion-card>
-
-  </div>
-
+<!-- ===== PANEL DE OPCIONES ===== -->
+<div id="accesibilidad-panel" [class.visible]="panelAbierto">
+  <h3>Accesibilidad</h3>
+  
+  <button (click)="aumentarTexto()">
+    <ion-icon name="add-circle-outline"></ion-icon> Aumentar texto
+  </button>
+  
+  <button (click)="disminuirTexto()">
+    <ion-icon name="remove-circle-outline"></ion-icon> Disminuir texto
+  </button>
+  
+  
+  <button (click)="leerContenido()">
+    <ion-icon name="volume-medium-outline"></ion-icon> Leer página
+  </button>
+  
+  <button (click)="resetAccesibilidad()" class="btn-reset">
+    <ion-icon name="refresh-outline"></ion-icon> Restablecer
+  </button>
+</div>
 </ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-    <ion-title size="small">
-      © 2026 RutaApp
-    </ion-title>
-  </ion-toolbar>
-</ion-footer>

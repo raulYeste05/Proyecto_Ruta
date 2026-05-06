@@ -1,9 +1,5 @@
 package com.ryf.Proyecto_Ruta.Controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ryf.Proyecto_Ruta.Services.ServicioCercanoService;
 
 import com.ryf.Proyecto_Ruta.DTO.ServicioCercanoResponseDTO;
@@ -44,6 +40,15 @@ public class ServicioCercanoController {
     @GetMapping("/{id}")
     public ResponseEntity<ServicioCercanoResponseDTO> obtener(@PathVariable Integer id) {
         return ResponseEntity.ok(servicioCercanoService.obtenerPorId(id));
+    }
+
+    // Nuevo endpoint para búsqueda por coordenadas (sin paradaId)
+    @GetMapping("/buscar")
+    public ResponseEntity<List<ServicioCercanoResponseDTO>> buscarPorCoordenadas(
+            @RequestParam Double lat, 
+            @RequestParam Double lng) {
+        
+        return ResponseEntity.ok(servicioCercanoService.buscarServiciosTemporales(lat, lng));
     }
 
     //Actualizar un servicio cercano

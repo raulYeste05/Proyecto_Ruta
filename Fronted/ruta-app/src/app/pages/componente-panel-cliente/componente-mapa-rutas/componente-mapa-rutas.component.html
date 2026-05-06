@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Planificador de Rutas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Boton blotante solo para el admin -->
+ <div style="position: relative; z-index: 9999;">
+    <ion-fab vertical="top" horizontal="start" slot="fixed" *ngIf="esAdmin" style="margin-top: 10px; margin-left: 10px;">
+      <ion-fab-button color="dark" (click)="volverAlPanelAdmin()" title="Volver a Gestión de Rutas">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
+
+  <div id="mapId"></div>
+
+    <div class="leyenda-servicios">
+      <div class="leyenda-item">
+        <span class="punto rojo"></span>
+        <ion-label>Gasolineras</ion-label>
+      </div>
+      <div class="leyenda-item">
+        <span class="punto azul"></span>
+        <ion-label>Restaurantes</ion-label>
+      </div>
+      <div class="leyenda-item">
+        <span class="punto verde"></span>
+        <ion-label>Áreas de Descanso</ion-label>
+      </div>
+  </div>
+
+  <ion-card class="resumen-ruta" *ngIf="distancia && duracion">
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="ion-align-items-center">
+          <ion-col size="8">
+            <div class="info-texto">
+              <ion-icon [name]="tipoTransporte === 'driving-car' ? 'car' : 'walk'"></ion-icon>
+              <strong> {{distancia}} | {{duracion}}</strong>
+            </div>
+          </ion-col>
+          <ion-col size="4" class="ion-text-right">
+            <ion-button fill="clear" color="danger" (click)="cancelarTramoActual()">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-button expand="block" color="success" (click)="confirmarTramoYContinuar()">
+              <ion-icon slot="start" name="flag-outline"></ion-icon>
+              Confirmar Parada
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="tramosConfirmados.length > 0">
+          <ion-col size="12">
+            <ion-button expand="block" color="tertiary" (click)="finalizarViaje()">
+              <ion-icon slot="start" name="checkmark-done-outline"></ion-icon>
+              Finalizar y Ver Resumen
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="grupo-selector">
+    <ion-item class="input-item" lines="none">
+      <ion-label>Modo de viaje</ion-label>
+      <select class="select-nativo" (change)="cambiarTransporte($event)" [value]="tipoTransporte">
+        <option value="driving-car">🚗 Coche</option>
+        <option value="foot-walking">🚶 Caminando</option>
+        <option value="cycling-regular">🚲 Bicicleta</option>
+      </select>
+    </ion-item>
+  </div>
+
+  <div class="botones-contenedor">
+    <ion-button expand="block" color="secondary" (click)="obtenerUbicacionActual()" [disabled]="cargandoUbicacion">
+      <ion-icon slot="start" name="locate-outline"></ion-icon>
+      {{ cargandoUbicacion ? 'Localizando...' : 'Mi ubicación actual' }}
+    </ion-button>
+
+    <ion-button expand="block" [color]="isModoLibre ? 'danger' : 'warning'" (click)="toggleModoLibre()">
+    <ion-icon slot="start" [name]="isModoLibre ? 'stop-circle' : 'play-outline'"></ion-icon>
+      {{ isModoLibre ? 'Detener Rastreo GPS' : 'Iniciar Ruta Libre (GPS)' }}
+    </ion-button>
+
+    <ion-button expand="block" color="light" (click)="limpiarMapa()">
+      Limpiar Mapa
+    </ion-button>
+  </div>
+</ion-content>

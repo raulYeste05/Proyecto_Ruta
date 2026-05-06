@@ -1,9 +1,5 @@
 package com.ryf.Proyecto_Ruta.Controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ryf.Proyecto_Ruta.Services.ParadaService;
 import com.ryf.Proyecto_Ruta.DTO.ParadaResponseDTO;
 import com.ryf.Proyecto_Ruta.DTO.ParadaRequestDTO;
@@ -44,6 +40,7 @@ public class ParadaController {
     public ResponseEntity<ParadaResponseDTO> obtener(@PathVariable Integer id) {
         return ResponseEntity.ok(paradaService.obtenerPorId(id));
     }
+    
 
     //  ACTUALIZAR
     @PutMapping("/{id}")

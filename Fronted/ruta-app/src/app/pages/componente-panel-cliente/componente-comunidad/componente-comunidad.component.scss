@@ -1,0 +1,50 @@
+/* Estilo para la tarjeta del foro */
+.post-card {
+  margin: 16px 8px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.user-name {
+  font-weight: bold;
+  color: var(--ion-color-primary);
+}
+
+.post-title {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+}
+
+.contenido-texto {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+/* El cuadro gris del resumen técnico */
+.resumen-texto {
+  white-space: pre-line;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.85em;
+  color: #555;
+  border-left: 4px solid var(--ion-color-secondary);
+  margin: 10px 0;
+}
+
+.acciones-post {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 10px;
+  padding-top: 5px;
+
+  ion-button {
+    --padding-start: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+}

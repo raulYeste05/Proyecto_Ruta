@@ -1,10 +1,24 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="barra-superior">
+      <div class="logo-admin">
+        <img src="assets/Logo-ruta.png" alt="Logo Ruta">
+        
+      </div>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" class="btn-logout">
+        <ion-label class="ion-hide-sm-down">Cerrar sesión</ion-label>
+        <ion-icon slot="end" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <div class="layout-admin">
 
   <!-- BARRA LATERAL -->
   <aside class="sidebar-admin">
     <div class="sidebar-header">
-      <div class="logo-admin">RutaApp</div>
-      <h2>Administración</h2>
+      <h3>Administración</h3>
     </div>
 
     <nav class="menu-admin">
@@ -12,7 +26,7 @@
         routerLink="/componente-panel-admin/usuarios"
         routerLinkActive="activo"
         class="item-menu">
-        Usuarios
+        👤 Usuarios
       </a>
 
       <a
@@ -27,6 +41,13 @@
         routerLinkActive="activo"
         class="item-menu">
         📍 Rutas
+      </a>
+
+      <a
+        routerLink="/componente-panel-admin/publicaciones"
+        routerLinkActive="activo"
+        class="item-menu">
+        📝 Publicaciones
       </a>
 
       <a

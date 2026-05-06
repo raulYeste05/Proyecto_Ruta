@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Comunidad Ruta & Foros</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="publicaciones.length === 0" class="ion-text-center ion-padding">
+    <ion-icon name="chatbubbles-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
+    <p>Aún no hay publicaciones. ¡Sé el primero en compartir una ruta!</p>
+  </div>
+
+  <ion-card *ngFor="let post of publicaciones" class="post-card">
+    <ion-item lines="none" class="user-header">
+      <ion-avatar slot="start">
+        <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      </ion-avatar>
+      <ion-label>
+        <h2 class="user-name">{{ post.emailUsuario }}</h2>
+        <p class="post-date">{{ post.fecha | date:'dd/MM/yy HH:mm' }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-card-header>
+      <ion-card-title class="post-title">{{ post.titulo }}</ion-card-title>
+      <ion-badge color="tertiary" *ngIf="post.tituloRuta">
+        <ion-icon name="trail-sign-outline"></ion-icon> {{ post.tituloRuta }}
+      </ion-badge>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p class="contenido-texto">{{ post.contenido }}</p>
+
+      <div class="resumen-ruta-publicada" *ngIf="post.descripcionRuta">
+        <div class="resumen-texto">
+          {{ post.descripcionRuta }}
+        </div>
+      </div>
+      
+      <div class="acciones-post">
+        <ion-button fill="clear" color="primary" (click)="verDetalleRuta(post.rutaId)" *ngIf="post.rutaId">
+          <ion-icon slot="start" name="map-outline"></ion-icon>
+          Ver Mapa
+        </ion-button>
+        <ion-button fill="clear" color="medium" (click)="abrirComentarios(post.id)">
+          <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+          <!-- Si el contador existe y es mayor a 0, lo mostramos -->
+          <ion-badge slot="end" color="light" *ngIf="contadoresComentarios[post.id] > 0">
+            {{ contadoresComentarios[post.id] }}
+          </ion-badge>
+          <span style="margin-left: 5px;">Comentar</span>
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

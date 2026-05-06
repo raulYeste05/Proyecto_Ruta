@@ -16,6 +16,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -31,13 +32,16 @@ public class ServicioCercano {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "parada_id")
-    private Parada parada;
-
     @Enumerated(EnumType.STRING)
     private TipoServicio tipoServicio;
 
     private String nombre;
     private Double distancia;
+    private Double latitud;
+    private Double longitud;
+
+    @ManyToOne
+    @JoinColumn(name = "parada_id")
+    @JsonBackReference
+    private Parada parada;
 }

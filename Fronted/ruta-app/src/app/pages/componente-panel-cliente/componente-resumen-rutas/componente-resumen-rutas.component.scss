@@ -1,0 +1,69 @@
+/* componente-resumen-rutas.component.scss */
+
+// Contenedor de la leyenda para que se vean los colores
+.leyenda-container {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  
+  p { 
+    margin: 0 0 10px 0; 
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .leyenda-items {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+// Círculos de colores
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: block; // Cambiado de inline-block a block para asegurar visibilidad
+  border: 1px solid rgba(0,0,0,0.1);
+  
+  &.azul { background-color: #3880ff !important; }
+  &.verde { background-color: #2dd36f !important; }
+  &.naranja { background-color: #ff9d00 !important; }
+}
+
+.ruta-card {
+  margin-bottom: 25px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.header-flex {
+  display: flex;
+  justify-content: space-between; // Esto separa el título del botón de basura
+  align-items: center;
+  width: 100%;
+}
+
+  .resumen-texto {
+    white-space: pre-line;
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    color: #444;
+    border-left: 4px solid #3880ff;
+    margin-bottom: 15px;
+  }

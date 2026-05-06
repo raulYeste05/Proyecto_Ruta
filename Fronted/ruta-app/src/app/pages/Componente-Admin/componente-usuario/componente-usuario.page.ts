@@ -35,10 +35,21 @@ export class ComponenteUsuarioPage implements OnInit {
   }
 
   eliminaruser(id: number) {
-    this.adminService.eliminarUsuario(id).subscribe(() => {
-      this.cargarUsuarios();
-    });
+  // Si el id llega como undefined o null, no hacemos nada
+  if (!id) {
+    console.error("No se puede eliminar: El ID del usuario es undefined. Revisa el nombre del campo en el HTML.");
+    return;
   }
+
+  this.adminService.eliminarUsuario(id).subscribe({
+    next: () => {
+      this.cargarUsuarios();
+    },
+    error: (err) => {
+      console.error("Error al eliminar usuario:", err);
+    }
+  });
+}
  
 
 }

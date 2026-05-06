@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Comentarios</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Listado de comentarios -->
+  <ion-list lines="none">
+    <ion-item *ngFor="let c of comentarios" class="comment-item" style="--background: transparent;">
+      <ion-avatar slot="start">
+        <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      </ion-avatar>
+      <ion-label class="ion-text-wrap">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="color: #3880ff; font-weight: bold; font-size: 0.9em;">{{ c.emailUsuario }}</span>
+          <span style="color: #888; font-size: 0.75em;">{{ c.fecha | date:'dd/MM/yy HH:mm' }}</span>
+        </div>
+        <div style="background: #222; padding: 10px; border-radius: 10px; color: white;">
+          {{ c.contenido }}
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="comentarios.length === 0" class="ion-text-center ion-padding">
+    <p>Aún no hay comentarios. ¡Sé el primero!</p>
+  </div>
+</ion-content>
+
+<!-- Input fijo abajo para escribir -->
+<ion-footer>
+  <ion-toolbar color="dark">
+    <ion-item lines="none" color="dark">
+      <ion-input 
+        [(ngModel)]="nuevoComentario" 
+        placeholder="Escribe un comentario..." 
+        [clearInput]="true">
+      </ion-input>
+      <ion-button 
+        slot="end" 
+        fill="clear" 
+        (click)="enviarComentario()" 
+        [disabled]="!nuevoComentario.trim()">
+        <ion-icon name="send" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

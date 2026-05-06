@@ -124,6 +124,20 @@ public class ClienteService {
     return clienteMapper.toDTO(actualizado);
 }
 
+    //Buscar cliente por email
+    public ClienteResponseDTO obtenerPorEmail(String email) {
+        // 1. Buscamos el usuario por su email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // 2. Buscamos el cliente que tiene ese usuario asignado
+        // Nota: Asegúrate de que tu repositorio tenga este método findByUserIdUser
+        Cliente cliente = clienteRepository.findByUserIdUser(user.getIdUser())
+                .orElseThrow(() -> new RuntimeException("Datos de cliente no encontrados"));
+
+        return clienteMapper.toDTO(cliente);
+    }
+
     public void eliminar(Integer id) {
         if (!clienteRepository.existsById(id)) {
             throw new RuntimeException("Cliente no encontrado");

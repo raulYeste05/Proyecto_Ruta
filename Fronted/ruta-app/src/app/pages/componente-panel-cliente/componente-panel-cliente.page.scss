@@ -1,0 +1,91 @@
+// Paleta de colores Premium
+$azul-oscuro: #0f172a; // Fondo profundo
+$azul-barra: #1e293b;  // Barra superior
+$verde-accent: #10b981; // Verde esmeralda vivo
+$texto-gris: #94a3b8;
+$rojo-suave: #f87171;
+
+ion-header {
+  background-color: $azul-oscuro;
+}
+
+ion-toolbar {
+  --background: #{$azul-barra};
+  --color: white;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+
+  ion-title {
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    
+    span {
+      color: $verde-accent; // Resalte en el nombre
+    }
+  }
+}
+
+/* Contenedor del segmento */
+.contenedor-segmento {
+  background: $azul-barra;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  ion-segment {
+    --background: transparent;
+    background: transparent;
+    
+    ion-segment-button {
+      --color: #{$texto-gris};
+      --color-checked: white;
+      --indicator-color: #{$verde-accent};
+      --indicator-height: 3px;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      min-height: 50px;
+    }
+  }
+}
+
+/* Botón Cerrar Sesión */
+.btn-logout {
+  --background: rgba(248, 113, 113, 0.1);
+  --color: #{$rojo-suave};
+  --border-radius: 10px;
+  --border-color: #{$rojo-suave};
+  --border-style: solid;
+  --border-width: 1px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    --background: #{$rojo-suave};
+    --color: white;
+  }
+}
+
+/* Cuerpo de la página */
+ion-content {
+  --background: #{$azul-oscuro};
+  --display: block;
+}
+
+.contenido-principal {
+  padding: 10px;
+  /* Esto asegura que el router-outlet tenga un poco de aire */
+}
+
+/* Estilo para los iconos de Ionic que puedan aparecer */
+ion-icon {
+  font-size: 1.2rem;
+}
+
+router-outlet + * {
+  display: block;
+  background: transparent;
+}

@@ -27,6 +27,13 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/Proyecto_ruta?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      # EMAIL
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ryeste124@gmail.com
+      SPRING_MAIL_PASSWORD: wbmpyudqegptarkv
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
 
   frontend:
     build:

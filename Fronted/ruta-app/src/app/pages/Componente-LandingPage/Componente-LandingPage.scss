@@ -1,97 +1,282 @@
-/* CONTENEDOR GENERAL */
+/* VARIABLES SEGÚN TU BOCETO */
+$verde-principal: rgb(5, 150, 105);
+$azul-secundario: rgb(37, 99, 235);
+$gris-apoyo: rgb(86, 80, 80);
+$fondo-footer: #111827; // Azul muy oscuro/negro del boceto
+$azul-barra: #1e293b;
+$verde-accent: #10b981;
+$azul-oscuro: #0f172a;
+
+ion-content {
+  --background: white; 
+}
+
+.nav-toolbar {
+  --background: #0f172a;
+  --color: white;
+  padding: 10px 20px;
+}
+
 .contenedor-nav {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 
-/* BARRA NAVEGACIÓN */
-.barra-navegacion {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* IZQUIERDA */
 .nav-izquierda {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  .logo { height: 35px; }
+  .marca { font-weight: bold; font-size: 1.2rem; }
 }
 
-.logo {
-  height: 30px;
-}
-
-.marca {
-  font-weight: bold;
-  font-size: 18px;
-  color: white;
-}
-
-/* CENTRO (CLAVE PARA CENTRARLO DE VERDAD) */
 .nav-centro {
   display: flex;
-  gap: 20px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  gap: 10px;
+  .btn-nav {
+    --background: #2563eb;
+    --color: white;
+    --border-radius: 4px;
+    font-size: 0.8rem;
+    height: 35px;
+  }
 }
 
-.nav-centro ion-button {
+.btn-login {
+  --border-color: white;
+  --color: white;
+  --border-style: solid;
+  --border-width: 1px;
+}
+
+/* HERO CON DEGRADADO */
+.hero-container {
+  padding: 40px 20px;
+  background: white;
+}
+
+.hero-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, $verde-principal 0%, $azul-secundario 100%);
+  border-radius: 15px;
+  padding: 60px 40px;
   color: white;
-  font-weight: 500;
-  transition: 0.3s;
+
+  h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+  p { font-size: 1.1rem; max-width: 700px; margin-bottom: 30px; opacity: 0.9; }
 }
 
-.nav-centro ion-button:hover {
-  color: #00d4ff;
-}
-
-/* DERECHA */
-.nav-derecha {
+.hero-buttons {
   display: flex;
+  gap: 15px;
+  
+  .btn-blanco {
+    --background: white;
+    --color: $verde-principal;
+    --border-radius: 8px;
+    font-weight: bold;
+    text-transform: none;
+  }
+
+  .btn-verde-oscuro {
+    --background: #065f46; // Un verde más oscuro para contraste
+    --color: white;
+    --border-radius: 8px;
+    font-weight: bold;
+    text-transform: none;
+  }
 }
 
-/* BOTÓN LOGIN */
-.boton-login {
-  --background: #00d4ff;
-  --color: black;
-  --border-radius: 8px;
-  font-weight: bold;
+/* CARDS DE BENEFICIOS */
+.info-section {
+  padding: 80px 10px;
+  background: white;
+  max-width: 1100px;
+  margin: 0 auto;
+
+  .titulo-pregunta {
+    color: #1f2937;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
 }
 
-.boton-login:hover {
-  --background: #00aacc;
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
 }
 
-/* HERO */
-.hero {
-  background: linear-gradient(135deg, #1e1e2f, #3a3a5f);
+.benefit-card {
+  padding: 30px;
+  border-radius: 12px;
+  text-align: left;
+
+  &.card-verde { background-color: #f0fdf4; }
+  &.card-azul { background-color: #eff6ff; }
+  &.card-verde-claro { background-color: #f0fdf4; }
+
+  .icon-box {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    ion-icon { font-size: 24px; color: white; }
+  }
+
+  .icon-v { background-color: $verde-principal; }
+  .icon-a { background-color: $azul-secundario; }
+  .icon-v-claro { background-color: #22c55e; }
+
+  h3 { color: #111827; font-weight: 700; margin-bottom: 10px; }
+  p { color: $gris-apoyo; font-size: 0.95rem; line-height: 1.5; }
+}
+
+/* FOOTER */
+.footer-dark {
+  background: $fondo-footer;
   color: white;
-  padding: 60px;
-  border-radius: 20px;
-  text-align: center;
-  margin-bottom: 40px;
+  padding: 60px 40px;
+  
+  .footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .logo-placeholder {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 15px;
+  }
+
+  .footer-brand p {
+    max-width: 250px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  .footer-links {
+    h4 { margin-bottom: 20px; font-size: 1rem; }
+    a { display: block; color: white; opacity: 0.7; text-decoration: none; margin-bottom: 10px; font-size: 0.9rem; }
+  }
 }
 
-.hero h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
+/* BOTON DE ACCESIBLIDAD */
+/* Botón flotante */
+#accesibilidad-btn {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  width: 55px;
+  height: 55px;
+  background: $verde-accent;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
-.hero p {
-  opacity: 0.8;
+/* Panel de accesibilidad */
+#accesibilidad-panel {
+  position: fixed;
+  right: 25px;
+  bottom: 90px;
+  background: $azul-barra;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  width: 240px;
+  display: none; // Se controla con la clase .visible
+  z-index: 10000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: white;
+
+  &.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    text-align: center;
+    color: $verde-accent;
+    font-weight: bold;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+
+    ion-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    &.active {
+      background: $verde-accent;
+      color: $azul-oscuro;
+    }
+  }
+
+  .btn-reset {
+    margin-top: 15px;
+    background: #f87171; // Rojo suave
+    color: white;
+    
+    &:hover {
+      background: #ef4444;
+    }
+  }
 }
 
-/* DESCRIPCIÓN */
-.descripcion {
-  text-align: center;
-  margin-bottom: 30px;
+/* Estilo para Modo Lectura Fácil */
+body.lectura-facil {
+  font-family: 'Open Sans', Arial, sans-serif !important;
+  line-height: 2 !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+  
+  p, h1, h2, h3, h4, span, label {
+    background-color: #000 !important;
+    color: #ffff00 !important; // Contraste alto: amarillo sobre negro
+  }
 }
 
-/* VENTAJAS */
-.ventajas ion-card {
-  text-align: center;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

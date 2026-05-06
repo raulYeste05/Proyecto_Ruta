@@ -19,4 +19,7 @@ public class PublicacionResponseDTO {
 
     private Integer rutaId;
     private String tituloRuta;
+
+    //Descripción de la ruta publicada
+    private String descripcionRuta;
 }

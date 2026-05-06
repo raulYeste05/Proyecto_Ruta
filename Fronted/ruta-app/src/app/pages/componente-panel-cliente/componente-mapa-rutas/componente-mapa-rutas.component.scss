@@ -1,0 +1,73 @@
+// mapa-rutas.component.scss
+
+#mapId {
+  height: 50vh; // Altura razonable para que quepan los botones debajo
+  width: 100%;  // ¡Importante! Estaba al 200%
+  display: block;
+  z-index: 1; 
+}
+
+// Estilo específico para el Toast en el centro
+.custom-toast {
+  --background: #eb445a; // Color rojo suave
+  --color: white;
+  --button-color: white;
+  --border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+// Esto asegura que flote sobre Leaflet
+ion-toast {
+  --z-index: 99999 !important;
+}
+
+.grupo-selector {
+  padding: 10px 16px;
+}
+
+.botones-contenedor {
+  padding: 0 16px;
+  margin-bottom: 20px;
+}
+
+// Estilo para el botón de obtener ubicación
+
+.leyenda-servicios {
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border: 1px solid #ddd;
+
+  .leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    ion-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #444;
+    }
+  }
+
+  .punto {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+
+    &.rojo { background-color: #f04141; }
+    &.azul { background-color: #3880ff; }
+    &.verde { background-color: #2dd36f; }
+  }
+}
+
+ion-fab {
+  z-index: 1000 !important;
+}

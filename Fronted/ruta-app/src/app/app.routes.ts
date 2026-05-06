@@ -55,10 +55,64 @@ export const routes: Routes = [
         path: 'clientes/editar/:id',
         loadComponent: () => import('./pages/Componente-Admin/componente-cliente-editar/componente-cliente-editar.page')
           .then(m => m.ComponenteClienteEditarPage)
-      }
-
-
+      },
+      {
+        path: 'rutas',
+        loadComponent: () => import('./pages/Componente-Admin/componente-rutas/componente-rutas.page')
+          .then(m => m.ComponenteRutasPage)
+      },
+      {
+        path: 'publicaciones',
+        loadComponent: () => import('./pages/Componente-Admin/componente-publicaciones/componente-publicaciones.page')
+          .then(m => m.ComponentePublicacionesPage)
+      },
     ]
+  },
+
+  {
+    path: 'componente-panel-cliente',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/componente-panel-cliente/componente-panel-cliente.page')
+      .then(m => m.ComponentePanelClientePage),
+      children: [
+        {
+          path: '',
+          redirectTo:'inicio',
+          pathMatch: 'full'
+        },
+        {
+          path: 'inicio',
+          loadComponent: () => import('./pages/componente-panel-cliente/componente-inicio/componente-inicio.component')
+            .then(m => m.ComponenteInicioComponent)
+        },
+        {
+          path: 'perfil',
+          loadComponent: () => import('./pages/componente-panel-cliente/componente-perfil/componente-perfil.component')
+            .then(m => m.ComponentePerfilPage)
+        },
+        {
+          path: 'mapa',
+          loadComponent: () => import('./pages/componente-panel-cliente/componente-mapa-rutas/componente-mapa-rutas.component')
+            .then(m => m.MapaRutasPage)
+        },
+        {
+          path: 'resumen-rutas',
+          loadComponent: () => import('./pages/componente-panel-cliente/componente-resumen-rutas/componente-resumen-rutas.component')
+            .then(m => m.ComponenteResumenRutas)
+        
+        },
+        {
+          path: 'comunidad',
+          loadComponent: () => import('./pages/componente-panel-cliente/componente-comunidad/componente-comunidad.component')
+            .then(m => m.ComponenteComunidad)
+        },
+        {
+          path: 'comentarios',
+          loadComponent: () => import('./pages/componente-panel-cliente/componente-comentarios/componente-comentarios.component')
+            .then(m => m.ComponenteComentariosComponent)
+        },
+        
+      ]
   },
  
   

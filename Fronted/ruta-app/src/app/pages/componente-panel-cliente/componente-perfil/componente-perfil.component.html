@@ -1,0 +1,99 @@
+<div class="ion-padding">
+  <h2>Editar mis datos personales</h2>
+
+  <form [formGroup]="perfilForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">DNI</ion-label>
+        <ion-input formControlName="dni"></ion-input>
+
+        <ion-text color="danger" *ngIf="perfilForm.get('dni')?.touched && perfilForm.get('dni')?.hasError('dniInvalido')">
+          <p>DNI incorrecto</p>
+        </ion-text>
+
+        <ion-text color="danger" *ngIf="perfilForm.get('dni')?.touched && perfilForm.get('dni')?.hasError('dniDuplicado')">
+          <p>Ya existe un cliente con ese DNI</p>
+        </ion-text>
+
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input formControlName="nombre"></ion-input>
+
+        <ion-text color="danger" *ngIf="perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.hasError('soloTexto')">
+          <p>Solo letras permitidas</p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Nueva Contraseña (opcional)</ion-label>
+        <ion-input formControlName="password" type="password" placeholder="Dejar en blanco para mantener la actual"></ion-input>
+
+        <ion-text color="danger" *ngIf="perfilForm.get('password')?.touched && perfilForm.get('password')?.hasError('contrasena')">
+          <p>La contraseña debe tener al menos 6 caracteres e incluir una mayúscula y un número. </p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Primer Apellido</ion-label>
+        <ion-input formControlName="apellido1"></ion-input>
+
+        <ion-text color="danger" *ngIf="perfilForm.get('apellido1')?.touched && perfilForm.get('apellido1')?.hasError('soloTexto')">
+          <p>Solo letras permitidas</p>
+          </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Segundo Apellido</ion-label>
+        <ion-input formControlName="apellido2"></ion-input>
+
+        <ion-text color="danger" *ngIf="perfilForm.get('apellido2')?.touched && perfilForm.get('apellido2')?.hasError('soloTexto')">
+          <p>Solo letras permitidas</p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input formControlName="telefono" type="tel"></ion-input>
+        <ion-text color="danger" *ngIf="perfilForm.get('telefono')?.touched && perfilForm.get('telefono')?.hasError('telefonoInvalido')">
+          <p>Debe tener 9 dígitos</p>
+        </ion-text>
+      </ion-item>
+
+      <div class="grupo">
+        <ion-label position="stacked">Provincia</ion-label>
+        <ion-item class="input-item" lines="none">
+          <select formControlName="provincia" (change)="onProvinciaChangeNative($event)" class="select-nativo">
+            <option value="" disabled selected>Selecciona Provincia</option>
+            <option *ngFor="let p of provincias" [value]="p.CPRO">
+              {{ p.PRO || p.NOMBRE_PROVINCIA }}
+            </option>
+          </select>
+        </ion-item>
+      </div>
+
+    <div class="grupo">
+      <ion-label position="stacked">Localidad</ion-label>
+      <ion-item class="input-item" lines="none">
+        <select formControlName="localidad" class="select-nativo">
+          <option value="" disabled selected>Selecciona Localidad</option>
+          <option *ngFor="let m of localidades" [value]="m.DMUN50 || m.NOMBRE_MUNICIPIO">
+            {{ m.DMUN50 || m.NOMBRE_MUNICIPIO }}
+          </option>
+        </select>
+      </ion-item>
+    </div>
+    </ion-list>
+
+    <ion-button expand="block" (click)="guardarCambios()" [disabled]="perfilForm.invalid" class="ion-margin-top">
+      Actualizar Perfil
+    </ion-button>
+  </form>
+</div>
+
+<div class="ion-padding">
+  <ion-button expand="block" fill="outline" color="secondary" (click)="irAMisRutas()">
+    <ion-icon slot="start" name="list-outline"></ion-icon>
+    Ver Historial de Rutas
+  </ion-button>

@@ -1,14 +1,30 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Panel Cliente</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="barra-superior">
+    <ion-title>Ruta<span>Explorer</span></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" class="btn-logout">
+        <ion-label class="ion-hide-sm-down">Cerrar sesión</ion-label>
+        <ion-icon slot="end" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+
+  <div class="contenedor-segmento">
+    <ion-segment value="Inicio" mode="md">
+      <ion-segment-button value="Inicio" [routerLink]="['inicio']">
+        <ion-label>Inicio</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="perfil" [routerLink]="['perfil']">
+        <ion-label>Mi Perfil</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="rutas" [routerLink]="['mapa']">
+        <ion-label>Mapa/Rutas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 </ion-header>
 
-<ion-content class="ion-padding">
-
-  <h2>Bienvenido al panel de cliente 👤</h2>
-  <p>Aquí podrás ver tus rutas y datos.</p>
-
-  <button (click)="logout()">Cerrar sesión</button>
-
+<ion-content [fullscreen]="true">
+  <!-- Dejamos el router-outlet solo para que ocupe todo el espacio -->
+  <router-outlet></router-outlet>
 </ion-content>

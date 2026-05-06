@@ -86,9 +86,9 @@ public class RutaService {
         Ruta ruta = rutaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ruta no encontrada"));
 
-        ruta.setTitulo(ruta.getTitulo());
-        ruta.setDescripcion(ruta.getDescripcion());
-        ruta.setPublicada(ruta.getPublicada());
+        ruta.setTitulo(RutaDTO.getTitulo());
+        ruta.setDescripcion(RutaDTO.getDescripcion());
+        ruta.setPublicada(RutaDTO.getPublicada());
 
         Ruta actualizada = rutaRepository.save(ruta);
 

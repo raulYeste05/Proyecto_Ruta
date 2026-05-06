@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from "@ionic/angular";
 import { RouterModule } from '@angular/router';
+import { AuthService } from "../../../services/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-componente-layout-admin',
@@ -18,8 +20,16 @@ import { RouterModule } from '@angular/router';
 })
 export class ComponenteLayoutAdminPage implements OnInit {
 
-  constructor() {}
+  constructor( 
+    private authService: AuthService, 
+    private router: Router) {
+  }
 
   ngOnInit() {}
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login'], { replaceUrl: true });
+  }
 
 }

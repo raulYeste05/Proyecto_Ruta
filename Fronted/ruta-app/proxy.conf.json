@@ -1,0 +1,12 @@
+{
+  "/ors": {
+    "target": "https://api.openrouteservice.org",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/ors": ""
+    },
+    "logLevel": "debug",
+    "onProxyReq": "function(proxyReq, req, res) { proxyReq.setHeader('Origin', 'https://api.openrouteservice.org'); }"
+  }
+}

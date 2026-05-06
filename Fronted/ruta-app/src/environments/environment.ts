@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'http://localhost:8080',
+  //Clave API para calcular las rutas
+  orsApiKey: 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImVjZWRhMmVjYjdmZTRiNzA5ODdhNzJmNDQzYzY0MmVmIiwiaCI6Im11cm11cjY0In0='
 };
 
 /*

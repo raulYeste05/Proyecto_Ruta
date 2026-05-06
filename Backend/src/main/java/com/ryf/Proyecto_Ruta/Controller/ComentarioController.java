@@ -1,10 +1,5 @@
 package com.ryf.Proyecto_Ruta.Controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ryf.Proyecto_Ruta.Services.ComentarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +38,12 @@ public class ComentarioController {
     @GetMapping("/{id}")
     public ResponseEntity<ComentarioResponseDTO> obtener(@PathVariable Integer id) {
         return ResponseEntity.ok(comentarioService.obtenerPorId(id));
+    }
+
+    // Método para contar el número de comentarios de una publicación
+    @GetMapping("/publicacion/{publicacionId}/count")
+    public ResponseEntity<Long> contarComentarios(@PathVariable Integer publicacionId) {
+        return ResponseEntity.ok(comentarioService.contarPorPublicacion(publicacionId));
     }
 
     @PutMapping("/{id}")

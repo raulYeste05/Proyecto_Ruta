@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Provincia, Municipio } from '../interfaces/geo.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class GeoService {
 
-  private baseUrl = 'http://localhost:8080/api/geo';
+  private baseUrl = `${environment.apiUrl}/api/geo`;
 
   constructor(private http: HttpClient) {}
 

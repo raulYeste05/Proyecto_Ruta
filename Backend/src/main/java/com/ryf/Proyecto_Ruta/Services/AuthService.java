@@ -4,6 +4,7 @@ import com.ryf.Proyecto_Ruta.DTO.RegisterRequestDTO;
 import com.ryf.Proyecto_Ruta.Model.Cliente;
 import com.ryf.Proyecto_Ruta.Model.Rol;
 import com.ryf.Proyecto_Ruta.Model.User;
+import com.ryf.Proyecto_Ruta.Services.EmailService;
 import com.ryf.Proyecto_Ruta.Repositories.ClienteRepository;
 import com.ryf.Proyecto_Ruta.Repositories.RolRepository;
 import com.ryf.Proyecto_Ruta.Repositories.UserRepository;
@@ -19,15 +20,18 @@ public class AuthService {
     private final RolRepository rolRepository;
     private final ClienteRepository clienteRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public AuthService(UserRepository userRepository,
                        RolRepository rolRepository,
                        ClienteRepository clienteRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                        EmailService emailService) {
         this.userRepository = userRepository;
         this.rolRepository = rolRepository;
         this.clienteRepository = clienteRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     public User registrar(RegisterRequestDTO request) {
@@ -62,6 +66,14 @@ public class AuthService {
                 .build();
 
         clienteRepository.save(cliente);
+
+        // Enviar correo de bienvenida
+        try {
+            emailService.enviarCorreoBienvenida(request.getEmail(), request.getNombre());
+            emailService.avisarAdminNuevoRegistro(request.getNombre(), request.getEmail());
+        } catch (Exception e) {
+            System.err.println("Error al enviar el correo: " + e.getMessage());
+        }
 
         return guardado;
     }

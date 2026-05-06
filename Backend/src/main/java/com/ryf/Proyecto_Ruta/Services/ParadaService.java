@@ -26,12 +26,16 @@ public class ParadaService {
     private final RutaRepository rutaRepository;
     private final ParadaMapper paradaMapper;
 
+    private final ServicioCercanoService servicioCercanoService;
+
     public ParadaService(ParadaRepository paradaRepository,
                          RutaRepository rutaRepository,
-                         ParadaMapper paradaMapper) {
+                         ParadaMapper paradaMapper,
+                         ServicioCercanoService servicioCercanoService) {
         this.paradaRepository = paradaRepository;
         this.rutaRepository = rutaRepository;
         this.paradaMapper = paradaMapper;
+        this.servicioCercanoService = servicioCercanoService;
 
     }
 
@@ -44,7 +48,18 @@ public class ParadaService {
         Parada parada = paradaMapper.toEntity(ParadaDTO);
         parada.setRuta(ruta);
 
-        return paradaMapper.toDTO(paradaRepository.save(parada));
+        // 3. Guardamos la parada primero
+        Parada paradaGuardada = paradaRepository.save(parada);
+
+        // 4. LLAMADA MÁGICA: Buscamos servicios automáticos para esta parada
+        try {
+            servicioCercanoService.buscarYGuardarServiciosAutomaticos(paradaGuardada);
+        } catch (Exception e) {
+            // Usamos un try-catch para que, si falla ORS, al menos se cree la parada
+            System.err.println("Error al buscar servicios cercanos: " + e.getMessage());
+        }
+
+        return paradaMapper.toDTO(paradaGuardada);
     }
 
     //Lista paradas de una ruta de forma ordenada

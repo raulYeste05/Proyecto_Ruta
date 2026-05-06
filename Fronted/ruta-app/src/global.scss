@@ -25,6 +25,9 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+/*--Estilo de librerias externas--*/
+@import "leaflet/dist/leaflet.css";
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -35,3 +38,97 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+// Fix para marcadores de Leaflet en Angular
+.leaflet-default-icon-path {
+  background-image: url(https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png);
+}
+
+/* En src/global.scss */
+.custom-toast {
+  --width: 90%;      /* Casi todo el ancho del móvil */
+  --max-width: 400px;
+  --background: #eb445a; 
+  --color: white;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  font-weight: bold;
+  
+  /* Esto es lo que fuerza el centrado horizontal real */
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+ion-toast {
+  z-index: 99999 !important;
+}
+
+
+//Estilo para el botón de cancelar en alertas
+.custom-alert {
+  --width: 90%;
+  --max-width: 400px;
+  --background: #ffffff;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  .alert-wrapper {
+    background: white !important;
+    border-radius: 15px !important;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2) !important;
+  }
+
+  .alert-title {
+    color: #eb445a !important;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .alert-message {
+    text-align: center;
+    color: #333;
+  }
+
+  .alert-button-group {
+    justify-content: center;
+    padding: 10px;
+    
+    .alert-button {
+      color: #3880ff;
+      font-weight: bold;
+    }
+    
+    .alert-button-role-destructive {
+      color: #eb445a;
+    }
+  }
+}
+
+  /* Estilo para centrar el Toast de éxito de borrado de la rutaS */
+
+  .toast-centrado {
+    --width: 280px;
+    --max-width: 90%;
+    --height: auto;
+    --border-radius: 50px;
+    --background: #2dd36f;
+    --color: white;
+    
+    /* Esto elimina los márgenes internos de Ionic que lo empujan a la izquierda */
+    --start: 0;
+    --end: 0;
+    --left: 0;
+    --right: 0;
+
+
+
+    &::part(message) {
+      font-weight: 600;
+      justify-content: center;
+    }
+  }
+

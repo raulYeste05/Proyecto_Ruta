@@ -48,6 +48,22 @@
       </ion-item>
 
       <ion-item>
+        <ion-label position="stacked">Primer Apellido</ion-label>
+        <input formControlName="apellido1">
+        <ion-text color="danger" *ngIf="fg.get('apellido1')?.touched && fg.get('apellido1')?.hasError('soloTexto')">
+          <p>Solo se permiten letras</p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Segundo Apellido</ion-label>
+        <input formControlName="apellido2">
+        <ion-text color="danger" *ngIf="fg.get('apellido2')?.touched && fg.get('apellido2')?.hasError('soloTexto')">
+          <p>Solo se permiten letras</p>
+        </ion-text>
+      </ion-item>
+
+      <ion-item>
         <ion-label position="stacked">Teléfono</ion-label>
         <input formControlName="telefono" placeholder="9 cifras">
         <ion-text color="danger" *ngIf="fg.get('telefono')?.touched && fg.get('telefono')?.hasError('telefonoInvalido')">

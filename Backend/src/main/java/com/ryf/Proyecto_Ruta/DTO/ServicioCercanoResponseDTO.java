@@ -12,4 +12,6 @@ public class ServicioCercanoResponseDTO {
     private String tipo;
     private String nombre;
     private Double distancia;
+    private Double latitud;
+    private Double longitud;
 }

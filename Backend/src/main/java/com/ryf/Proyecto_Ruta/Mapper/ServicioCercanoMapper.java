@@ -16,6 +16,8 @@ public class ServicioCercanoMapper {
         servicio.setTipoServicio(TipoServicio.valueOf(dto.getTipo()));
         servicio.setNombre(dto.getNombre());
         servicio.setDistancia(dto.getDistancia());
+        servicio.setLatitud(dto.getLatitud());
+        servicio.setLongitud(dto.getLongitud());
         return servicio;
     }
 
@@ -25,6 +27,8 @@ public class ServicioCercanoMapper {
         dto.setTipo(servicio.getTipoServicio().name());
         dto.setNombre(servicio.getNombre());
         dto.setDistancia(servicio.getDistancia());
+        dto.setLatitud(servicio.getLatitud());
+        dto.setLongitud(servicio.getLongitud());
 
         if (servicio.getParada() != null) {
             dto.setParadaId(servicio.getParada().getId());

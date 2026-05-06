@@ -17,6 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "comentario")
 @Getter
@@ -31,16 +33,16 @@ public class Comentario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
+    private String contenido;
+    private LocalDateTime fecha;
+
     @ManyToOne
     @JoinColumn(name = "publicacion_id")
+    @JsonBackReference
     private Publicacion publicacion;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(nullable = false)
-    private String contenido;
-
-    private LocalDateTime fecha;
 }

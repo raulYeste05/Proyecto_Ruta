@@ -13,6 +13,7 @@ import com.ryf.Proyecto_Ruta.Model.User;
 import com.ryf.Proyecto_Ruta.DTO.PublicacionRequestDTO;
 import com.ryf.Proyecto_Ruta.DTO.PublicacionResponseDTO;
 import com.ryf.Proyecto_Ruta.Mapper.PublicacionMapper;
+import com.ryf.Proyecto_Ruta.Services.EmailService;
 
 import java.util.List;
 import java.time.LocalDateTime;
@@ -24,35 +25,44 @@ public class PublicacionService {
     private final UserRepository userRepository;
     private final RutaRepository rutaRepository;
     private final PublicacionMapper publicacionMapper;
+    private final EmailService emailService;
 
     public PublicacionService(PublicacionRepository publicacionRepository,
                               UserRepository userRepository,
                               RutaRepository rutaRepository,
-                              PublicacionMapper publicacionMapper) {
+                              PublicacionMapper publicacionMapper,
+                              EmailService emailService) {
         this.publicacionRepository = publicacionRepository;
         this.userRepository = userRepository;
         this.rutaRepository = rutaRepository;
         this.publicacionMapper = publicacionMapper;
+        this.emailService = emailService;
     }
 
     //  CREAR PUBLICACION
-    public PublicacionResponseDTO crearPublicacion(PublicacionRequestDTO PublicacionDTO) {
-
-        User user = userRepository.findById(PublicacionDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        Publicacion publicacion = publicacionMapper.toEntity(PublicacionDTO);
-        publicacion.setUser(user);
-        publicacion.setFecha(LocalDateTime.now());
-
-        if (PublicacionDTO.getRutaId() != null) {
-            Ruta ruta = rutaRepository.findById(PublicacionDTO.getRutaId())
-                    .orElseThrow(() -> new RuntimeException("Ruta no encontrada"));
-
-            publicacion.setRuta(ruta);
+    public PublicacionResponseDTO crearPublicacion(PublicacionRequestDTO dto) {
+        Publicacion entity = publicacionMapper.toEntity(dto); // Crea la entidad base
+        
+        // Buscas y asignas las relaciones
+        User user = userRepository.findById(dto.getUserId()).orElseThrow();
+        entity.setUser(user);
+        
+        if (dto.getRutaId() != null) {
+            Ruta ruta = rutaRepository.findById(dto.getRutaId()).orElseThrow();
+            entity.setRuta(ruta);
+            ruta.setPublicada(true); // No olvides marcarla como publicada
         }
-
-        return publicacionMapper.toDTO(publicacionRepository.save(publicacion));
+        
+        entity.setFecha(LocalDateTime.now());
+        Publicacion guardada = publicacionRepository.save(entity);
+        // Enviar correo de publicación
+        try {
+            emailService.enviarCorreoRutaPublicada(user.getEmail(), dto.getTitulo());
+            emailService.avisarAdminNuevaPublicacion(user.getCliente().getNombre(), dto.getTitulo());
+        } catch (Exception e) {
+            System.err.println("Error al enviar el correo: " + e.getMessage());
+        }
+        return publicacionMapper.toDTO(guardada);
     }
 
     public List<PublicacionResponseDTO> listar() {

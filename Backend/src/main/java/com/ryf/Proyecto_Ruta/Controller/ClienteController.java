@@ -7,6 +7,7 @@ import com.ryf.Proyecto_Ruta.DTO.ClienteResponseDTO;
 import com.ryf.Proyecto_Ruta.DTO.RegistroClienteDTO;
 import com.ryf.Proyecto_Ruta.DTO.ClienteRequestDTO;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -39,6 +40,14 @@ public class ClienteController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<ClienteResponseDTO> obtenerPorUser(@PathVariable Integer userId) {
         return ResponseEntity.ok(clienteService.obtenerPorUser(userId));
+    }
+
+    // Obtner el nombre de un cliente
+    @GetMapping("/perfil")
+    public ResponseEntity<ClienteResponseDTO> obtenerPerfilPropio(Principal principal) {
+        // principal.getName() nos da el email (username) del token JWT
+        String email = principal.getName();
+        return ResponseEntity.ok(clienteService.obtenerPorEmail(email));
     }
 
     @PutMapping("/{id}")

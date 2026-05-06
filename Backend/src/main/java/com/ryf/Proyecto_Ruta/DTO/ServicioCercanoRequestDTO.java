@@ -16,4 +16,6 @@ public class ServicioCercanoRequestDTO {
 
     private String nombre;
     private Double distancia;
+    private Double latitud;
+    private Double longitud;
 }

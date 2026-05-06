@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.ryf.Proyecto_Ruta.Repositories.ComentarioRepository;
 import com.ryf.Proyecto_Ruta.Repositories.PublicacionRepository;
 import com.ryf.Proyecto_Ruta.Repositories.UserRepository;
+import com.ryf.Proyecto_Ruta.Services.EmailService;
 
 import com.ryf.Proyecto_Ruta.Model.Comentario;
 import com.ryf.Proyecto_Ruta.Model.Publicacion;
@@ -23,15 +24,18 @@ public class ComentarioService {
     private final PublicacionRepository publicacionRepository;
     private final UserRepository userRepository;
     private final ComentarioMapper comentarioMapper;
+    private final EmailService emailService;
 
     public ComentarioService(ComentarioRepository comentarioRepository,
                              PublicacionRepository publicacionRepository,
                              UserRepository userRepository,
-                             ComentarioMapper comentarioMapper) {
+                             ComentarioMapper comentarioMapper,
+                             EmailService emailService) {
         this.comentarioRepository = comentarioRepository;
         this.publicacionRepository = publicacionRepository;
         this.userRepository = userRepository;
         this.comentarioMapper = comentarioMapper;
+        this.emailService = emailService;
     }
 
     // 🔥 CREAR
@@ -50,6 +54,36 @@ public class ComentarioService {
         comentario.setFecha(LocalDateTime.now());
 
         Comentario guardado = comentarioRepository.save(comentario);
+        // Enviar correo de notificación
+        // Enviar correo de notificación
+        try {
+            User autorOriginal = publicacion.getUser();
+            
+            // Obtenemos el nombre del cliente que comenta (usamos la lógica que ya tenías)
+            String nombreQuienComenta = (user.getCliente() != null) 
+                                        ? user.getCliente().getNombre() 
+                                        : user.getEmail();
+
+            // NOTIFICACIÓN AL AUTOR ORIGINAL
+            
+            if (!autorOriginal.getIdUser().equals(user.getIdUser())) {
+                emailService.enviarNotificacionNuevoComentario(
+                    autorOriginal.getEmail(), 
+                    nombreQuienComenta, 
+                    publicacion.getTitulo()
+                );
+            }
+
+            // 2. NOTIFICACIÓN AL ADMINISTRADOR 
+            emailService.avisarAdminNuevoComentario(
+                nombreQuienComenta, 
+                user.getEmail(), 
+                publicacion.getTitulo()
+            );
+
+        } catch (Exception e) {
+            System.err.println("Error al enviar los correos de comentario: " + e.getMessage());
+        }
 
         return comentarioMapper.toDTO(guardado);
     }
@@ -83,6 +117,13 @@ public class ComentarioService {
         comentario.setContenido(ComentarioDTO.getContenido());
 
         return comentarioMapper.toDTO(comentarioRepository.save(comentario));
+    }
+
+    // Método para contar el número de comentarios de una publicación
+    
+    public Long contarPorPublicacion(Integer publicacionId) {
+        // Usamos el repositorio para contar directamente en la BD (más eficiente)
+        return comentarioRepository.countByPublicacionId(publicacionId);
     }
 
     public void eliminar(Integer id) {

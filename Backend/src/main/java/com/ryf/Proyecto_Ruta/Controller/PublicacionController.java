@@ -1,10 +1,5 @@
 package com.ryf.Proyecto_Ruta.Controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ryf.Proyecto_Ruta.Services.PublicacionService;
 
 import com.ryf.Proyecto_Ruta.DTO.PublicacionResponseDTO;
@@ -51,6 +46,12 @@ public class PublicacionController {
     @GetMapping("/{id}")
     public ResponseEntity<PublicacionResponseDTO> obtener(@PathVariable Integer id) {
         return ResponseEntity.ok(publicacionService.obtenerPorId(id));
+    }
+
+    // Listar ABSOLUTAMENTE TODAS para el muro de la comunidad
+    @GetMapping
+    public ResponseEntity<List<PublicacionResponseDTO>> listarTodas() {
+        return ResponseEntity.ok(publicacionService.listar());
     }
 
     // Actualizar

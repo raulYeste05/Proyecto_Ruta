@@ -1,62 +1,135 @@
-/* CONTENEDOR GENERAL */
+/* VARIABLES DE REFERENCIA */
+$verde-principal: rgb(5, 150, 105);
+$azul-secundario: rgb(37, 99, 235);
+$gris-texto: rgb(86, 80, 80);
+
+ion-content {
+  --background: #f4f7f6; /* Un gris casi blanco para dar contraste */
+}
+
 .contenedor-login {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  min-height: 100%;
 }
 
-/* TARJETA */
 .tarjeta-login {
   width: 100%;
-  max-width: 400px;
-  background: #1e1e2f;
-  padding: 30px;
-  border-radius: 15px;
+  max-width: 420px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+
+  /* Estilo del logo en el login */
+  .logo-seccion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+    cursor: pointer;
+
+    .logo-login {
+      height: 10px;
+      margin-bottom: 10px;
+    }
+
+    .marca-login {
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: $verde-principal;
+    }
+  }
+
+  h1 {
+    color: #1a1a1a;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 1.8rem;
+  }
+
+  .subtitulo {
+    color: $gris-texto;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+  }
 }
 
-/* TEXTOS */
-h1 {
-  color: white;
-  margin-bottom: 5px;
-}
-
-.subtitulo {
-  color: #aaa;
+/* DISEÑO DE INPUTS */
+.input-group {
   margin-bottom: 25px;
 }
 
-/* INPUTS */
 .input-item {
   margin-bottom: 15px;
-  border-radius: 10px;
-  --background: #2a2a40;
-  --color: white;
-  padding: 5px 10px;
+  --background: #f9f9f9;
+  --border-radius: 12px;
+  --padding-start: 15px;
+  --color: #333;
+  border: 1px solid #eee;
+
+  ion-icon {
+    color: $verde-principal;
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+
+  ion-input {
+    font-size: 0.95rem;
+  }
 }
 
-/* BOTÓN */
-.boton-acceder {
-  --background: #00d4ff;
-  --color: black;
-  margin-top: 10px;
-  border-radius: 10px;
+/* BOTÓN PRINCIPAL */
+.btn-acceder {
+  --background: linear-gradient(90deg, $verde-principal 0%, $azul-secundario 100%);
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+  height: 50px;
   font-weight: bold;
-  transition: 0.3s;
+  margin-top: 10px;
+  text-transform: none;
 }
 
-.boton-acceder:hover {
-  --background: #00aacc;
+/* LINKS Y FOOTER */
+.footer-login {
+  margin-top: 25px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+
+  p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+
+    a {
+      color: $azul-secundario;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  }
+
+  .btn-volver {
+    --color: $gris-texto;
+    font-size: 0.85rem;
+    text-transform: none;
+    background-color: #1a1a1a;
+  }
 }
 
-/* LINKS */
-.links {
-  margin-top: 15px;
+/* ERRORES */
+.error-container {
+  display: block;
+  color: red;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 6px;
+  padding-left: 5px;
+  animation: fadeIn 0.3s ease;
 }
 
-.links ion-button {
-  font-size: 14px;
-  color: #ccc;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

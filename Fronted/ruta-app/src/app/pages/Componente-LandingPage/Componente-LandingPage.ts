@@ -3,6 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';          
 import { IonicModule } from '@ionic/angular';
+
+import { addIcons } from 'ionicons';
+import { 
+  accessibilityOutline, addCircleOutline, removeCircleOutline, 
+  eyeOutline, volumeMediumOutline, refreshOutline 
+} from 'ionicons/icons';
+
 @Component({
   selector: 'app-landing',
   templateUrl: './Componente-LandingPage.html',
@@ -11,10 +18,54 @@ import { IonicModule } from '@ionic/angular';
   imports: [RouterModule, CommonModule, FormsModule, IonicModule]
 })
 export class LandingPage implements OnInit {
+  
+  panelAbierto = false;
+  isLecturaFacil = false;
 
-  constructor() { }
+  constructor() {
+    addIcons({ 
+      accessibilityOutline, addCircleOutline, removeCircleOutline, 
+      eyeOutline, volumeMediumOutline, refreshOutline 
+    });
+  }
 
   ngOnInit() {
   }
+
+  toggleAccesibilidad() {
+    this.panelAbierto = !this.panelAbierto;
+  }
+
+  aumentarTexto() {
+    const actual = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    document.documentElement.style.fontSize = (actual + 2) + 'px';
+  }
+
+  disminuirTexto() {
+    const actual = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    if (actual > 12) {
+      document.documentElement.style.fontSize = (actual - 2) + 'px';
+    }
+  }
+
+
+
+  leerContenido() {
+    // Obtenemos solo el texto relevante para evitar leer menús
+    const texto = document.querySelector('main')?.innerText || document.body.innerText;
+    const speech = new SpeechSynthesisUtterance(texto);
+    speech.lang = 'es-ES';
+    speech.rate = 0.9;
+    window.speechSynthesis.cancel(); // Para evitar que se amontone el audio
+    window.speechSynthesis.speak(speech);
+  }
+
+  resetAccesibilidad() {
+    document.body.classList.remove('lectura-facil');
+    this.isLecturaFacil = false;
+    document.documentElement.style.fontSize = '16px';
+    window.speechSynthesis.cancel();
+  }
+
 
 }

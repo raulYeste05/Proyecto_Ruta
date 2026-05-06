@@ -22,6 +22,12 @@ public class PublicacionMapper {
         dto.setContenido(publicacion.getContenido());
         dto.setFecha(publicacion.getFecha());
 
+        if (publicacion.getRuta() != null) {
+            dto.setRutaId(publicacion.getRuta().getId());
+            dto.setTituloRuta(publicacion.getRuta().getTitulo());
+            dto.setDescripcionRuta(publicacion.getRuta().getDescripcion());
+        }
+
         if (publicacion.getUser() != null) {
             dto.setUserId(publicacion.getUser().getIdUser());
             dto.setEmailUsuario(publicacion.getUser().getEmail());

@@ -1,20 +1,74 @@
+.admin-container {
+  padding: 20px;
+  background-color: #f9fafb;
+  min-height: 100%;
+}
+
+.header-seccion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h2 {
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+  }
+}
+
+.tabla-contenedor {
+  background: rgb(56, 54, 54);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden; // Para que las esquinas de las filas no se salgan
+}
+
 .fila {
   display: grid;
-  grid-template-columns: 
-    2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  // Ajustamos las columnas: Email y Apellidos tienen más peso
+  grid-template-columns: 2fr 1fr 1.5fr 1fr 1.5fr 120px;
   gap: 10px;
   align-items: center;
+  padding: 12px 20px;
 }
 
 /* CABECERA */
-.tabla-clientes .tabla-cabecera {
-  background: #eef0f3;
-  font-weight: 700;
-  color: #334155;
+.tabla-cabecera {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
 }
 
 /* FILAS */
-.tabla-clientes .tabla-fila {
-  border-top: 1px solid #eef2f7;
-  color: #1e293b;
+.tabla-fila {
+  border-top: 1px solid #f1f5f9;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #f8fafc;
+  }
+
+  .email-text {
+    font-weight: 500;
+    color: #3b82f6;
+  }
+}
+
+.col-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 900px) {
+  .fila {
+    grid-template-columns: 1fr 1fr 100px; // Ocultamos lo menos importante
+    .col:nth-child(3), .col:nth-child(4), .col:nth-child(5) { display: none; }
+  }
 }

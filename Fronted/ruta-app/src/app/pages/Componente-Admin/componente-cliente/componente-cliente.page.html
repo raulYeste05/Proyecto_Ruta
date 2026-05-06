@@ -1,32 +1,44 @@
-<div class="tabla-clientes">
-
-  <!-- CABECERA -->
-  <div class="fila tabla-cabecera">
-    <div>Email</div>
-    <div>Nombre</div>
-    <div>Apellido1</div>
-    <div>Apellido2</div>
-    <div>Teléfono</div>
-    <div>Provincia</div>
-    <div>Localidad</div>
-    <div>Acciones</div>
+<div class="admin-container">
+  <!-- CABECERA DEL PANEL -->
+  <div class="header-seccion">
+    <h2>Gestión de Clientes</h2>
+    <ion-button color="success" (click)="nuevocliente()">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Añadir Cliente
+    </ion-button>
   </div>
 
-  <!-- FILAS -->
-  <div class="fila tabla-fila" *ngFor="let c of clientes">
-    <div>{{ c.email }}</div>
-    <div>{{ c.nombre }}</div>
-    <div>{{ c.apellido1 }}</div>
-    <div>{{ c.apellido2 }}</div>
-    <div>{{ c.telefono }}</div>
-    <div>{{ c.provincia }}</div>
-    <div>{{ c.localidad }}</div>
+  <div class="tabla-contenedor">
+    <div class="tabla-clientes">
+      <!-- CABECERA -->
+      <div class="fila tabla-cabecera">
+        <div class="col">Email</div>
+        <div class="col">Nombre</div>
+        <div class="col">Apellidos</div>
+        <div class="col">Teléfono</div>
+        <div class="col">Ubicación</div>
+        <div class="col-acciones">Acciones</div>
+      </div>
 
-    <div>
-      <ion-button size="small" (click)="nuevocliente()">Nuevo</ion-button>
-      <ion-button size="small" color="warning" (click)="editarcliente(c.idCliente)">Editar</ion-button>
-      <ion-button size="small" color="danger" (click)="eliminarcliente(c.idCliente)">Eliminar</ion-button>
+      <!-- FILAS -->
+      <div class="fila tabla-fila" *ngFor="let c of clientes">
+        <div class="col email-text">{{ c.email }}</div>
+        <div class="col">{{ c.nombre }}</div>
+        <div class="col">{{ c.apellido1 }} {{ c.apellido2 }}</div>
+        <div class="col">{{ c.telefono }}</div>
+        <div class="col">
+          <small>{{ c.localidad }}, {{ c.provincia }}</small>
+        </div>
+
+        <div class="col-acciones">
+          <ion-button fill="clear" color="warning" (click)="editarcliente(c.idCliente)">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" color="danger" (click)="eliminarcliente(c.idCliente)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
     </div>
   </div>
-
 </div>
