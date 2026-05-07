@@ -81,9 +81,17 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOriginPatterns(List.of("*"));
+        // Añadimos específicamente tus dominios de Vercel y los de desarrollo
+        config.setAllowedOrigins(List.of(
+            "http://localhost:8100",
+            "http://localhost:4200",
+            "https://proyecto-ruta.vercel.app", // Tu dominio principal
+            "https://proyecto-ruta-aaaltp50l-raulyeste05s-projects.vercel.app" // Tu dominio de deployment
+        ));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        config.setExposedHeaders(List.of("Authorization")); // Importante para leer el Token
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

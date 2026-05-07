@@ -132,3 +132,28 @@ ion-toast {
     }
   }
 
+  /*Para que funcione para la interaccion de Vercel*/
+  /* Asegura que los elementos de entrada no estén bloqueados por capas invisibles */
+ion-content {
+  --pointer-events: auto !important;
+  pointer-events: auto !important;
+}
+
+/* Fuerza que los inputs y botones estén siempre al frente y reciban clics */
+ion-input, 
+ion-textarea, 
+ion-select, 
+ion-button, 
+ion-checkbox, 
+ion-back-button {
+  --pointer-events: auto !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10 !important;
+}
+
+/* Evita que el scroll de Ionic bloquee el foco en navegadores móviles */
+.ion-page {
+  pointer-events: auto !important;
+}
+
