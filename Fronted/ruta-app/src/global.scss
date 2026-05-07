@@ -132,37 +132,28 @@ ion-toast {
     }
   }
 
-  /*Para que funcione para la interaccion de Vercel*/
-  /* Asegura que los elementos de entrada no estén bloqueados por capas invisibles */
-ion-content {
+  /* 1. Asegura que el contenedor de la página no bloquee clicks */
+.ion-page, ion-content {
+  pointer-events: auto !important;
+  touch-action: auto !important;
+}
+
+/* 2. El "truco" maestro para Ionic Standalone: Forzar el input real */
+ion-input {
   --pointer-events: auto !important;
   pointer-events: auto !important;
 }
 
-/* Fuerza que los inputs y botones estén siempre al frente y reciban clics */
-ion-input, 
-ion-textarea, 
-ion-select, 
-ion-button, 
-ion-checkbox, 
-ion-back-button {
-  --pointer-events: auto !important;
+ion-input > input, 
+ion-input .native-input {
   pointer-events: auto !important;
+  user-select: text !important;
+  cursor: text !important;
+}
+
+/* 3. Asegura que los formularios no queden debajo de capas invisibles */
+form, .contenedor-login, .contenedor-registro {
   position: relative;
-  z-index: 10 !important;
-}
-
-/* Evita que el scroll de Ionic bloquee el foco en navegadores móviles */
-.ion-page {
-  pointer-events: auto !important;
-}
-
-.ion-focused {
-  --highlight-background: transparent !important;
-}
-
-/* Fix específico para Standalone Components en Vercel */
-ion-input > input {
-  pointer-events: auto !important;
+  z-index: 100;
 }
 
