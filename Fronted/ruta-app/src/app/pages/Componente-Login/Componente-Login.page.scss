@@ -62,34 +62,31 @@ ion-content {
   margin-bottom: 25px;
 }
 
-.input-item {
-  margin-bottom: 15px;
-  --background: #f9f9f9;
-  --border-radius: 12px;
-  --padding-start: 15px;
-  --color: #333;
+.input-html {
+  display: flex;
+  align-items: center;
+  background: #f9f9f9;
   border: 1px solid #eee;
-  position: relative;
-  cursor: text;
+  border-radius: 12px;
+  padding: 0 15px;
+  margin-bottom: 15px;
+  height: 55px;
 
   ion-icon {
-    color: $verde-principal;
+    color: rgb(5, 150, 105);
     margin-right: 10px;
     font-size: 1.2rem;
   }
 
-  ion-input {
-    width: 100%;
-    min-height: 45px;
-    --padding-start: 10px;
-    /* Esto permite que el click pase directamente al input real de HTML */
-    
-  }
-
   input {
-    cursor: text !important;
-    pointer-events: auto !important;
-  }  
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    color: #333;
+    height: 100%;
+  }
 }
 
 
