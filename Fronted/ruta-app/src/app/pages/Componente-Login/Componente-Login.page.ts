@@ -7,6 +7,9 @@ import { validaciones } from '../../Validators/validaciones';
 
 import { AuthService } from '../../services/auth.service';
 
+import {addIcons} from 'ionicons';
+import { mailOutline, lockClosedOutline, arrowBackOutline } from 'ionicons/icons';
+
 @Component({
   selector: 'app-login',
   templateUrl: './Componente-Login.page.html',
@@ -21,7 +24,11 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+    addIcons({ 
+      mailOutline, lockClosedOutline, arrowBackOutline 
+    });
+  }
 
   ngOnInit(): void {
 

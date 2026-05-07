@@ -15,7 +15,7 @@
         <div class="grupo">
           <ion-item class="input-item" lines="none">
             <ion-icon slot="start" name="mail-outline"></ion-icon>
-            <ion-input formControlName="email" type="email" placeholder="Correo electrónico" class="custom-iput" legacy="true"></ion-input>
+            <ion-input formControlName="email" type="email" placeholder="Correo electrónico" class="custom-input" legacy="true"></ion-input>
           </ion-item>
           <!-- Error fuera del item para que no haya problemas de espacio -->
           <div class="error-container" *ngIf="form.get('email')?.touched && form.get('email')?.errors">
@@ -28,7 +28,7 @@
         <div class="grupo">
           <ion-item class="input-item" lines="none">
             <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
-            <ion-input formControlName="password" type="password" placeholder="Contraseña " class="custom-iput" legacy="true"></ion-input>
+            <ion-input formControlName="password" type="password" placeholder="Contraseña " class="custom-input" legacy="true"></ion-input>
           </ion-item>
           <div class="error-container" *ngIf="form.get('password')?.touched && form.get('password')?.errors">
             <small class="error-texto" *ngIf="form.get('password')?.hasError('required')">La contraseña es obligatoria</small>

@@ -69,6 +69,7 @@ ion-content {
   --padding-start: 15px;
   --color: #333;
   border: 1px solid #eee;
+  z-index: 100 !important;
 
   ion-icon {
     color: $verde-principal;
