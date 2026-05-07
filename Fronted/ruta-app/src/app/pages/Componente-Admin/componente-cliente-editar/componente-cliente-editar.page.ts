@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonContent, IonButton, IonItem, IonLabel, IonText } from '@ionic/angular/standalone';
+import { IonContent, IonButton,  } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../services/admin.service';
 import { validaciones } from '../../../Validators/validaciones';
@@ -11,7 +11,7 @@ import { validaciones } from '../../../Validators/validaciones';
   templateUrl: './componente-cliente-editar.page.html',
   styleUrls: ['./componente-cliente-editar.page.scss'],
   standalone: true,
-  imports: [IonLabel, IonItem, IonButton, IonContent, IonText, CommonModule, ReactiveFormsModule]
+  imports: [ IonButton, IonContent, CommonModule, ReactiveFormsModule]
 })
 export class ComponenteClienteEditarPage implements OnInit {
 

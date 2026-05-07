@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
 import { Router, RouterModule } from '@angular/router';
-import { IonContent, IonButton, IonItem, IonLabel, IonText } from '@ionic/angular/standalone';
+import { IonContent, IonButton} from '@ionic/angular/standalone';
 import { validaciones } from '../../../Validators/validaciones';
 
 @Component({
@@ -12,7 +12,7 @@ import { validaciones } from '../../../Validators/validaciones';
   templateUrl: './componente-cliente-nuevo.page.html',
   styleUrls: ['./componente-cliente-nuevo.page.scss'],
   standalone: true,
-  imports: [IonLabel, IonItem, IonButton, IonContent, IonText, CommonModule, ReactiveFormsModule, RouterModule]
+  imports: [IonButton, IonContent, CommonModule, ReactiveFormsModule, RouterModule]
 })
 export class ComponenteClienteNuevoPage implements OnInit {
   

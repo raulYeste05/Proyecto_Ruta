@@ -15,10 +15,14 @@
         
         <!-- EMAIL -->
         <div class="grupo">
-          <ion-item class="input-moderno" lines="none">
-            <ion-icon name="mail-outline" slot="start"></ion-icon>
-            <ion-input type="email" placeholder="Correo electrónico" formControlName="email"></ion-input>
-          </ion-item>
+          <div class="input-html">
+          <ion-icon name="mail-outline"></ion-icon>
+
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            formControlName="email">
+        </div>
           <ion-note class="error-texto" *ngIf="registroUsuario.get('email')?.touched && registroUsuario.get('email')?.errors">
             <span *ngIf="registroUsuario.get('email')?.hasError('required')">El email es obligatorio</span>
             <span *ngIf="registroUsuario.get('email')?.hasError('emailInvalido')">Formato incorrecto</span>
@@ -28,29 +32,41 @@
 
         <!-- CONTRASEÑA -->
         <div class="grupo">
-          <ion-item class="input-moderno" lines="none">
-            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-            <ion-input type="password" placeholder="Contraseña" formControlName="password"></ion-input>
-          </ion-item>
+          <div class="input-html">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+
+            <input
+              type="password"
+              placeholder="Contraseña"
+              formControlName="password">
+          </div>
           <ion-note class="error-texto" *ngIf="registroUsuario.get('password')?.touched && registroUsuario.get('password')?.hasError('contraseñaInvalida')">
             Mínimo 6 caracteres + una letra
           </ion-note>
         </div>
 
-        <!-- FILA: DNI Y NOMBRE -->
+        <!-- FILA: DNI -->
         <div class="fila-inputs">
           <div class="grupo">
-            <ion-item class="input-moderno" lines="none">
-              <ion-input type="text" placeholder="DNI" formControlName="dni"></ion-input>
-            </ion-item>
+            <div class="input-html">
+              <input
+                type="text"
+                placeholder="DNI"
+                formControlName="dni">
+            </div>
             <ion-note class="error-texto" *ngIf="registroUsuario.get('dni')?.touched && registroUsuario.get('dni')?.errors">
               Inválido
             </ion-note>
           </div>
+
+          <!-- NOMBRE -->
           <div class="grupo">
-            <ion-item class="input-moderno" lines="none">
-              <ion-input type="text" placeholder="Nombre" formControlName="nombre"></ion-input>
-            </ion-item>
+            <div class="input-html">
+              <input
+                type="text"
+                placeholder="Nombre"
+                formControlName="nombre">
+            </div>
             <ion-note class="error-texto" *ngIf="registroUsuario.get('nombre')?.touched && registroUsuario.get('nombre')?.hasError('soloTexto')">
               Solo letras permitidas
             </ion-note>
@@ -59,18 +75,24 @@
 
         <!-- APELLIDOS -->
         <div class="grupo">
-          <ion-item class="input-moderno" lines="none">
-            <ion-input type="text" placeholder="Primer apellido" formControlName="apellido1"></ion-input>
-          </ion-item>
+          <div class="input-html">
+            <input
+              type="text"
+              placeholder="Primer apellido"
+              formControlName="apellido1">
+          </div>
           <ion-note class="error-texto" *ngIf="registroUsuario.get('apellido1')?.touched && registroUsuario.get('apellido1')?.hasError('soloTexto')">
             Solo letras permitidas
           </ion-note>
         </div>
 
         <div class="grupo">
-          <ion-item class="input-moderno" lines="none">
-            <ion-input type="text" placeholder="Segundo apellido" formControlName="apellido2"></ion-input>
-          </ion-item>
+          <div class="input-html">
+            <input
+              type="text"
+              placeholder="Segundo apellido"
+              formControlName="apellido2">
+          </div>
           <ion-note class="error-texto" *ngIf="registroUsuario.get('apellido2')?.touched && registroUsuario.get('apellido2')?.hasError('soloTexto')">
             Solo letras permitidas
           </ion-note>
@@ -78,10 +100,13 @@
 
         <!-- TELÉFONO -->
         <div class="grupo">
-          <ion-item class="input-moderno" lines="none">
+          <div class="input-html">
             <ion-icon name="call-outline" slot="start"></ion-icon>
-            <ion-input type="tel" placeholder="Teléfono" formControlName="telefono"></ion-input>
-          </ion-item>
+            <input
+              type="tel"
+              placeholder="Teléfono"
+              formControlName="telefono">
+          </div>
           <ion-note class="error-texto" *ngIf="registroUsuario.get('telefono')?.touched && registroUsuario.get('telefono')?.hasError('telefonoInvalido')">
             Debe tener 9 dígitos
           </ion-note>

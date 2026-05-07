@@ -1,0 +1,28 @@
+.comentario-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: #222;
+  padding: 10px 15px;
+}
+
+.comentario-box input {
+  flex: 1;
+
+  background: #333;
+  border: none;
+  outline: none;
+
+  color: white;
+
+  padding: 12px 15px;
+
+  border-radius: 12px;
+
+  font-size: 0.95rem;
+}
+
+.comentario-box input::placeholder {
+  color: #aaa;
+}

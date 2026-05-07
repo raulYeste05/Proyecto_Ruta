@@ -1,0 +1,44 @@
+.input-html,
+.select-html {
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 0 15px;
+  min-height: 55px;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border: 2px solid #059669;
+    background: #ffffff;
+  }
+}
+
+.input-html input,
+.select-html select {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #1e293b;
+  font-size: 0.95rem;
+  padding: 15px 0;
+}
+
+.grupo {
+  margin-bottom: 20px;
+}
+
+.grupo label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.error-texto {
+  color: #ef4444;
+  font-size: 0.75rem;
+  margin-top: 5px;
+}
