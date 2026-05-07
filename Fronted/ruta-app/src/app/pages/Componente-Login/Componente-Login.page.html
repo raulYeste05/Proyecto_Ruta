@@ -13,10 +13,16 @@
         <div class="input-group">
         <!-- EMAIL -->
         <div class="grupo">
-          <ion-item class="input-item" lines="none">
-            <ion-icon slot="start" name="mail-outline"></ion-icon>
-            <ion-input formControlName="email" type="email" placeholder="Correo electrónico" class="custom-input" aria-label="Correo electrónico"></ion-input>
-          </ion-item>
+          <div class="input-wrapper-visual"> <ion-icon name="mail-outline"></ion-icon>
+            <ion-input 
+              formControlName="email" 
+              type="email" 
+              placeholder="Correo electrónico"
+              mode="md"
+              fill="none"
+              class="custom-input">
+            </ion-input>
+          </div>
           <!-- Error fuera del item para que no haya problemas de espacio -->
           <div class="error-container" *ngIf="form.get('email')?.touched && form.get('email')?.errors">
             <small class="error-texto" *ngIf="form.get('email')?.hasError('required')">El correo es obligatorio</small>

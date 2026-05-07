@@ -151,6 +151,17 @@ ion-input .native-input {
   cursor: text !important;
 }
 
+/* Esto obliga al navegador a permitir el foco aunque Ionic se equivoque */
+ion-input input {
+  pointer-events: auto !important;
+  user-select: text !important;
+}
+
+/* Evita que el click en el icono robe el foco del input */
+ion-icon {
+  pointer-events: none;
+}
+
 /* 3. Asegura que los formularios no queden debajo de capas invisibles */
 form, .contenedor-login, .contenedor-registro {
   position: relative;

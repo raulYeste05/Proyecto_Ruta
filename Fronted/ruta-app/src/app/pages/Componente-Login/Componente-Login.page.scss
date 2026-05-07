@@ -92,6 +92,37 @@ ion-content {
   }  
 }
 
+
+
+//Prueba
+
+
+.input-wrapper-visual {
+  display: flex;
+  align-items: center;
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 0 15px;
+  border: 1px solid #eee;
+  margin-bottom: 5px;
+  min-height: 50px;
+
+  ion-icon {
+    color: $verde-principal;
+    font-size: 1.2rem;
+    margin-right: 10px;
+  }
+
+  ion-input {
+    flex: 1;
+    --background: transparent;
+    --border-style: none;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    color: #333;
+  }
+}
+
 /* BOTÓN PRINCIPAL */
 .btn-acceder {
   --background: linear-gradient(90deg, $verde-principal 0%, $azul-secundario 100%);
