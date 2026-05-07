@@ -132,39 +132,5 @@ ion-toast {
     }
   }
 
-  /* 1. Asegura que el contenedor de la página no bloquee clicks */
-.ion-page, ion-content {
-  pointer-events: auto !important;
-  touch-action: auto !important;
-}
-
-/* 2. El "truco" maestro para Ionic Standalone: Forzar el input real */
-ion-input {
-  --pointer-events: auto !important;
-  pointer-events: auto !important;
-}
-
-ion-input > input, 
-ion-input .native-input {
-  pointer-events: auto !important;
-  user-select: text !important;
-  cursor: text !important;
-}
-
-/* Esto obliga al navegador a permitir el foco aunque Ionic se equivoque */
-ion-input input {
-  pointer-events: auto !important;
-  user-select: text !important;
-}
-
-/* Evita que el click en el icono robe el foco del input */
-ion-icon {
-  pointer-events: none;
-}
-
-/* 3. Asegura que los formularios no queden debajo de capas invisibles */
-form, .contenedor-login, .contenedor-registro {
-  position: relative;
-  z-index: 100;
-}
+  
 

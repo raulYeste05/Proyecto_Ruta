@@ -1,60 +1,145 @@
 <ion-content class="ion-padding">
+
   <div class="contenedor-login">
+
     <div class="tarjeta-login">
-      <!-- Logo Superior -->
+
+      <!-- LOGO -->
       <div class="logo-seccion" routerLink="/landing">
         <img src="assets/Logo-ruta.png" class="logo">
       </div>
 
       <h1>Bienvenido</h1>
-      <p class="subtitulo">Accede a tu cuenta para empezar a explorar</p>
+
+      <p class="subtitulo">
+        Accede a tu cuenta para empezar a explorar
+      </p>
 
       <form [formGroup]="form" (ngSubmit)="login()">
-        <div class="input-group">
+
         <!-- EMAIL -->
         <div class="grupo">
-          <div class="input-wrapper-visual"> <ion-icon name="mail-outline"></ion-icon>
-            <ion-input 
-              formControlName="email" 
-              type="email" 
-              placeholder="Correo electrónico"
-              mode="md"
-              fill="none"
-              class="custom-input">
+
+          <ion-item lines="none" class="input-item">
+
+            <ion-icon
+              slot="start"
+              name="mail-outline">
+            </ion-icon>
+
+            <ion-input
+              formControlName="email"
+              type="email"
+              placeholder="Correo electrónico">
             </ion-input>
+
+          </ion-item>
+
+          <div
+            class="error-container"
+            *ngIf="form.get('email')?.touched && form.get('email')?.errors">
+
+            <small
+              class="error-texto"
+              *ngIf="form.get('email')?.hasError('required')">
+
+              El correo es obligatorio
+
+            </small>
+
+            <small
+              class="error-texto"
+              *ngIf="form.get('email')?.hasError('emailInvalido')">
+
+              Formato de correo incorrecto
+
+            </small>
+
           </div>
-          <!-- Error fuera del item para que no haya problemas de espacio -->
-          <div class="error-container" *ngIf="form.get('email')?.touched && form.get('email')?.errors">
-            <small class="error-texto" *ngIf="form.get('email')?.hasError('required')">El correo es obligatorio</small>
-            <small class="error-texto" *ngIf="form.get('email')?.hasError('emailInvalido')">Formato de correo incorrecto</small>
-          </div>
+
         </div>
 
         <!-- PASSWORD -->
         <div class="grupo">
-          <ion-item class="input-item" lines="none">
-            <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
-            <ion-input formControlName="password" type="password" placeholder="Contraseña " class="custom-input" aria-label="Contraseña"></ion-input>
-          </ion-item>
-          <div class="error-container" *ngIf="form.get('password')?.touched && form.get('password')?.errors">
-            <small class="error-texto" *ngIf="form.get('password')?.hasError('required')">La contraseña es obligatoria</small>
-            <small class="error-texto" *ngIf="form.get('password')?.hasError('contraseñaInvalida')">Mínimo 6 caracteres y 1 letra</small>
-          </div>
-        </div>
-      </div>
 
-        <ion-button type="submit" expand="block" class="btn-acceder">
+          <ion-item lines="none" class="input-item">
+
+            <ion-icon
+              slot="start"
+              name="lock-closed-outline">
+            </ion-icon>
+
+            <ion-input
+              formControlName="password"
+              type="password"
+              placeholder="Contraseña">
+            </ion-input>
+
+          </ion-item>
+
+          <div
+            class="error-container"
+            *ngIf="form.get('password')?.touched && form.get('password')?.errors">
+
+            <small
+              class="error-texto"
+              *ngIf="form.get('password')?.hasError('required')">
+
+              La contraseña es obligatoria
+
+            </small>
+
+            <small
+              class="error-texto"
+              *ngIf="form.get('password')?.hasError('contraseñaInvalida')">
+
+              Mínimo 6 caracteres y 1 letra
+
+            </small>
+
+          </div>
+
+        </div>
+
+        <!-- BOTÓN -->
+        <ion-button
+          type="submit"
+          expand="block"
+          class="btn-acceder">
+
           Acceder
+
         </ion-button>
+
       </form>
 
+      <!-- FOOTER -->
       <div class="footer-login">
-        <p>¿No tienes cuenta? <a routerLink="/registro">Regístrate</a></p>
-        <ion-button fill="clear" size="small" routerLink="/landing" class="btn-volver">
-          <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+
+        <p>
+          ¿No tienes cuenta?
+          <a routerLink="/registro">Regístrate</a>
+        </p>
+
+        <ion-button
+          fill="clear"
+          size="small"
+          routerLink="/landing"
+          class="btn-volver">
+
+          <ion-icon
+            slot="start"
+            name="arrow-back-outline">
+          </ion-icon>
+
           Volver al inicio
+
         </ion-button>
+
       </div>
+
     </div>
+
   </div>
+
 </ion-content>
