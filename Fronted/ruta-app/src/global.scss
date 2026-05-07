@@ -157,3 +157,12 @@ ion-back-button {
   pointer-events: auto !important;
 }
 
+.ion-focused {
+  --highlight-background: transparent !important;
+}
+
+/* Fix específico para Standalone Components en Vercel */
+ion-input > input {
+  pointer-events: auto !important;
+}
+

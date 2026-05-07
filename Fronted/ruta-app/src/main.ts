@@ -11,7 +11,11 @@ import { provideIonicAngular } from '@ionic/angular/standalone';
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular({ mode: 'md' }),
+    provideIonicAngular({ 
+      mode: 'md',
+      inputShims: false, // <--- Evita el error de setFocus en web
+      hideCaretOnScroll: true
+    }),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideRouter(routes, withPreloading(PreloadAllModules)),
   ],

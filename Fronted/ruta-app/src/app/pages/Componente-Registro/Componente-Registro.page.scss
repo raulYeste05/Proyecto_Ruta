@@ -66,6 +66,14 @@ ion-content { --background: #{$fondo}; }
   ion-icon { color: #94a3b8; font-size: 20px; margin-right: 10px; }
 }
 
+ion-input {
+  width: 100%;
+  height: 100%;
+  --padding-start: 10px;
+  /* Esto permite que el click pase directamente al input real de HTML */
+  pointer-events: auto !important;
+}
+
 /* ELIMINAR FONDO GRIS/AZUL DE AUTOCOMPLETADO (Edge/Chrome) */
 ion-input input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px #f1f5f9 inset !important;
