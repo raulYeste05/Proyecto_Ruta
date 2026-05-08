@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RutasService {
-  private apiUrlORS = '/ors/v2/directions';
+  private apiUrlORS = 'https://api.openrouteservice.org/v2/directions';
   private apiRuta = `${environment.apiUrl}/api/rutas`;
   private apiParada = `${environment.apiUrl}/api/paradas`;
   private apiServicioCercano = `${environment.apiUrl}/api/servicio_cercano`;
