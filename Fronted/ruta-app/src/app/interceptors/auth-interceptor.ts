@@ -13,7 +13,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // 1. EXCEPCIONES: No añadimos el token de nuestra DB si:
   // - Es una ruta de login/registro (/auth/)
   // - Es una ruta para el mapa (/ors/)
-  if (req.url.includes('/auth/') || req.url.includes('/ors/')) {
+  if (req.url.includes('/auth/') || req.url.includes('openrouteservice.org/ors/')) {
     return next(req); 
   }
 
@@ -31,7 +31,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(clonedReq).pipe(
     catchError((err) => {
       // Solo hacemos logout si el error 401 viene de nuestra API, no del mapa
-      if (err.status === 401 && !req.url.includes('/ors/')) {
+      if (err.status === 401 && !req.url.includes('openrouteservice.org/ors/')) {
         authService.logout();
         router.navigate(['/login']);
       }
