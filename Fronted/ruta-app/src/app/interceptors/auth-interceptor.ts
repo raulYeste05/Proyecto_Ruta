@@ -13,7 +13,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // 1. EXCEPCIONES: No añadimos el token de nuestra DB si:
   // - Es una ruta de login/registro (/auth/)
   // - Es una ruta para el mapa (/ors/)
-  if (req.url.includes('/auth/') || req.url.includes('openrouteservice.org/ors/')) {
+  if (req.url.includes('/auth/') || req.url.includes('openrouteservice.org')) {
     return next(req); 
   }
 
