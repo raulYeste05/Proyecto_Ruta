@@ -13,7 +13,6 @@ import com.ryf.Proyecto_Ruta.Model.User;
 import com.ryf.Proyecto_Ruta.DTO.PublicacionRequestDTO;
 import com.ryf.Proyecto_Ruta.DTO.PublicacionResponseDTO;
 import com.ryf.Proyecto_Ruta.Mapper.PublicacionMapper;
-import com.ryf.Proyecto_Ruta.Services.EmailService;
 
 import java.util.List;
 import java.time.LocalDateTime;

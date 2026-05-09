@@ -4,7 +4,6 @@ import com.ryf.Proyecto_Ruta.DTO.RegisterRequestDTO;
 import com.ryf.Proyecto_Ruta.Model.Cliente;
 import com.ryf.Proyecto_Ruta.Model.Rol;
 import com.ryf.Proyecto_Ruta.Model.User;
-import com.ryf.Proyecto_Ruta.Services.EmailService;
 import com.ryf.Proyecto_Ruta.Repositories.ClienteRepository;
 import com.ryf.Proyecto_Ruta.Repositories.RolRepository;
 import com.ryf.Proyecto_Ruta.Repositories.UserRepository;
