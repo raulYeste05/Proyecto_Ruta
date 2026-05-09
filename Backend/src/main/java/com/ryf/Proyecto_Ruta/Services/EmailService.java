@@ -60,6 +60,7 @@ public class EmailService {
     public void avisarAdminNuevoRegistro(String nombreUser, String emailUser) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(ADMIN_EMAIL);
+        message.setFrom("ryeste124@gmail.com");
         message.setSubject("ALERTA: Nuevo usuario registrado");
         message.setText("Se ha registrado: " + nombreUser + " (" + emailUser + ")");
         mailSender.send(message);
