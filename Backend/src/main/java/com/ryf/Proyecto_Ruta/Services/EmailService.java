@@ -3,6 +3,7 @@ package com.ryf.Proyecto_Ruta.Services;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Async;
 
 @Service
 public class EmailService {
@@ -15,6 +16,7 @@ public class EmailService {
     }
 
     //Correos para clientes
+    @Async
     public void enviarCorreoBienvenida(String destinatario, String nombre) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(destinatario);
@@ -22,11 +24,11 @@ public class EmailService {
         message.setText("Hola " + nombre + ",\n\n" +
                 "¡Tu cuenta ha sido creada con éxito! Gracias por registrarte en nuestra aplicación.\n\n" +
                 "Saludos,\nEl equipo de Proyecto Ruta.");
-        message.setFrom("RutaApp@proyectoruta.com");
+        message.setFrom("ryeste124@gmail.com");
 
         mailSender.send(message);
     }
-
+    @Async
     public void enviarCorreoRutaPublicada(String destinatario, String tituloRuta) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(destinatario);
@@ -34,13 +36,13 @@ public class EmailService {
         message.setText("Tu ruta '" + tituloRuta + "' ya está disponible en el foro.\n\n" +
                 "Otros usuarios ya pueden verla y comentar tu aventura.\n" +
                 "¡Gracias por compartir con la comunidad!");
-        message.setFrom("RutaApp@proyectoruta.com");
+        message.setFrom("ryeste124@gmail.com");
 
         mailSender.send(message);
     }
 
     
-
+    @Async
     public void enviarNotificacionNuevoComentario(String emailAutor, String nombreComentador, String tituloPublicacion) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(emailAutor);
@@ -48,13 +50,13 @@ public class EmailService {
         message.setText("Hola,\n\n" +
                 nombreComentador + " ha dejado un comentario en tu publicación '" + tituloPublicacion + "'.\n\n" +
                 "¡Entra en la app para ver qué ha dicho!");
-        message.setFrom("RutaApp@proyectoruta.com");
+        message.setFrom("ryeste124@gmail.com");
 
         mailSender.send(message);
     }
 
     //Correos para administradores
-
+    @Async
     public void avisarAdminNuevoRegistro(String nombreUser, String emailUser) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(ADMIN_EMAIL);
@@ -62,7 +64,7 @@ public class EmailService {
         message.setText("Se ha registrado: " + nombreUser + " (" + emailUser + ")");
         mailSender.send(message);
     }
-
+    @Async
     public void avisarAdminNuevaPublicacion(String nombreUser, String tituloRuta) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(ADMIN_EMAIL);
@@ -70,7 +72,7 @@ public class EmailService {
         message.setText("El usuario " + nombreUser + " ha publicado: " + tituloRuta);
         mailSender.send(message);
     }
-
+    @Async
     public void avisarAdminNuevoComentario(String nombreUser, String emailUser, String tituloPublicacion) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(ADMIN_EMAIL);
