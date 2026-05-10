@@ -1,84 +1,125 @@
 package com.ryf.Proyecto_Ruta.Services;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${BREVO_API_KEY}")
+    private String apiKey;
+
     private final String ADMIN_EMAIL = "ryeste124@gmail.com";
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    private final WebClient webClient = WebClient.builder()
+            .baseUrl("https://api.brevo.com/v3")
+            .build();
+
+    // Método general
+    private void enviarCorreo(String destinatario, String asunto, String contenido) {
+
+        Map<String, Object> body = Map.of(
+                "sender", Map.of(
+                        "name", "Proyecto Ruta",
+                        "email", "ryeste124@gmail.com"
+                ),
+                "to", List.of(
+                        Map.of("email", destinatario)
+                ),
+                "subject", asunto,
+                "htmlContent", contenido
+        );
+
+        webClient.post()
+                .uri("/smtp/email")
+                .header("api-key", apiKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
     }
 
-    //Correos para clientes
-    @Async
+    // Cliente
     public void enviarCorreoBienvenida(String destinatario, String nombre) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(destinatario);
-        message.setSubject("¡Bienvenido a Proyecto Ruta!");
-        message.setText("Hola " + nombre + ",\n\n" +
-                "¡Tu cuenta ha sido creada con éxito! Gracias por registrarte en nuestra aplicación.\n\n" +
-                "Saludos,\nEl equipo de Proyecto Ruta.");
-        message.setFrom("ryeste124@gmail.com");
 
-        mailSender.send(message);
+        String contenido = """
+                <h2>Bienvenido a Proyecto Ruta</h2>
+                <p>Hola %s, tu cuenta ha sido creada correctamente.</p>
+                """.formatted(nombre);
+
+        enviarCorreo(destinatario,
+                "¡Bienvenido a Proyecto Ruta!",
+                contenido);
     }
-    @Async
+
     public void enviarCorreoRutaPublicada(String destinatario, String tituloRuta) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(destinatario);
-        message.setSubject("¡Ruta publicada correctamente! 🗺️");
-        message.setText("Tu ruta '" + tituloRuta + "' ya está disponible en el foro.\n\n" +
-                "Otros usuarios ya pueden verla y comentar tu aventura.\n" +
-                "¡Gracias por compartir con la comunidad!");
-        message.setFrom("ryeste124@gmail.com");
 
-        mailSender.send(message);
+        String contenido = """
+                <h2>Ruta publicada</h2>
+                <p>Tu ruta '%s' ya está visible en la aplicación.</p>
+                """.formatted(tituloRuta);
+
+        enviarCorreo(destinatario,
+                "Ruta publicada correctamente",
+                contenido);
     }
 
-    
-    @Async
-    public void enviarNotificacionNuevoComentario(String emailAutor, String nombreComentador, String tituloPublicacion) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(emailAutor);
-        message.setSubject("¡Nuevo comentario en tu ruta! 💬");
-        message.setText("Hola,\n\n" +
-                nombreComentador + " ha dejado un comentario en tu publicación '" + tituloPublicacion + "'.\n\n" +
-                "¡Entra en la app para ver qué ha dicho!");
-        message.setFrom("ryeste124@gmail.com");
+    public void enviarNotificacionNuevoComentario(String emailAutor,
+                                                  String nombreComentador,
+                                                  String tituloPublicacion) {
 
-        mailSender.send(message);
+        String contenido = """
+                <h2>Nuevo comentario</h2>
+                <p>%s ha comentado tu publicación '%s'.</p>
+                """.formatted(nombreComentador, tituloPublicacion);
+
+        enviarCorreo(emailAutor,
+                "Nuevo comentario",
+                contenido);
     }
 
-    //Correos para administradores
-    @Async
+    // Admin
     public void avisarAdminNuevoRegistro(String nombreUser, String emailUser) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(ADMIN_EMAIL);
-        message.setFrom("ryeste124@gmail.com");
-        message.setSubject("ALERTA: Nuevo usuario registrado");
-        message.setText("Se ha registrado: " + nombreUser + " (" + emailUser + ")");
-        mailSender.send(message);
+
+        String contenido = """
+                <h2>Nuevo usuario registrado</h2>
+                <p>%s (%s)</p>
+                """.formatted(nombreUser, emailUser);
+
+        enviarCorreo(ADMIN_EMAIL,
+                "Nuevo registro",
+                contenido);
     }
-    @Async
+
     public void avisarAdminNuevaPublicacion(String nombreUser, String tituloRuta) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(ADMIN_EMAIL);
-        message.setSubject("ALERTA: Nueva ruta publicada");
-        message.setText("El usuario " + nombreUser + " ha publicado: " + tituloRuta);
-        mailSender.send(message);
+
+        String contenido = """
+                <h2>Nueva publicación</h2>
+                <p>%s ha publicado: %s</p>
+                """.formatted(nombreUser, tituloRuta);
+
+        enviarCorreo(ADMIN_EMAIL,
+                "Nueva publicación",
+                contenido);
     }
-    @Async
-    public void avisarAdminNuevoComentario(String nombreUser, String emailUser, String tituloPublicacion) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(ADMIN_EMAIL);
-        message.setSubject("ALERTA: Nuevo comentario en publicación");
-        message.setText("El usuario " + nombreUser + " (" + emailUser + ") ha dejado un comentario en la publicación: " + tituloPublicacion);
-        mailSender.send(message);
+
+    public void avisarAdminNuevoComentario(String nombreUser,
+                                           String emailUser,
+                                           String tituloPublicacion) {
+
+        String contenido = """
+                <h2>Nuevo comentario</h2>
+                <p>%s (%s) comentó en '%s'</p>
+                """.formatted(nombreUser, emailUser, tituloPublicacion);
+
+        enviarCorreo(ADMIN_EMAIL,
+                "Nuevo comentario",
+                contenido);
     }
 }
