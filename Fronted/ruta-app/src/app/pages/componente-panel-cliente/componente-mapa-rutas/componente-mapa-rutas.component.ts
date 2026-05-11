@@ -586,6 +586,7 @@ async mostrarToastSuccess(msj: string) {
     };
     this.marcadoresServicios.forEach(m => this.map.removeLayer(m));
     this.marcadoresServicios = [];
+    this.puntoInicioGuardado = false;
   }
 
 
