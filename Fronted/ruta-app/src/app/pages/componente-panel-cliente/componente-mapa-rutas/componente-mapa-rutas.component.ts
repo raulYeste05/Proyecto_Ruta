@@ -264,19 +264,59 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     };
   }
 
+   // CONFIRMAR TRAMO Y CONTINUAR
    confirmarTramoYContinuar() {
+
     if (!this.datosTramoActual) return;
 
-    const lat = this.isModoLibre 
-      ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
+    // =========================================================
+    // GUARDAR EL PUNTO INICIAL SOLO EN EL PRIMER TRAMO
+    // =========================================================
+    if (this.tramosConfirmados.length === 0) {
+
+      let latInicio: number;
+      let lngInicio: number;
+
+      if (this.isModoLibre) {
+
+        latInicio = this.puntosTrayectoLibre[0].lat;
+        lngInicio = this.puntosTrayectoLibre[0].lng;
+
+      } else {
+
+        // puntosRuta guarda [lng, lat]
+        lngInicio = this.puntosRuta[0][0];
+        latInicio = this.puntosRuta[0][1];
+      }
+
+      const paradaInicio = {
+        orden: 0,
+        latitud: latInicio,
+        longitud: lngInicio,
+        tipoTransporte: 'inicio',
+        tiempoEstimado: 0,
+        distanciaEstimada: 0
+      };
+
+      this.tramosConfirmados.push(paradaInicio);
+    }
+
+    // =========================================================
+    // OBTENER EL PUNTO FINAL DEL TRAMO
+    // =========================================================
+    const lat = this.isModoLibre
+      ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat
       : this.puntosRuta[this.puntosRuta.length - 1][1];
-    
-    const lng = this.isModoLibre 
-      ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
+
+    const lng = this.isModoLibre
+      ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng
       : this.puntosRuta[this.puntosRuta.length - 1][0];
 
+    // =========================================================
+    // CREAR LA PARADA FINAL DEL TRAMO
+    // =========================================================
     const nuevaParada = {
-      orden: this.tramosConfirmados.length + 1,
+      orden: this.tramosConfirmados.length,
       latitud: lat,
       longitud: lng,
       tipoTransporte: this.obtenerTipoEnum(),
@@ -285,28 +325,52 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     };
 
     this.tramosConfirmados.push(nuevaParada);
+
+    // =========================================================
+    // ACUMULAR TOTALES
+    // =========================================================
     this.acumularTotales();
 
-    // --- NUEVA LÓGICA: BUSCAR SERVICIOS SIN GUARDAR EN DB ---
+    // =========================================================
+    // BUSCAR SERVICIOS CERCANOS
+    // =========================================================
     this.RutasService.getServiciosPorCoordenadas(lat, lng).subscribe({
-    next: (servicios) => {
-      // Llamamos al método que ya tenías para pintar los círculos en el mapa
-      this.pintarServiciosEnMapa(servicios); 
-    },
-    error: (err) => console.error("Error buscando servicios temporales", err)
-  });
+      next: (servicios) => {
+        this.pintarServiciosEnMapa(servicios);
+      },
+      error: (err) => console.error("Error buscando servicios temporales", err)
+    });
 
-    // Limpieza para el siguiente tramo...
+    // =========================================================
+    // PREPARAR EL SIGUIENTE TRAMO
+    // =========================================================
     if (!this.isModoLibre) {
-      if (this.polylineActual) this.map.removeLayer(this.polylineActual);
+
+      // eliminar línea actual
+      if (this.polylineActual) {
+        this.map.removeLayer(this.polylineActual);
+        this.polylineActual = null;
+      }
+
+      // importante: mantener el último punto como inicio del siguiente tramo
       this.puntosRuta = [[lng, lat]];
     }
 
+    // =========================================================
+    // LIMPIAR VARIABLES TEMPORALES
+    // =========================================================
     this.datosTramoActual = null;
     this.distancia = '';
     this.duracion = '';
-    this.mostrarToastSuccess('Tramo añadido. Buscando servicios cercanos...');
 
+    // =========================================================
+    // MENSAJE
+    // =========================================================
+    this.mostrarToastSuccess('Tramo añadido correctamente');
+
+    // =========================================================
+    // MODO LIBRE
+    // =========================================================
     if (this.isModoLibre) {
       this.presentarAlertaSiguientePaso();
     }
@@ -706,69 +770,132 @@ async mostrarToastSuccess(msj: string) {
 
   //Mostrar la ruta en el mapa
  cargarRutaGuardada(id: number) {
+
   console.log("1. Entrando en cargarRutaGuardada con ID:", id);
+
   this.limpiarMapa();
 
   this.RutasService.getParadasByRuta(id).subscribe({
-    next: (paradas) => {
-      console.log("2. Respuesta del backend recibida. Paradas:", paradas); // <--- LOG 2
-      if (!paradas || paradas.length === 0) return;
-      console.warn("3. Ojo: El backend no devolvió paradas para esta ruta.");
 
-      // Forzamos ordenación por si el backend fallara en el OrderBy
+    next: (paradas) => {
+
+      console.log("2. Paradas recibidas:", paradas);
+
+      // =========================================================
+      // VALIDACIÓN
+      // =========================================================
+      if (!paradas || paradas.length === 0) {
+
+        console.warn("No hay paradas para esta ruta");
+        return;
+      }
+
+      // =========================================================
+      // ORDENAR
+      // =========================================================
       paradas.sort((a, b) => a.orden - b.orden);
 
+      // =========================================================
+      // RECORRER PARADAS
+      // =========================================================
       paradas.forEach((p, index) => {
-        console.log(`4. Procesando marcador parada ${p.orden} en:`, p.latitud, p.longitud); // <--- LOG 3
-        // 1. Dibujar el marcador de la parada
-        const marcador = L.marker([p.latitud, p.longitud])
-          .addTo(this.map)
-          .bindPopup(`<b>Parada ${p.orden}</b><br>Transporte: ${p.tipoTransporte}`);
-        this.marcadores.push(marcador);
-        
-        // 2. Pintar servicios guardados para esta parada
-        this.dibujarServiciosCercanos(p.id);
 
-        // 3. Dibujar el tramo hacia la SIGUIENTE parada
+        console.log("Procesando parada:", p);
+
+        // =====================================================
+        // NO MOSTRAR EL MARCADOR DEL PUNTO INICIAL
+        // =====================================================
+        if (p.orden !== 0) {
+
+          const marcador = L.marker([p.latitud, p.longitud])
+            .addTo(this.map)
+            .bindPopup(`
+              <b>Parada ${p.orden}</b><br>
+              Transporte: ${p.tipoTransporte}
+            `);
+
+          this.marcadores.push(marcador);
+
+          // Servicios cercanos
+          this.dibujarServiciosCercanos(p.id);
+        }
+
+        // =====================================================
+        // DIBUJAR TRAMO HACIA LA SIGUIENTE PARADA
+        // =====================================================
         if (index < paradas.length - 1) {
-          console.log(`5. Pidiendo ruta a ORS para tramo entre ${p.orden} y ${index + 2}`); // <--- LOG 4
-          const pSiguiente = paradas[index + 1];
-          
-          // Coordenadas para ORS: [Longitud, Latitud]
+
+          const siguiente = paradas[index + 1];
+
+          console.log(
+            `Calculando tramo ${p.orden} -> ${siguiente.orden}`
+          );
+
+          // ORS USA [lng, lat]
           const puntosTramo = [
-            [p.longitud, p.latitud], 
-            [pSiguiente.longitud, pSiguiente.latitud]
+            [p.longitud, p.latitud],
+            [siguiente.longitud, siguiente.latitud]
           ];
 
-          // IMPORTANTE: Usamos el transporte de la parada DESTINO (pSiguiente)
-          // porque es el que define cómo se llegó de p a pSiguiente
-          const transporteORS = this.mapearTransporteORS(pSiguiente.tipoTransporte);
+          // IMPORTANTE:
+          // usamos el transporte de la parada destino
+          const transporteORS =
+            this.mapearTransporteORS(siguiente.tipoTransporte);
 
-          this.RutasService.getRoute(puntosTramo, transporteORS).subscribe({
+          const colorTramo =
+            this.obtenerColorPorTransporte(siguiente.tipoTransporte);
+
+          this.RutasService.getRoute(
+            puntosTramo,
+            transporteORS
+          ).subscribe({
+
             next: (res) => {
-              // Usamos el color según el transporte de la parada destino
-              const colorTramo = this.obtenerColorPorTransporte(pSiguiente.tipoTransporte);
-              
+
+              console.log(
+                `Ruta ORS OK entre ${p.orden} y ${siguiente.orden}`
+              );
+
               L.geoJSON(res, {
-                style: { color: colorTramo, weight: 6, opacity: 0.8 }
+                style: {
+                  color: colorTramo,
+                  weight: 6,
+                  opacity: 0.8
+                }
               }).addTo(this.map);
             },
+
             error: (err) => {
-              console.error(`Error en tramo entre parada ${p.orden} y ${pSiguiente.orden}:`, err);
+
+              console.error(
+                `Error tramo ${p.orden} -> ${siguiente.orden}`,
+                err
+              );
             }
           });
         }
       });
 
-      // 4. Centrar el mapa con un margen (pad)
+      // =========================================================
+      // CENTRAR MAPA
+      // =========================================================
       setTimeout(() => {
+
         if (this.marcadores.length > 0) {
+
           const group = L.featureGroup(this.marcadores);
-          this.map.fitBounds(group.getBounds().pad(0.2));
+
+          this.map.fitBounds(
+            group.getBounds().pad(0.2)
+          );
         }
-      }, 1000); // Aumentamos un poco el tiempo para dar margen a la carga de rutas
+
+      }, 1000);
     },
-    error: (err) => console.error("Error cargando paradas del backend:", err)
+
+    error: (err) => {
+      console.error("Error cargando ruta:", err);
+    }
   });
 }
 
