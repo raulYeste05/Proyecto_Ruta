@@ -720,12 +720,12 @@ async mostrarToastSuccess(msj: string) {
           this.dibujarServiciosCercanos(p.id);
 
           // 3. Si no es la primera parada, dibujamos el camino desde la anterior
-          if (index > 0) {
-            const pAnterior = paradas[index - 1];
-            const puntosTramo = [
-              [pAnterior.longitud, pAnterior.latitud], 
-              [p.longitud, p.latitud]
-            ];
+          if (index < paradas.length - 1) {
+          const pSiguiente = paradas[index + 1];
+          const puntosTramo = [
+            [p.longitud, p.latitud], 
+            [pSiguiente.longitud, pSiguiente.latitud]
+          ];
 
             // Elegimos el perfil de transporte correcto para este tramo
             const transporteORS = this.mapearTransporteORS(p.tipoTransporte);
