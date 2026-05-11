@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { noAuthGuard } from './guards/no-auth-guard';
+import { salirGuard } from './guards/salir-guard';
 
 
 export const routes: Routes = [
@@ -71,7 +72,7 @@ export const routes: Routes = [
 
   {
     path: 'componente-panel-cliente',
-    canActivate: [authGuard],
+    canActivate: [authGuard, salirGuard],
     loadComponent: () => import('./pages/componente-panel-cliente/componente-panel-cliente.page')
       .then(m => m.ComponentePanelClientePage),
       children: [
