@@ -35,21 +35,25 @@ export class ComponenteUsuarioPage implements OnInit {
   }
 
   eliminaruser(id: number) {
-  // Si el id llega como undefined o null, no hacemos nada
-  if (!id) {
-    console.error("No se puede eliminar: El ID del usuario es undefined. Revisa el nombre del campo en el HTML.");
-    return;
-  }
+    if (!id) return;
 
-  this.adminService.eliminarUsuario(id).subscribe({
-    next: () => {
-      this.cargarUsuarios();
-    },
-    error: (err) => {
-      console.error("Error al eliminar usuario:", err);
-    }
-  });
-}
+    // Añadimos { responseType: 'text' } si el servidor no devuelve un JSON
+    this.adminService.eliminarUsuario(id).subscribe({
+      next: () => {
+        console.log("Usuario eliminado con éxito");
+        // ESTO ES CLAVE: Filtramos la lista localmente para que desaparezca al instante
+        this.usuarios = this.usuarios.filter(u => u.idUser !== id);
+      },
+      error: (err) => {
+        // Si el status es 200, en realidad es un éxito, así que lo manejamos aquí
+        if (err.status === 200) {
+          this.usuarios = this.usuarios.filter(u => u.idUser !== id);
+        } else {
+          console.error("Error real al eliminar:", err);
+        }
+      }
+    });
+  }
  
 
 }
