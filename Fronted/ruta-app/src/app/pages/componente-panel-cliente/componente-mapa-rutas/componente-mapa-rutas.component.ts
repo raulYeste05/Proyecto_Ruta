@@ -730,7 +730,7 @@ async mostrarToastSuccess(msj: string) {
             const transporteORS = this.mapearTransporteORS(p.tipoTransporte);
 
             this.RutasService.getRoute(puntosTramo, transporteORS).subscribe(res => {
-              const colorTramo = p.tipoTransporte === 'coche' ? '#3880ff' : '#2dd36f';
+              const colorTramo =this.obtenerColorPorTransporte(p.tipoTransporte);
               
               L.geoJSON(res, {
                 style: { color: colorTramo, weight: 6, opacity: 0.8 }
@@ -755,6 +755,20 @@ async mostrarToastSuccess(msj: string) {
     if (t === 'coche') return 'driving-car';
     if (t === 'bicicleta') return 'cycling-regular';
     return 'foot-walking'; // Por defecto andando
+  }
+
+    private obtenerColorPorTransporte(tipo: string): string {
+    const t = tipo.toLowerCase();
+    switch (t) {
+      case 'coche':
+        return '#3880ff'; // Azul
+      case 'bicicleta':
+        return '#ffa500'; // Naranja (puedes usar el hex exacto de tu CSS)
+      case 'andando':
+        return '#2dd36f'; // Verde
+      default:
+        return '#3880ff'; // Color por defecto
+    }
   }
   
 }
