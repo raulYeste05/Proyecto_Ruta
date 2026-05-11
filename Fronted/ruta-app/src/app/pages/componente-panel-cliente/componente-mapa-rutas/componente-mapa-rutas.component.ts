@@ -700,61 +700,66 @@ async mostrarToastSuccess(msj: string) {
 
   //Mostrar la ruta en el mapa
  cargarRutaGuardada(id: number) {
-    this.limpiarMapa();
+  this.limpiarMapa();
 
-    this.RutasService.getParadasByRuta(id).subscribe({
-      next: (paradas) => {
-        if (!paradas || paradas.length === 0) return;
+  this.RutasService.getParadasByRuta(id).subscribe({
+    next: (paradas) => {
+      if (!paradas || paradas.length === 0) return;
 
-        // Las paradas ya vienen ordenadas por el Backend gracias a OrderByOrdenAsc
+      // Forzamos ordenación por si el backend fallara en el OrderBy
+      paradas.sort((a, b) => a.orden - b.orden);
+
+      paradas.forEach((p, index) => {
+        // 1. Dibujar el marcador de la parada
+        const marcador = L.marker([p.latitud, p.longitud])
+          .addTo(this.map)
+          .bindPopup(`<b>Parada ${p.orden}</b><br>Transporte: ${p.tipoTransporte}`);
+        this.marcadores.push(marcador);
         
-        paradas.forEach((p, index) => {
-          console.log(`Procesando parada ${index}, Tipo en DB: "${p.tipoTransporte}"`);
-          // 1. Dibujar el marcador de la parada
-          const marcador = L.marker([p.latitud, p.longitud])
-            .addTo(this.map)
-            .bindPopup(`<b>Parada ${p.orden}</b><br>Transporte: ${p.tipoTransporte}`);
-          this.marcadores.push(marcador);
-          
-          // 2. Pintar servicios guardados para esta parada
-          this.dibujarServiciosCercanos(p.id);
+        // 2. Pintar servicios guardados para esta parada
+        this.dibujarServiciosCercanos(p.id);
 
-          // 3. Si no es la primera parada, dibujamos el camino desde la anterior
-          if (index < paradas.length - 1) {
+        // 3. Dibujar el tramo hacia la SIGUIENTE parada
+        if (index < paradas.length - 1) {
           const pSiguiente = paradas[index + 1];
+          
+          // Coordenadas para ORS: [Longitud, Latitud]
           const puntosTramo = [
             [p.longitud, p.latitud], 
             [pSiguiente.longitud, pSiguiente.latitud]
           ];
 
-            // Elegimos el perfil de transporte correcto para este tramo
-            const transporteORS = this.mapearTransporteORS(p.tipoTransporte);
+          // IMPORTANTE: Usamos el transporte de la parada DESTINO (pSiguiente)
+          // porque es el que define cómo se llegó de p a pSiguiente
+          const transporteORS = this.mapearTransporteORS(pSiguiente.tipoTransporte);
 
-            this.RutasService.getRoute(puntosTramo, transporteORS).subscribe({
-              next: (res) => {
-                console.log(`Ruta recibida para ${p.tipoTransporte}:`, res); // <--- AÑADIR PARA DEPURAR
-                const colorTramo = this.obtenerColorPorTransporte(p.tipoTransporte);
-                
-                L.geoJSON(res, {
-                  style: { color: colorTramo, weight: 6, opacity: 0.8 }
-                }).addTo(this.map);
-              },
-              error: (err) => {
-                console.error(`Error al obtener ruta de bicicleta:`, err);
-              }
-            });
-          }
-        });
+          this.RutasService.getRoute(puntosTramo, transporteORS).subscribe({
+            next: (res) => {
+              // Usamos el color según el transporte de la parada destino
+              const colorTramo = this.obtenerColorPorTransporte(pSiguiente.tipoTransporte);
+              
+              L.geoJSON(res, {
+                style: { color: colorTramo, weight: 6, opacity: 0.8 }
+              }).addTo(this.map);
+            },
+            error: (err) => {
+              console.error(`Error en tramo entre parada ${p.orden} y ${pSiguiente.orden}:`, err);
+            }
+          });
+        }
+      });
 
-        // 4. Centrar el mapa para ver todo el trayecto
-        setTimeout(() => {
+      // 4. Centrar el mapa con un margen (pad)
+      setTimeout(() => {
+        if (this.marcadores.length > 0) {
           const group = L.featureGroup(this.marcadores);
-          this.map.fitBounds(group.getBounds().pad(0.1));
-        }, 500);
-      },
-      error: (err) => console.error("Error cargando paradas del backend:", err)
-    });
-  }
+          this.map.fitBounds(group.getBounds().pad(0.2));
+        }
+      }, 1000); // Aumentamos un poco el tiempo para dar margen a la carga de rutas
+    },
+    error: (err) => console.error("Error cargando paradas del backend:", err)
+  });
+}
 
   // Función auxiliar para que ORS entienda tus tipos de transporte
  private mapearTransporteORS(tipo: any): string {
