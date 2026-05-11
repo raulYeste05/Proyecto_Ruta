@@ -37,6 +37,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
 
   idRutaActual: number | null = null; // Para rastrear la ruta en curso
   tramosConfirmados: any[] = [];
+  puntoInicioGuardado: boolean = false;
   datosTramoActual: Tramo | null = null;
   // Añadimos un array para limpiar los marcadores de servicios si fuera necesario
   marcadoresServicios: L.Marker[] = [];
@@ -272,7 +273,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     // =========================================================
     // GUARDAR EL PUNTO INICIAL SOLO EN EL PRIMER TRAMO
     // =========================================================
-    if (this.tramosConfirmados.length === 0) {
+    if (this.puntoInicioGuardado) {
 
       let latInicio: number;
       let lngInicio: number;
@@ -299,6 +300,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
       };
 
       this.tramosConfirmados.push(paradaInicio);
+      this.puntoInicioGuardado = true;
     }
 
     // =========================================================
