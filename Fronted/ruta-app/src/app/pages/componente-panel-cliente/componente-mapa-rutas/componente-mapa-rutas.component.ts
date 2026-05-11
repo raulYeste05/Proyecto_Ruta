@@ -709,6 +709,7 @@ async mostrarToastSuccess(msj: string) {
         // Las paradas ya vienen ordenadas por el Backend gracias a OrderByOrdenAsc
         
         paradas.forEach((p, index) => {
+          console.log(`Procesando parada ${index}, Tipo en DB: "${p.tipoTransporte}"`);
           // 1. Dibujar el marcador de la parada
           const marcador = L.marker([p.latitud, p.longitud])
             .addTo(this.map)
@@ -756,12 +757,14 @@ async mostrarToastSuccess(msj: string) {
   }
 
   // Función auxiliar para que ORS entienda tus tipos de transporte
-  private mapearTransporteORS(tipo: string): string {
-    const t = tipo.toLowerCase();
-    if (t === 'coche') return 'driving-car';
-    if (t === 'bicicleta') return 'cycling-regular';
-    return 'foot-walking'; // Por defecto andando
-  }
+ private mapearTransporteORS(tipo: any): string {
+  if (!tipo) return 'foot-walking';
+  const t = String(tipo).toLowerCase().trim(); // Forzamos a String por si viene el objeto Enum
+  
+  if (t === 'coche') return 'driving-car';
+  if (t === 'bicicleta' || t === 'bici') return 'cycling-regular';
+  return 'foot-walking';
+}
 
     private obtenerColorPorTransporte(tipo: string): string {
     const t = tipo.toLowerCase();
