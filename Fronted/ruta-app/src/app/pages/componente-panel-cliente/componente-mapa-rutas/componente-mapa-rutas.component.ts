@@ -729,13 +729,18 @@ async mostrarToastSuccess(msj: string) {
             // Elegimos el perfil de transporte correcto para este tramo
             const transporteORS = this.mapearTransporteORS(p.tipoTransporte);
 
-            this.RutasService.getRoute(puntosTramo, transporteORS).subscribe(res => {
-              console.log('Ruta recibida para ${p.tipoTransporte}:', res);
-              const colorTramo =this.obtenerColorPorTransporte(p.tipoTransporte);
-              
-              L.geoJSON(res, {
-                style: { color: colorTramo, weight: 6, opacity: 0.8 }
-              }).addTo(this.map);
+            this.RutasService.getRoute(puntosTramo, transporteORS).subscribe({
+              next: (res) => {
+                console.log(`Ruta recibida para ${p.tipoTransporte}:`, res); // <--- AÑADIR PARA DEPURAR
+                const colorTramo = this.obtenerColorPorTransporte(p.tipoTransporte);
+                
+                L.geoJSON(res, {
+                  style: { color: colorTramo, weight: 6, opacity: 0.8 }
+                }).addTo(this.map);
+              },
+              error: (err) => {
+                console.error(`Error al obtener ruta de bicicleta:`, err);
+              }
             });
           }
         });
