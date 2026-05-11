@@ -273,7 +273,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     // =========================================================
     // GUARDAR EL PUNTO INICIAL SOLO EN EL PRIMER TRAMO
     // =========================================================
-    if (this.puntoInicioGuardado) {
+    if (!this.puntoInicioGuardado) {
 
       let latInicio: number;
       let lngInicio: number;
