@@ -72,7 +72,8 @@ export const routes: Routes = [
 
   {
     path: 'componente-panel-cliente',
-    canActivate: [authGuard, salirGuard],
+    canActivate: [authGuard],
+    canDeactivate: [salirGuard],
     loadComponent: () => import('./pages/componente-panel-cliente/componente-panel-cliente.page')
       .then(m => m.ComponentePanelClientePage),
       children: [
