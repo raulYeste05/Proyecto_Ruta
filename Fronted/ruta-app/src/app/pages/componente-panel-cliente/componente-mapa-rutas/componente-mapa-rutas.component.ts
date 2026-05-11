@@ -81,26 +81,32 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-  this.initMap();
+    this.initMap();
 
-  this.route.queryParams.subscribe(params => {
-    console.log("DEBUG: Parámetros recibidos en la URL:", params);
-    
-    // Cambiamos 'idRuta' por el nombre que realmente estés usando en la URL
-    // Si tu URL es ?idRuta=10, usa params['idRuta']
-    // Si tu URL es ?id=10, usa params['id']
-    const id = params['idRuta'] || params['id']; 
+    setTimeout(() => {
+      if (this.map) {
+        this.map.invalidateSize();
+        console.log("Mapa Leaflet listo");
+      }
+    }, 400);
 
-    if (id) {
-      console.log("DEBUG: Llamando a cargarRutaGuardada con ID:", id);
-      setTimeout(() => {
-        this.cargarRutaGuardada(Number(id));
-      }, 800); // Un poco más de tiempo por seguridad
-    } else {
-      console.warn("DEBUG: No se encontró ningún ID en los queryParams");
-    }
-  });
-}
+    // SUSCRIPCIÓN CORREGIDA
+    this.route.queryParams.subscribe(params => {
+      console.log("DEBUG: Parámetros de URL recibidos:", params);
+      
+      // Intentamos capturar el ID tanto si viene como 'idRuta' o como 'id'
+      const idCapturado = params['idRuta'] || params['id'];
+
+      if (idCapturado) {
+        console.log("DEBUG: ID encontrado:", idCapturado, ". Llamando a cargarRutaGuardada...");
+        setTimeout(() => {
+          this.cargarRutaGuardada(Number(idCapturado));
+        }, 800); 
+      } else {
+        console.warn("DEBUG: No se detectó ningún parámetro 'idRuta' o 'id' en la URL.");
+      }
+    });
+  }
 
   volverAlPanelAdmin(){
     this.router.navigate(['/componente-panel-admin/rutas']);
