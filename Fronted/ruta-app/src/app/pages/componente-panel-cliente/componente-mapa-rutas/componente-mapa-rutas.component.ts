@@ -294,7 +294,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
         orden: 0,
         latitud: latInicio,
         longitud: lngInicio,
-        tipoTransporte: 'inicio',
+        tipoTransporte: 'andando',
         tiempoEstimado: 0,
         distanciaEstimada: 0
       };
