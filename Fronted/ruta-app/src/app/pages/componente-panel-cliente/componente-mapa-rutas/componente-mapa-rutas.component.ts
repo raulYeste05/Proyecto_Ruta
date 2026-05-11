@@ -730,6 +730,7 @@ async mostrarToastSuccess(msj: string) {
             const transporteORS = this.mapearTransporteORS(p.tipoTransporte);
 
             this.RutasService.getRoute(puntosTramo, transporteORS).subscribe(res => {
+              console.log('Ruta recibida para ${p.tipoTransporte}:', res);
               const colorTramo =this.obtenerColorPorTransporte(p.tipoTransporte);
               
               L.geoJSON(res, {
