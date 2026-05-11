@@ -1,4 +1,32 @@
-<ion-header class="ion-no-border">
+<ion-menu contentId="main-content" side="end">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="menu-mobile-content">
+    <ion-list lines="none">
+      <ion-item button>
+        <ion-icon slot="start" name="home-outline"></ion-icon>
+        <ion-label>INICIO</ion-label>
+      </ion-item>
+      <ion-item button>
+        <ion-icon slot="start" name="help-circle-outline"></ion-icon>
+        <ion-label>CÓMO FUNCIONA</ion-label>
+      </ion-item>
+      <ion-item button>
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-label>CONTACTO</ion-label>
+      </ion-item>
+      <ion-item button routerLink="/login" class="item-login-mobile">
+        <ion-icon slot="start" name="log-in-outline"></ion-icon>
+        <ion-label>LOGIN</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-header class="ion-no-border" id="main-content">
   <ion-toolbar class="nav-toolbar">
     <div class="contenedor-nav">
       <div class="nav-izquierda">
@@ -6,18 +34,21 @@
         <span class="marca">RutaApp</span>
       </div>
 
-      <div class="nav-centro">
-        <ion-button fill="solid" class="btn-nav active">INICIO</ion-button>
-        <ion-button fill="solid" class="btn-nav">COMO FUNCIONA</ion-button>
-        <ion-button fill="solid" class="btn-nav">CONTACTO</ion-button>
+      <div class="nav-centro ion-hide-md-down">
+        <ion-button fill="clear" class="btn-nav active">INICIO</ion-button>
+        <ion-button fill="clear" class="btn-nav">COMO FUNCIONA</ion-button>
+        <ion-button fill="clear" class="btn-nav">CONTACTO</ion-button>
       </div>
 
       <div class="nav-derecha">
-        <ion-button variant="outline" class="btn-login" routerLink="/login">LOGIN</ion-button>
+        <ion-button variant="outline" class="btn-login ion-hide-md-down" routerLink="/login">LOGIN</ion-button>
+        
+        <ion-menu-button class="ion-hide-md-up" color="light"></ion-menu-button>
       </div>
     </div>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content>
   <!-- HERO SECTION CON DEGRADADO -->

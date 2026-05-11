@@ -7,6 +7,56 @@ $azul-barra: #1e293b;
 $verde-accent: #10b981;
 $azul-oscuro: #0f172a;
 
+//Menu Mobile
+/* --- RESPONSIVE NAVBAR --- */
+
+// Ocultar botones en móvil
+.nav-centro, .btn-login {
+  &.ion-hide-md-down {
+    @media (max-width: 768px) {
+      display: none !important;
+    }
+  }
+}
+
+// Estilos del Menú lateral móvil
+.menu-mobile-content {
+  --background: #0f172a;
+  
+  ion-list {
+    background: transparent;
+    padding-top: 20px;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: white;
+    --padding-start: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+
+    ion-icon {
+      color: $verde-accent;
+    }
+  }
+
+  .item-login-mobile {
+    margin-top: 30px;
+    --background: #{$verde-principal};
+    --border-radius: 10px;
+    margin-inline: 15px;
+    --color: white;
+    
+    ion-icon { color: white; }
+  }
+}
+
+// Ajuste del Toolbar para que el botón hamburguesa se vea bien
+ion-menu-button {
+  --color: white;
+  font-size: 1.5rem;
+}
+
 ion-content {
   --background: white; 
 }
