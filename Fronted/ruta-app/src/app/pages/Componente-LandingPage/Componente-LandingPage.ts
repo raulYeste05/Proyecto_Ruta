@@ -4,18 +4,28 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';          
 import { IonicModule } from '@ionic/angular';
 
+import { 
+  IonHeader, IonToolbar, IonButtons, IonMenuButton, IonMenu, 
+  IonContent, IonList, IonItem, IonIcon, IonLabel, IonTitle, IonButton 
+} from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
 import { 
   accessibilityOutline, addCircleOutline, removeCircleOutline, 
-  eyeOutline, volumeMediumOutline, refreshOutline 
+  eyeOutline, volumeMediumOutline, refreshOutline, menuOutline, homeOutline, helpCircleOutline, mailOutline, logInOutline
 } from 'ionicons/icons';
+
+
 
 @Component({
   selector: 'app-landing',
   templateUrl: './Componente-LandingPage.html',
   styleUrls: ['./Componente-LandingPage.scss'],
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule, IonicModule]
+  imports: [RouterModule, CommonModule, FormsModule, IonicModule, 
+    IonHeader, IonToolbar, IonButtons, IonMenuButton, IonMenu, 
+    IonContent, IonList, IonItem, IonIcon, IonLabel, IonTitle, IonButton
+  ]
 })
 export class LandingPage implements OnInit {
   
@@ -25,7 +35,8 @@ export class LandingPage implements OnInit {
   constructor() {
     addIcons({ 
       accessibilityOutline, addCircleOutline, removeCircleOutline, 
-      eyeOutline, volumeMediumOutline, refreshOutline 
+      eyeOutline, volumeMediumOutline, refreshOutline, menuOutline, homeOutline, 
+      helpCircleOutline, mailOutline, logInOutline
     });
   }
 
