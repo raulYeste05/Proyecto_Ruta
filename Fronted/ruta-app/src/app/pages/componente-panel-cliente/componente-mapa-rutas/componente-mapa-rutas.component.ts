@@ -700,16 +700,20 @@ async mostrarToastSuccess(msj: string) {
 
   //Mostrar la ruta en el mapa
  cargarRutaGuardada(id: number) {
+  console.log("1. Entrando en cargarRutaGuardada con ID:", id);
   this.limpiarMapa();
 
   this.RutasService.getParadasByRuta(id).subscribe({
     next: (paradas) => {
+      console.log("2. Respuesta del backend recibida. Paradas:", paradas); // <--- LOG 2
       if (!paradas || paradas.length === 0) return;
+      console.warn("3. Ojo: El backend no devolvió paradas para esta ruta.");
 
       // Forzamos ordenación por si el backend fallara en el OrderBy
       paradas.sort((a, b) => a.orden - b.orden);
 
       paradas.forEach((p, index) => {
+        console.log(`4. Procesando marcador parada ${p.orden} en:`, p.latitud, p.longitud); // <--- LOG 3
         // 1. Dibujar el marcador de la parada
         const marcador = L.marker([p.latitud, p.longitud])
           .addTo(this.map)
@@ -721,6 +725,7 @@ async mostrarToastSuccess(msj: string) {
 
         // 3. Dibujar el tramo hacia la SIGUIENTE parada
         if (index < paradas.length - 1) {
+          console.log(`5. Pidiendo ruta a ORS para tramo entre ${p.orden} y ${index + 2}`); // <--- LOG 4
           const pSiguiente = paradas[index + 1];
           
           // Coordenadas para ORS: [Longitud, Latitud]
