@@ -122,6 +122,21 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     const nuevoMarcador = L.marker([coords.lat, coords.lng]).addTo(this.map);
     this.marcadores.push(nuevoMarcador);
 
+    // --- LÓGICA PARA EL PUNTO DE ORIGEN ---
+    if (this.puntosRuta.length === 1) {
+      const puntoOrigen = {
+        orden: 1, // Será la primera parada en la DB
+        latitud: coords.lat,
+        longitud: coords.lng,
+        tipoTransporte: this.obtenerTipoEnum(),
+        tiempoEstimado: 0,
+        distanciaEstimada: 0
+      };
+      this.tramosConfirmados.push(puntoOrigen);
+      console.log("Origen de ruta guardado:", puntoOrigen);
+    }
+    // ---------------------------------------
+
     if (this.puntosRuta.length >= 2) {
       this.calcularYDibujarRuta();
     }
@@ -583,14 +598,18 @@ async mostrarToastSuccess(msj: string) {
     const procesarPosicion = (pos: GeolocationPosition) => {
       const latlng = L.latLng(pos.coords.latitude, pos.coords.longitude);
       
-      // Solo añadimos el punto si es distinto al último (evita ruido si estás quieto)
-      if (this.puntosTrayectoLibre.length > 0) {
-        const ultimoPunto = this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1];
-        const dist = ultimoPunto.distanceTo(latlng);
-        
-        if (dist < 2) return; // Si te has movido menos de 2 metros, no hagas nada
-        this.distanciaAcumuladaTramo += dist;
-      }
+      if (this.puntosTrayectoLibre.length === 0) {
+      // Es el primer punto detectado por el GPS
+      const puntoOrigenLibre = {
+        orden: 1,
+        latitud: latlng.lat,
+        longitud: latlng.lng,
+        tipoTransporte: this.obtenerTipoEnum(),
+        tiempoEstimado: 0,
+        distanciaEstimada: 0
+      };
+      this.tramosConfirmados.push(puntoOrigenLibre);
+    }
 
       this.puntosTrayectoLibre.push(latlng);
       this.actualizarMapaLibre(latlng);
