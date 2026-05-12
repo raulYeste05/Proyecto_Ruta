@@ -90,35 +90,20 @@ export class ComponenteResumenRutas implements OnInit {
   }
 
   eliminarRuta(id: number) {
-    console.log("Iniciando proceso de borrado para ID:", id);
-    
+    // Nota: Necesitas tener este método deleteRuta(id) en tu RutasService
     this.rutasService.deleteRuta(id).subscribe({
-      next: () => {
-        console.log("¡Servidor confirmó el borrado!");
-        // Filtramos el array local para que desaparezca de la vista inmediatamente
+      next: async () => {
         this.misRutas = this.misRutas.filter(r => r.id !== id);
-        this.mostrarToast('Ruta eliminada con éxito', 'success');
+        const toast = await this.toastCtrl.create({
+          message: 'Ruta eliminada correctamente',
+          duration: 2000,
+          color: 'success',
+          cssClass: 'custom-toast'
+        });
+        await toast.present();
       },
-      error: (err) => {
-        console.error("El servidor rechazó el borrado:", err);
-        if (err.status === 500) {
-          this.mostrarToast('Error 500: Revisa las claves foráneas en Java', 'danger');
-        } else {
-          this.mostrarToast('Error al eliminar: ' + err.message, 'danger');
-        }
-      }
+      error: (err) => console.error("Error al borrar ruta", err)
     });
-  }
-
-  // Helper rápido para mensajes
-  async mostrarToast(msj: string, color: string) {
-    const toast = await this.toastCtrl.create({
-      message: msj,
-      duration: 3000,
-      color: color,
-      position: 'bottom'
-    });
-    toast.present();
   }
 
   async publicarRuta(ruta: any) {
