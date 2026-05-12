@@ -20,6 +20,7 @@ import { mailOutline, lockClosedOutline, arrowBackOutline } from 'ionicons/icons
 export class LoginPage implements OnInit {
 
   form!: FormGroup;
+  errorMessage: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -63,6 +64,13 @@ export class LoginPage implements OnInit {
 
       error: (err) => {
         console.error("Error login:", err);
+
+        if (err.status === 401 || err.status === 403) {
+          this.errorMessage = "Usuario no identificado. Por favor, regístrese o verifique sus datos.";
+        } else {
+          this.errorMessage = "Hubo un problema con el servidor. Inténtelo más tarde.";
+        }
+
       }
 
     });

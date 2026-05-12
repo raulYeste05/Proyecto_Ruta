@@ -103,9 +103,7 @@ cargarValidacionesDuplicados() {
 
     this.authService.registro(datosFinales).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('rol', res.rol);
-        this.router.navigate(['/landing']);
+        alert("¡Registro completado con éxito! Ahora puedes iniciar sesión.");
       },
       error: (err) => alert("Error en el registro: " + (err.error?.message || "Servidor no disponible"))
     });

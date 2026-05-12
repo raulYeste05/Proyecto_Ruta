@@ -15,6 +15,11 @@
         Accede a tu cuenta para empezar a explorar
       </p>
 
+      <div class="alerta-error" *ngIf="errorMessage">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
       <form [formGroup]="form" (ngSubmit)="login()">
 
         <!-- EMAIL -->
@@ -90,6 +95,11 @@
         </div>
 
         <!-- BOTÓN -->
+        <div class="alerta-error" *ngIf="errorMessage">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
         <ion-button
           type="submit"
           expand="block"

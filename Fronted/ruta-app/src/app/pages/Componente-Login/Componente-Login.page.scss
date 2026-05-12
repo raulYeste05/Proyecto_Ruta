@@ -101,6 +101,20 @@ ion-content {
   text-transform: none;
 }
 
+.alerta-error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ffcdd2;
+  animation: shake 0.5s ease-in-out; 
+}
+
 /* LINKS Y FOOTER */
 .footer-login {
   margin-top: 25px;
