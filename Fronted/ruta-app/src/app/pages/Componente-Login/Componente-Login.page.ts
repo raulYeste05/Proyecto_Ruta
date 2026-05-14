@@ -38,6 +38,10 @@ export class LoginPage implements OnInit {
       password: new FormControl('', [Validators.required, validaciones.contrasena])
     });
 
+    this.form.valueChanges.subscribe(() => {
+      this.errorMessage = null; 
+    });
+
   }
 
     login() {
