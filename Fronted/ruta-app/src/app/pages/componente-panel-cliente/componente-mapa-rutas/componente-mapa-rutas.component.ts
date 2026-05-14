@@ -389,58 +389,84 @@ async mostrarToastSuccess(msj: string) {
   }
 
     async finalizarViaje() {
-    // 1. Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
-    // lo procesamos automáticamente para que no se pierda esa distancia/tiempo.
+    // 1. Caso: Tramo pendiente (Sustituye al confirm de chrome_nu1PPykDR.png)
     if (this.datosTramoActual) {
-      const confirmarAutomatico = confirm("Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?");
-      if (confirmarAutomatico) {
-        // Reutilizamos la lógica de confirmar para que sume a los totales
+      const alertTramo = await this.alertController.create({
+        header: 'Tramo pendiente',
+        message: 'Tienes un tramo sin añadir, ¿quieres incluirlo?',
+        buttons: [
+          { text: 'No', role: 'cancel' },
+          { text: 'Sí, incluir', role: 'confirm' }
+        ]
+      });
+      await alertTramo.present();
+      const { role } = await alertTramo.onDidDismiss();
+
+      if (role === 'confirm') {
+        // Reutilizamos tu lógica existente para añadir el último punto
         const lat = this.isModoLibre 
           ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
           : this.puntosRuta[this.puntosRuta.length - 1][1];
-        
         const lng = this.isModoLibre 
           ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
           : this.puntosRuta[this.puntosRuta.length - 1][0];
 
-        const nuevaParada = {
+        this.tramosConfirmados.push({
           orden: this.tramosConfirmados.length + 1,
           latitud: lat,
           longitud: lng,
           tipoTransporte: this.obtenerTipoEnum(),
           tiempoEstimado: Math.round(this.datosTramoActual.duracion / 60),
           distanciaEstimada: this.datosTramoActual.distancia
-        };
-        this.tramosConfirmados.push(nuevaParada);
+        });
         this.acumularTotales();
       }
     }
 
     // 2. Verificación de seguridad
     if (this.tramosConfirmados.length === 0) {
-      alert("No hay tramos confirmados para guardar.");
+      this.mostrarToastSuccess('No hay tramos para guardar'); // O un toast de error
       return;
     }
 
-    //Extraemos el id del usuario
-    const userId = this.AuthService.getUserId();
-    if (!userId) {
-      alert("No se pudo obtener el ID del usuario. Por favor, inicia sesión.");
-      return;
-    }
-
-    const titulo = prompt("Asigna un nombre a esta ruta:");
-    if (!titulo) return;
-
-    const volverMismoCamino = confirm("¿Vas a volver por donde has venido? (Se duplicará la distancia y el tiempo)");
+    // 3. Pedir nombre de ruta (Sustituye al prompt de chrome_fyJHqGbGWi.png)
+    const alertNombre = await this.alertController.create({
+      header: 'Nombre de la ruta',
+      inputs: [{ name: 'titulo', type: 'text', placeholder: 'Ej: Ruta de montaña' }],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Guardar', role: 'confirm' }
+      ]
+    });
+    await alertNombre.present();
+    const { data, role: roleNombre } = await alertNombre.onDidDismiss();
     
-    // 3. GENERAR EL RESUMEN (Ahora sí, con todos los totales sumados)
-    const resumenDescripcion = this.generarResumenTexto(volverMismoCamino);
+    if (roleNombre !== 'confirm' || !data.titulo) return;
+
+    // 4. Preguntar si es ida y vuelta (Sustituye al confirm de 5LHpgTJUg3.jpg)
+    const alertVuelta = await this.alertController.create({
+      header: 'Configuración',
+      message: '¿Vas a volver por el mismo camino? (Duplica distancia y tiempo)',
+      buttons: [
+        { text: 'Solo ida', role: 'ida' },
+        { text: 'Ida y Vuelta', role: 'vuelta' }
+      ]
+    });
+    await alertVuelta.present();
+    const { role: roleVuelta } = await alertVuelta.onDidDismiss();
+    
+    const esVuelta = (roleVuelta === 'vuelta');
+
+    // 5. Lógica final de guardado (Todo sigue aquí dentro)
+    const userId = this.AuthService.getUserId();
+    if (!userId) return;
+
+    const resumenDescripcion = this.generarResumenTexto(esVuelta);
 
     this.ClienteService.getPerfil().subscribe(perfil => {
       const rutaDTO = {
         userId: userId,
-        titulo: titulo,
+        titulo: data.titulo,
         descripcion: resumenDescripcion,
         publicada: false
       };
@@ -449,10 +475,7 @@ async mostrarToastSuccess(msj: string) {
         next: (rutaGuardada) => {
           this.guardarTramosEnSerie(rutaGuardada.id);
         },
-        error: (err) => {
-          console.error("Error al guardar cabecera:", err);
-          alert("Error al conectar con el servidor.");
-        }
+        error: (err) => console.error("Error al guardar:", err)
       });
     });
   }
