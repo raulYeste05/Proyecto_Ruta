@@ -389,53 +389,113 @@ async mostrarToastSuccess(msj: string) {
   }
 
     async finalizarViaje() {
-    // 1. Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
-    // lo procesamos automáticamente para que no se pierda esa distancia/tiempo.
+    // 1. Sustitución del confirm() para tramos sin añadir
     if (this.datosTramoActual) {
-      const confirmarAutomatico = confirm("Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?");
-      if (confirmarAutomatico) {
-        // Reutilizamos la lógica de confirmar para que sume a los totales
-        const lat = this.isModoLibre 
-          ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
-          : this.puntosRuta[this.puntosRuta.length - 1][1];
-        
-        const lng = this.isModoLibre 
-          ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
-          : this.puntosRuta[this.puntosRuta.length - 1][0];
+      const alertTramo = await this.alertController.create({
+        header: 'Tramo pendiente',
+        message: 'Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?',
+        backdropDismiss: false,
+        buttons: [
+          { text: 'No', role: 'cancel' },
+          { 
+            text: 'Sí, incluir', 
+            handler: () => {
+              const lat = this.isModoLibre 
+                ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
+                : this.puntosRuta[this.puntosRuta.length - 1][1];
+              
+              const lng = this.isModoLibre 
+                ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
+                : this.puntosRuta[this.puntosRuta.length - 1][0];
 
-        const nuevaParada = {
-          orden: this.tramosConfirmados.length + 1,
-          latitud: lat,
-          longitud: lng,
-          tipoTransporte: this.obtenerTipoEnum(),
-          tiempoEstimado: Math.round(this.datosTramoActual.duracion / 60),
-          distanciaEstimada: this.datosTramoActual.distancia
-        };
-        this.tramosConfirmados.push(nuevaParada);
-        this.acumularTotales();
-      }
+              const nuevaParada = {
+                orden: this.tramosConfirmados.length + 1,
+                latitud: lat,
+                longitud: lng,
+                tipoTransporte: this.obtenerTipoEnum(),
+                tiempoEstimado: Math.round(this.datosTramoActual!.duracion / 60),
+                distanciaEstimada: this.datosTramoActual!.distancia
+              };
+              this.tramosConfirmados.push(nuevaParada);
+              this.acumularTotales();
+            }
+          }
+        ]
+      });
+      await alertTramo.present();
+      await alertTramo.onDidDismiss(); // Esperamos a que el usuario decida antes de seguir
     }
 
-    // 2. Verificación de seguridad
+    // 2. Verificación de seguridad (Sustitución de alert)
     if (this.tramosConfirmados.length === 0) {
-      alert("No hay tramos confirmados para guardar.");
+      const alertError = await this.alertController.create({
+        header: 'Atención',
+        message: 'No hay tramos confirmados para guardar.',
+        buttons: ['OK']
+      });
+      await alertError.present();
       return;
     }
 
-    //Extraemos el id del usuario
+    // Extraemos el id del usuario
     const userId = this.AuthService.getUserId();
     if (!userId) {
-      alert("No se pudo obtener el ID del usuario. Por favor, inicia sesión.");
+      this.mostrarToastSuccess('Error: Debes iniciar sesión'); // Reutilizo tu toast
       return;
     }
 
-    const titulo = prompt("Asigna un nombre a esta ruta:");
-    if (!titulo) return;
+    // 3. Sustitución del prompt() por un Alert con Input
+    const alertNombre = await this.alertController.create({
+      header: 'Guardar Ruta',
+      message: 'Asigna un nombre a esta ruta:',
+      inputs: [
+        {
+          name: 'titulo',
+          type: 'text',
+          placeholder: 'Ej: Mi viaje a la playa'
+        }
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        { 
+          text: 'Siguiente',
+          handler: (data) => {
+            if (!data.titulo) {
+              this.mostrarToastSuccess('El nombre es obligatorio');
+              return false; // No cierra el alert
+            }
+            this.preguntarSiEsVuelta(userId, data.titulo);
+            return true;
+          }
+        }
+      ]
+    });
+    await alertNombre.present();
+  }
 
-    const volverMismoCamino = confirm("¿Vas a volver por donde has venido? (Se duplicará la distancia y el tiempo)");
-    
-    // 3. GENERAR EL RESUMEN (Ahora sí, con todos los totales sumados)
-    const resumenDescripcion = this.generarResumenTexto(volverMismoCamino);
+  // 4. Nueva función auxiliar para la confirmación de Ida y Vuelta
+  private async preguntarSiEsVuelta(userId: number, titulo: string) {
+    const alertVuelta = await this.alertController.create({
+      header: 'Tipo de viaje',
+      message: '¿Vas a volver por donde has venido? (Se duplicará la distancia y el tiempo)',
+      backdropDismiss: false,
+      buttons: [
+        { 
+          text: 'Solo ida', 
+          handler: () => this.ejecutarGuardadoFinal(userId, titulo, false) 
+        },
+        { 
+          text: 'Ida y Vuelta', 
+          handler: () => this.ejecutarGuardadoFinal(userId, titulo, true) 
+        }
+      ]
+    });
+    await alertVuelta.present();
+  }
+
+  // 5. El proceso final de guardado
+  private ejecutarGuardadoFinal(userId: number, titulo: string, esVuelta: boolean) {
+    const resumenDescripcion = this.generarResumenTexto(esVuelta);
 
     this.ClienteService.getPerfil().subscribe(perfil => {
       const rutaDTO = {
@@ -450,8 +510,8 @@ async mostrarToastSuccess(msj: string) {
           this.guardarTramosEnSerie(rutaGuardada.id);
         },
         error: (err) => {
-          console.error("Error al guardar cabecera:", err);
-          alert("Error al conectar con el servidor.");
+          console.error("Error al guardar:", err);
+          this.mostrarToastSuccess('Error al conectar con el servidor.');
         }
       });
     });
