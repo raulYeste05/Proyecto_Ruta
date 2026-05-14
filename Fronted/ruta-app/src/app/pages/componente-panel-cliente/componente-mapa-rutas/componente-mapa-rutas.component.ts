@@ -388,90 +388,104 @@ async mostrarToastSuccess(msj: string) {
     this.limpiarMapa();
   }
 
-    async finalizarViaje() {
-    // 1. Sustitución del confirm() para tramos sin añadir
-    if (this.datosTramoActual) {
-      const alertTramo = await this.alertController.create({
-        header: 'Tramo pendiente',
-        message: 'Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?',
-        backdropDismiss: false,
-        buttons: [
-          { text: 'No', role: 'cancel' },
-          { 
-            text: 'Sí, incluir', 
-            handler: () => {
-              const lat = this.isModoLibre 
-                ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
-                : this.puntosRuta[this.puntosRuta.length - 1][1];
-              
-              const lng = this.isModoLibre 
-                ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
-                : this.puntosRuta[this.puntosRuta.length - 1][0];
-
-              const nuevaParada = {
-                orden: this.tramosConfirmados.length + 1,
-                latitud: lat,
-                longitud: lng,
-                tipoTransporte: this.obtenerTipoEnum(),
-                tiempoEstimado: Math.round(this.datosTramoActual!.duracion / 60),
-                distanciaEstimada: this.datosTramoActual!.distancia
-              };
-              this.tramosConfirmados.push(nuevaParada);
-              this.acumularTotales();
-            }
-          }
-        ]
-      });
-      await alertTramo.present();
-      await alertTramo.onDidDismiss(); // Esperamos a que el usuario decida antes de seguir
-    }
-
-    // 2. Verificación de seguridad (Sustitución de alert)
-    if (this.tramosConfirmados.length === 0) {
-      const alertError = await this.alertController.create({
-        header: 'Atención',
-        message: 'No hay tramos confirmados para guardar.',
-        buttons: ['OK']
-      });
-      await alertError.present();
-      return;
-    }
-
-    // Extraemos el id del usuario
-    const userId = this.AuthService.getUserId();
-    if (!userId) {
-      this.mostrarToastSuccess('Error: Debes iniciar sesión'); // Reutilizo tu toast
-      return;
-    }
-
-    // 3. Sustitución del prompt() por un Alert con Input
-    const alertNombre = await this.alertController.create({
-      header: 'Guardar Ruta',
-      message: 'Asigna un nombre a esta ruta:',
-      inputs: [
-        {
-          name: 'titulo',
-          type: 'text',
-          placeholder: 'Ej: Mi viaje a la playa'
-        }
-      ],
+    
+  async finalizarViaje() {
+  // 1. Manejo de tramo pendiente (Sustitución de confirm)
+  if (this.datosTramoActual) {
+    const alertTramo = await this.alertController.create({
+      header: 'Tramo pendiente',
+      message: 'Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?',
+      backdropDismiss: false,
       buttons: [
-        { text: 'Cancelar', role: 'cancel' },
         { 
-          text: 'Siguiente',
-          handler: (data) => {
-            if (!data.titulo) {
-              this.mostrarToastSuccess('El nombre es obligatorio');
-              return false; // No cierra el alert
-            }
-            this.preguntarSiEsVuelta(userId, data.titulo);
-            return true;
+          text: 'No', 
+          role: 'cancel',
+          handler: () => {
+            // Si dice que no, pasamos directamente a pedir el nombre
+            this.solicitarNombreRuta(); 
+          }
+        },
+        { 
+          text: 'Sí, incluir', 
+          handler: () => {
+            // Lógica para añadir el último punto
+            const lat = this.isModoLibre 
+              ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
+              : this.puntosRuta[this.puntosRuta.length - 1][1];
+            
+            const lng = this.isModoLibre 
+              ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
+              : this.puntosRuta[this.puntosRuta.length - 1][0];
+
+            const nuevaParada = {
+              orden: this.tramosConfirmados.length + 1,
+              latitud: lat,
+              longitud: lng,
+              tipoTransporte: this.obtenerTipoEnum(),
+              tiempoEstimado: Math.round(this.datosTramoActual!.duracion / 60),
+              distanciaEstimada: this.datosTramoActual!.distancia
+            };
+            this.tramosConfirmados.push(nuevaParada);
+            this.acumularTotales();
+            this.datosTramoActual = null; // Limpiamos para evitar bucles
+
+            // Una vez añadido, pasamos al siguiente paso
+            this.solicitarNombreRuta();
           }
         }
       ]
     });
-    await alertNombre.present();
+    await alertTramo.present();
+    return; // Salimos de la función aquí, el flujo sigue en los handlers de los botones
   }
+
+  // Si no había tramo actual, saltamos directamente a pedir el nombre
+  this.solicitarNombreRuta();
+}
+
+// He extraído esto a una función aparte para que el código sea más limpio y no falle
+private async solicitarNombreRuta() {
+  // Verificación de seguridad
+  if (this.tramosConfirmados.length === 0) {
+    const alertError = await this.alertController.create({
+      header: 'Atención',
+      message: 'No hay tramos confirmados para guardar.',
+      buttons: ['OK']
+    });
+    await alertError.present();
+    return;
+  }
+
+  const userId = this.AuthService.getUserId();
+  if (!userId) {
+    this.mostrarToastSuccess('Error: Debes iniciar sesión');
+    return;
+  }
+
+  const alertNombre = await this.alertController.create({
+    header: 'Guardar Ruta',
+    message: 'Asigna un nombre a esta ruta:',
+    inputs: [
+      { name: 'titulo', type: 'text', placeholder: 'Ej: Mi viaje a la playa' }
+    ],
+    buttons: [
+      { text: 'Cancelar', role: 'cancel' },
+      { 
+        text: 'Siguiente',
+        handler: (data) => {
+          if (!data.titulo) {
+            this.mostrarToastSuccess('El nombre es obligatorio');
+            return false; 
+          }
+          // Pasamos al siguiente Alert
+          this.preguntarSiEsVuelta(userId, data.titulo);
+          return true;
+        }
+      }
+    ]
+  });
+  await alertNombre.present();
+}
 
   // 4. Nueva función auxiliar para la confirmación de Ida y Vuelta
   private async preguntarSiEsVuelta(userId: number, titulo: string) {
