@@ -389,98 +389,73 @@ async mostrarToastSuccess(msj: string) {
   }
 
     async finalizarViaje() {
-  // 1. Sustitución de chrome_rIm3n1EVAb.jpg (Tramo sin añadir)
-  if (this.datosTramoActual) {
-    const alertTramo = await this.alertController.create({
-      header: 'Confirmación',
-      message: 'Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?',
-      backdropDismiss: false,
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        { text: 'Aceptar', role: 'confirm' }
-      ]
-    });
-    await alertTramo.present();
-    const { role } = await alertTramo.onDidDismiss();
+    // 1. Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
+    // lo procesamos automáticamente para que no se pierda esa distancia/tiempo.
+    if (this.datosTramoActual) {
+      const confirmarAutomatico = confirm("Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?");
+      if (confirmarAutomatico) {
+        // Reutilizamos la lógica de confirmar para que sume a los totales
+        const lat = this.isModoLibre 
+          ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
+          : this.puntosRuta[this.puntosRuta.length - 1][1];
+        
+        const lng = this.isModoLibre 
+          ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
+          : this.puntosRuta[this.puntosRuta.length - 1][0];
 
-    if (role === 'confirm') {
-      const lat = this.isModoLibre 
-        ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
-        : this.puntosRuta[this.puntosRuta.length - 1][1];
-      const lng = this.isModoLibre 
-        ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lng 
-        : this.puntosRuta[this.puntosRuta.length - 1][0];
-
-      this.tramosConfirmados.push({
-        orden: this.tramosConfirmados.length + 1,
-        latitud: lat,
-        longitud: lng,
-        tipoTransporte: this.obtenerTipoEnum(),
-        tiempoEstimado: Math.round(this.datosTramoActual.duracion / 60),
-        distanciaEstimada: this.datosTramoActual.distancia
-      });
-      this.acumularTotales();
+        const nuevaParada = {
+          orden: this.tramosConfirmados.length + 1,
+          latitud: lat,
+          longitud: lng,
+          tipoTransporte: this.obtenerTipoEnum(),
+          tiempoEstimado: Math.round(this.datosTramoActual.duracion / 60),
+          distanciaEstimada: this.datosTramoActual.distancia
+        };
+        this.tramosConfirmados.push(nuevaParada);
+        this.acumularTotales();
+      }
     }
-  }
 
-  if (this.tramosConfirmados.length === 0) {
-    this.mostrarToastSuccess('No hay tramos para guardar');
-    return;
-  }
+    // 2. Verificación de seguridad
+    if (this.tramosConfirmados.length === 0) {
+      alert("No hay tramos confirmados para guardar.");
+      return;
+    }
 
-  // 2. Pedir nombre (Sustitución de un prompt)
-  const alertNombre = await this.alertController.create({
-    header: 'Guardar Ruta',
-    message: 'Introduce un nombre para identificar tu viaje',
-    inputs: [{ name: 'titulo', type: 'text', placeholder: 'Nombre de la ruta' }],
-    backdropDismiss: false,
-    buttons: [
-      { text: 'Cancelar', role: 'cancel' },
-      { text: 'Siguiente', role: 'confirm' }
-    ]
-  });
-  await alertNombre.present();
-  const { data, role: roleNombre } = await alertNombre.onDidDismiss();
-  
-  if (roleNombre !== 'confirm' || !data.titulo) return;
+    //Extraemos el id del usuario
+    const userId = this.AuthService.getUserId();
+    if (!userId) {
+      alert("No se pudo obtener el ID del usuario. Por favor, inicia sesión.");
+      return;
+    }
 
-  // 3. Sustitución de chrome_OupMLtsb4R.jpg (¿Vas a volver...?)
-  const alertVuelta = await this.alertController.create({
-    header: 'Tipo de trayecto',
-    message: '¿Vas a volver por donde has venido? (Se duplicará la distancia y el tiempo)',
-    backdropDismiss: false,
-    buttons: [
-      { text: 'Cancelar', role: 'cancel' }, // Equivale al "Cancelar" de tu foto
-      { text: 'Aceptar', role: 'confirm' }   // Equivale al "Aceptar" de tu foto
-    ]
-  });
-  await alertVuelta.present();
-  const { role: roleVuelta } = await alertVuelta.onDidDismiss();
-  
-  const esVuelta = (roleVuelta === 'confirm');
+    const titulo = prompt("Asigna un nombre a esta ruta:");
+    if (!titulo) return;
 
-  // 4. Proceso de guardado final
-  const userId = this.AuthService.getUserId();
-  if (!userId) return;
+    const volverMismoCamino = confirm("¿Vas a volver por donde has venido? (Se duplicará la distancia y el tiempo)");
+    
+    // 3. GENERAR EL RESUMEN (Ahora sí, con todos los totales sumados)
+    const resumenDescripcion = this.generarResumenTexto(volverMismoCamino);
 
-  const resumenDescripcion = this.generarResumenTexto(esVuelta);
+    this.ClienteService.getPerfil().subscribe(perfil => {
+      const rutaDTO = {
+        userId: userId,
+        titulo: titulo,
+        descripcion: resumenDescripcion,
+        publicada: false
+      };
 
-  this.ClienteService.getPerfil().subscribe(perfil => {
-    const rutaDTO = {
-      userId: userId,
-      titulo: data.titulo,
-      descripcion: resumenDescripcion,
-      publicada: false
-    };
-
-    this.RutasService.guardarRuta(rutaDTO).subscribe({
-      next: (rutaGuardada) => {
-        this.guardarTramosEnSerie(rutaGuardada.id);
-      },
-      error: (err) => console.error("Error al guardar:", err)
+      this.RutasService.guardarRuta(rutaDTO).subscribe({
+        next: (rutaGuardada) => {
+          this.guardarTramosEnSerie(rutaGuardada.id);
+        },
+        error: (err) => {
+          console.error("Error al guardar cabecera:", err);
+          alert("Error al conectar con el servidor.");
+        }
+      });
     });
-  });
-}
+  }
 
   private generarResumenTexto(volverMismoCamino: boolean): string {
     const factor = volverMismoCamino ? 2 : 1;
