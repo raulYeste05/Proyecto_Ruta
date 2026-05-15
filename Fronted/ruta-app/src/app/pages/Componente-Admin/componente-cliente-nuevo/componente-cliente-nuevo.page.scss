@@ -1,7 +1,13 @@
+ion-content {
+  --focusable: true;
+  height: 100%;
+}
+
 .formulario {
   display: flex;
   flex-direction: column;
-  padding-bottom: 50px; /* Evita que el botón sea tapado por el borde de la pantalla */
+  padding-bottom: 120px; /* Incrementamos drásticamente el espacio inferior */
+  width: 100%;
 }
 
 .input-html,
@@ -44,9 +50,13 @@
 }
 
 ion-button {
-  margin-top: 30px;
-  --background: #059669; /* Verde corporativo */
-  font-weight: 600;
+  margin-top: 35px;
+  margin-bottom: 35px;
+  min-height: 50px; /* Le aseguramos una altura mínima pase lo que pase */
+  --background: #059669; 
+  font-weight: bold;
+  display: block; /* Forzamos su renderizado como bloque */
+  clear: both;
 }
 
 .error-texto {
