@@ -131,6 +131,13 @@ export class ComponenteResumenRutas implements OnInit {
   }
 
   private enviarPublicacion(rutaId: number, titulo: string, contenido: string) {
+    console.log("Publicando con UserID:", this.userIdActual); // <-- DEPURACIÓN
+    
+    if (!this.userIdActual) {
+    console.error("No se puede publicar: ID de usuario no encontrado");
+    return;
+  }
+    
     const datos = {
       userId: this.userIdActual,
       rutaId: rutaId,
