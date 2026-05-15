@@ -14,7 +14,23 @@ export const routes: Routes = [
   path: 'landing',
   loadComponent: () => import('./pages/Componente-LandingPage/Componente-LandingPage')
     .then(m => m.LandingPage)
-},
+  },
+  {
+    path: 'como-funciona',
+    loadComponent: () => import('./pages/componente-como-funciona/componente-como-funciona.component')
+      .then(m => m.ComponenteComoFuncionaComponent)
+  },
+  {
+    path: 'contacto',
+    loadComponent: () => import('./pages/componente-contacto/componente-contacto.component')
+      .then(m => m.ComponenteContactoComponent)
+  },
+  {
+    path: 'privacidad',
+    loadComponent: () => import('./pages/componente-privacidada/componente-privacidada.component')
+      .then(m => m.ComponentePrivacidadaComponent)
+  },
+
   {
     path:'login',
     canActivate: [noAuthGuard],

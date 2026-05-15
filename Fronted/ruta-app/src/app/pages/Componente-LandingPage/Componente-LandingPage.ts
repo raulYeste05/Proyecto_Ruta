@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';          
 import { IonicModule } from '@ionic/angular';
+import { Title, Meta } from '@angular/platform-browser';
 
 import { 
   IonHeader, IonToolbar, IonButtons, IonMenuButton, IonMenu, 
@@ -32,7 +33,10 @@ export class LandingPage implements OnInit {
   panelAbierto = false;
   isLecturaFacil = false;
 
-  constructor() {
+  constructor(
+    private titleService: Title,
+    private metaService: Meta
+  ) {
     addIcons({ 
       accessibilityOutline, addCircleOutline, removeCircleOutline, 
       eyeOutline, volumeMediumOutline, refreshOutline, menuOutline, homeOutline, 

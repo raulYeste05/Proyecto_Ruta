@@ -30,14 +30,14 @@
   <ion-toolbar class="nav-toolbar">
     <div class="contenedor-nav">
       <div class="nav-izquierda">
-        <img src="assets/Logo-ruta.png" class="logo">
+        <img src="assets/Logo-ruta.png" class="logo" alt="Logo RutaApp">
         <span class="marca">RutaApp</span>
       </div>
 
       <div class="nav-centro ion-hide-md-down">
         <ion-button fill="clear" class="btn-nav active">INICIO</ion-button>
-        <ion-button fill="clear" class="btn-nav">COMO FUNCIONA</ion-button>
-        <ion-button fill="clear" class="btn-nav">CONTACTO</ion-button>
+        <ion-button fill="clear" class="btn-nav" routerLink="/como-funciona">COMO FUNCIONA</ion-button>
+        <ion-button fill="clear" class="btn-nav" routerLink="/contacto">CONTACTO</ion-button>
       </div>
 
       <div class="nav-derecha">
@@ -111,7 +111,7 @@
       </div>
       <div class="footer-links">
         <h4>Soporte</h4>
-        <a href="#">Privacidad</a>
+        <a href="#" routerLink="/privacidad">Privacidad</a>
       </div>
     </div>
   </footer>
