@@ -65,7 +65,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/clientes/**").hasAnyRole("ADMIN", "CLIENTE")
                 
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("api/auth/**").permitAll()
                 .requestMatchers("/api/geo/**").permitAll()
                 .requestMatchers("/api/paradas/**").permitAll() 
                 .requestMatchers("/api/servicio_cercano/**").permitAll() // Prueba dejarlo en permitAll para testear
