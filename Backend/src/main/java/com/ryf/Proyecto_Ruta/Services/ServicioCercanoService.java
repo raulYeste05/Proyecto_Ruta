@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.ryf.Proyecto_Ruta.Repositories.ServicioCercanoRepository;
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.ryf.Proyecto_Ruta.Repositories.ParadaRepository;
 import com.ryf.Proyecto_Ruta.Model.ServicioCercano;
