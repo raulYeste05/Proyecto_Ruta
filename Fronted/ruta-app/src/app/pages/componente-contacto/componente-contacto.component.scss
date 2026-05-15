@@ -1,0 +1,17 @@
+.contacto-section {
+  padding: 80px 20px;
+  background: #0f172a; // Fondo oscuro para variar
+  color: white;
+
+  .contacto-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: white;
+    margin-bottom: 10px;
+    ion-icon { color: #10b981; margin-right: 15px; }
+  }
+}

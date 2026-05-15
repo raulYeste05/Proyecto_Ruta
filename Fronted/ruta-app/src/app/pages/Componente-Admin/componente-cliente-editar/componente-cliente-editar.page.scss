@@ -1,3 +1,9 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px; /* Le da espacio abajo para que el botón no se pegue al borde */
+}
+
 .input-html,
 .select-html {
   display: flex;
@@ -13,6 +19,11 @@
     border: 2px solid #059669;
     background: #ffffff;
   }
+}
+
+ion-button {
+  margin-top: 25px;
+  --background: #059669; /* Un color verde elegante que combine con tu panel */
 }
 
 .input-html input,

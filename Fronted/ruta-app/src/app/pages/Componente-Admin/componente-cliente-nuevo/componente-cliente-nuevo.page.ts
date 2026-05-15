@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// Importamos ReactiveFormsModule en lugar de FormsModule (o ambos)
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
 import { Router, RouterModule } from '@angular/router';
-import { IonContent, IonButton} from '@ionic/angular/standalone';
+import { IonContent, IonButton } from '@ionic/angular/standalone';
 import { validaciones } from '../../../Validators/validaciones';
 
 @Component({
@@ -16,7 +15,7 @@ import { validaciones } from '../../../Validators/validaciones';
 })
 export class ComponenteClienteNuevoPage implements OnInit {
   
-  fg: FormGroup; // El grupo de formulario
+  fg: FormGroup;
   provincias: any[] = [];
   localidades: any[] = [];
   
@@ -28,9 +27,8 @@ export class ComponenteClienteNuevoPage implements OnInit {
     private adminService: AdminService, 
     private router: Router
   ) {
-    // Inicializamos el formulario con las validaciones
     this.fg = this.fb.group({
-      email: ['', [Validators.required, validaciones.email, ]],
+      email: ['', [Validators.required, validaciones.email]],
       password: ['', [Validators.required, validaciones.contrasena]],
       dni: ['', [Validators.required, validaciones.dni]],
       nombre: ['', [Validators.required, validaciones.soloTexto]],
@@ -51,20 +49,22 @@ export class ComponenteClienteNuevoPage implements OnInit {
   }
 
   cargarDatosYValidar() {
-    // 1. Obtenemos usuarios para validar el EMAIL repetido
-    this.adminService.getUsuarios().subscribe(users => {
-      this.usuariosActuales = users;
-      // Añadimos el validador de repetidos dinámicamente
-      this.fg.get('email')?.addValidators(validaciones.emailRepetido(this.usuariosActuales, 'email'));
-      this.fg.get('email')?.updateValueAndValidity();
+    // Obtenemos usuarios para validar el EMAIL repetido
+    this.adminService.getUsuarios().subscribe({
+      next: (users) => {
+        this.usuariosActuales = users;
+        this.fg.get('email')?.addValidators(validaciones.emailRepetido(this.usuariosActuales, 'email'));
+        this.fg.get('email')?.updateValueAndValidity({ emitEvent: false });
+      }
     });
 
-    // 2. Obtenemos clientes para validar el DNI repetido
-    this.adminService.getClientes().subscribe(clientes => {
-      this.clientesActuales = clientes;
-      // Añadimos el validador de DNI repetido
-      this.fg.get('dni')?.addValidators(validaciones.dniRepetido(this.clientesActuales));
-      this.fg.get('dni')?.updateValueAndValidity();
+    // Obtenemos clientes para validar el DNI repetido
+    this.adminService.getClientes().subscribe({
+      next: (clientes) => {
+        this.clientesActuales = clientes;
+        this.fg.get('dni')?.addValidators(validaciones.dniRepetido(this.clientesActuales));
+        this.fg.get('dni')?.updateValueAndValidity({ emitEvent: false });
+      }
     });
   }
 
@@ -80,7 +80,7 @@ export class ComponenteClienteNuevoPage implements OnInit {
 
   guardar() {
     if (this.fg.invalid) {
-      this.fg.markAllAsTouched(); // Marca todos para mostrar errores
+      this.fg.markAllAsTouched();
       return;
     }
 
@@ -95,7 +95,7 @@ export class ComponenteClienteNuevoPage implements OnInit {
 
     this.adminService.nuevoCliente(datosRegistro).subscribe({
       next: () => this.router.navigate(['/componente-panel-admin/clientes']),
-      error: (err) => alert("Error: " + err.error.message)
+      error: (err) => alert("Error: " + (err.error?.message || "No se pudo crear el cliente"))
     });
   }
 }

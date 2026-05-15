@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonContent, IonButton,  } from '@ionic/angular/standalone';
+import { IonContent, IonButton } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../services/admin.service';
 import { validaciones } from '../../../Validators/validaciones';
@@ -11,14 +11,14 @@ import { validaciones } from '../../../Validators/validaciones';
   templateUrl: './componente-cliente-editar.page.html',
   styleUrls: ['./componente-cliente-editar.page.scss'],
   standalone: true,
-  imports: [ IonButton, IonContent, CommonModule, ReactiveFormsModule]
+  imports: [IonButton, IonContent, CommonModule, ReactiveFormsModule]
 })
 export class ComponenteClienteEditarPage implements OnInit {
 
   fg: FormGroup;
   provincias: any[] = [];
   localidades: any[] = [];
-  clienteOriginal: any; // Para guardar datos originales si es necesario
+  clienteOriginal: any;
 
   constructor(
     private fb: FormBuilder,
@@ -26,10 +26,11 @@ export class ComponenteClienteEditarPage implements OnInit {
     private adminService: AdminService,
     private router: Router
   ) {
-    // Inicializar el formulario con validaciones básicas
+    // NOTA: Quitamos la validación estricta de contraseña aquí si es opcional,
+    // o asegúrate de que tu validador 'validaciones.contrasena' permita strings vacíos.
     this.fg = this.fb.group({
       email: ['', [Validators.required, validaciones.email]],
-      password: ['', [validaciones.contrasena]],
+      password: [''], // Opcional al editar
       dni: ['', [Validators.required, validaciones.dni]],
       nombre: ['', [Validators.required, validaciones.soloTexto]],
       apellido1: ['', [Validators.required, validaciones.soloTexto]],
@@ -43,38 +44,38 @@ export class ComponenteClienteEditarPage implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
 
-    // 1. Cargar Provincias
-    this.adminService.getProvincias().subscribe(res => {
-      this.provincias = Array.isArray(res) ? res : res.data;
+    // 1. Cargar Provincias Primero
+    this.adminService.getProvincias().subscribe(resProvincias => {
+      this.provincias = Array.isArray(resProvincias) ? resProvincias : resProvincias.data;
 
-      // 2. Cargar Cliente
+      // 2. Cargar datos del Cliente
       this.adminService.getClientes().subscribe(clientes => {
         const clienteEncontrado = clientes.find(c => c.idCliente == id);
         
         if (clienteEncontrado) {
           this.clienteOriginal = clienteEncontrado;
           
-          // 3. Obtener listas para validaciones de duplicados (excluyendo al actual)
+          // 3. Rellenar el formulario ANTES de poner los validadores de duplicados
+          this.rellenarFormulario(clienteEncontrado);
+
+          // 4. Añadir validadores de duplicados EXCLUYENDO al usuario actual
           this.adminService.getUsuarios().subscribe(users => {
             const otrosUsuarios = users.filter(u => u.idUser !== clienteEncontrado.userId);
             this.fg.get('email')?.addValidators(validaciones.emailRepetido(otrosUsuarios, 'email'));
+            this.fg.get('email')?.updateValueAndValidity(); // Forzar a Angular a revisar
           });
 
-          this.adminService.getClientes().subscribe(clientes => {
-            const otrosClientes = clientes.filter(c => c.idCliente !== clienteEncontrado.idCliente);
+          this.adminService.getClientes().subscribe(todosClientes => {
+            const otrosClientes = todosClientes.filter(c => c.idCliente !== clienteEncontrado.idCliente);
             this.fg.get('dni')?.addValidators(validaciones.dniRepetido(otrosClientes));
+            this.fg.get('dni')?.updateValueAndValidity(); // Forzar a Angular a revisar
           });
-
-
-          // 4. Rellenar el formulario
-          this.rellenarFormulario(clienteEncontrado);
         }
       });
     });
   }
 
   rellenarFormulario(cliente: any) {
-    // Buscar el código de la provincia por nombre
     const provEncontrada = this.provincias.find(p => (p.PRO || p.NOMBRE_PROVINCIA) === cliente.provincia);
     const codProvincia = provEncontrada ? provEncontrada.CPRO : '';
 
@@ -90,7 +91,12 @@ export class ComponenteClienteEditarPage implements OnInit {
     });
 
     if (codProvincia) {
-      this.cargarLocalidades(codProvincia);
+      // Cargamos las localidades correspondientes a la provincia del cliente
+      this.adminService.getLocalidades(codProvincia).subscribe(res => {
+        this.localidades = res.data || res;
+        // Volvemos a setear la localidad para asegurarnos que se marque en el <select>
+        this.fg.get('localidad')?.setValue(cliente.localidad);
+      });
     }
   }
 
@@ -113,10 +119,9 @@ export class ComponenteClienteEditarPage implements OnInit {
     const values = this.fg.value;
     const provNombre = this.provincias.find(p => p.CPRO === values.provincia);
 
-    const clienteFormateado = {
+    const clienteFormateado: any = {
       id_cliente: this.clienteOriginal.idCliente,
       dni: values.dni,
-      password : values.password,
       nombre: values.nombre,
       apellido1: values.apellido1,
       apellido2: values.apellido2,
@@ -126,7 +131,6 @@ export class ComponenteClienteEditarPage implements OnInit {
       telefono: values.telefono
     };
 
-    //  Solo añadimos el password si el campo tiene contenido
     if (values.password && values.password.trim() !== '') {
       clienteFormateado.password = values.password;
     }

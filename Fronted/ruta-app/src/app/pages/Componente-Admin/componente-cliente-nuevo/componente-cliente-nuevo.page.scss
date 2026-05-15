@@ -1,3 +1,9 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px; /* Evita que el botón sea tapado por el borde de la pantalla */
+}
+
 .input-html,
 .select-html {
   display: flex;
@@ -35,6 +41,12 @@
   margin-bottom: 8px;
   font-weight: 600;
   color: #334155;
+}
+
+ion-button {
+  margin-top: 30px;
+  --background: #059669; /* Verde corporativo */
+  font-weight: 600;
 }
 
 .error-texto {
