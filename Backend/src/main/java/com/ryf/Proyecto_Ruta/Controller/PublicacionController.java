@@ -63,6 +63,13 @@ public class PublicacionController {
         return ResponseEntity.ok(publicacionService.actualizar(id, PublicacionDTO));
     }
 
+    // Eliminar publicacion por el ID de la Ruta
+    @DeleteMapping("/ruta/{rutaId}")
+    public ResponseEntity<Void> eliminarPorRutaId(@PathVariable Integer rutaId) {
+        publicacionService.eliminarPorRutaId(rutaId);
+        return ResponseEntity.noContent().build();
+    }
+
     // Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {

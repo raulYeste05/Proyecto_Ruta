@@ -17,6 +17,10 @@ export class PublicacionesService {
     return this.http.post<any>(this.apiUrl, publicacion);
   }
 
+  eliminarPublicacionPorRuta(rutaId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/ruta/${rutaId}`);
+  }
+
   eliminarPublicacion(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

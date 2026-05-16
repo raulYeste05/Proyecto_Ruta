@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 
 import { addIcons } from 'ionicons';
-import { trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline } from 'ionicons/icons';
+import { trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline, closeCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-componente-resumen-rutas',
@@ -31,7 +31,7 @@ export class ComponenteResumenRutas implements OnInit {
     private zone: NgZone
 
   ) {
-    addIcons({trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline});
+    addIcons({trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline, closeCircleOutline});
   }
 
   ngOnInit() {
@@ -171,6 +171,47 @@ export class ComponenteResumenRutas implements OnInit {
         });
       },
       error: (err) => console.error("Error al publicar", err)
+    });
+  }
+
+  // Método para confirmar la eliminación de una publicación
+  async confirmarQuitarPublicacion(ruta: any) {
+    this.zone.run(async () => {
+      const alert = await this.alertCtrl.create({
+        header: 'Retirar del foro',
+        message: '¿Seguro que quieres quitar esta ruta de la sección de la comunidad?',
+        buttons: [
+          { text: 'Cancelar', role: 'cancel' },
+          {
+            text: 'Quitar',
+            role: 'destructive',
+            handler: () => { this.quitarPublicacion(ruta.id); }
+          }
+        ]
+      });
+      await alert.present();
+    });
+  }
+
+  private quitarPublicacion(rutaId: number) {
+    // Usamos el servicio para eliminar la publicación. 
+    // Si tu backend elimina usando el ID de la ruta en vez del ID de la publicación, usa rutaId directamente.
+    this.publicacionesService.eliminarPublicacion(rutaId).subscribe({
+      next: () => {
+        this.zone.run(async () => {
+          const toast = await this.toastCtrl.create({
+            message: 'Ruta retirada de la comunidad.',
+            duration: 2000,
+            color: 'warning',
+            position: 'middle'
+          });
+          await toast.present();
+          
+          // Refrescamos los datos para cambiar el estado de los botones visualmente
+          this.cargarMisRutas();
+        });
+      },
+      error: (err) => console.error("Error al retirar la publicación", err)
     });
   }
 

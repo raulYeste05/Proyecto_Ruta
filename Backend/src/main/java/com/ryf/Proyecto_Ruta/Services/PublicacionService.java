@@ -107,6 +107,27 @@ public class PublicacionService {
                 
     }
 
+    // ELIMINAR PUBLICACIÓN USANDO EL RUTA ID Y REVERTIR ESTADO
+    @org.springframework.transaction.annotation.Transactional
+    public void eliminarPorRutaId(Integer rutaId) {
+        // 1. Buscamos la publicación por el ID de la ruta para poder borrarla
+        // Nota: Asumo que tienes este método en tu PublicacionRepository, si no, lo añadimos en el siguiente paso.
+        Publicacion publicacion = publicacionRepository.findByRutaId(rutaId)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No existe ninguna publicación para esta ruta"));
+
+        // 2. Localizamos la ruta asociada y cambiamos su estado a false
+        Ruta ruta = publicacion.getRuta();
+        if (ruta != null) {
+            ruta.setPublicada(false);
+            rutaRepository.save(ruta);
+        }
+
+        // 3. Eliminamos la publicación físicamente de la base de datos
+        publicacionRepository.delete(publicacion);
+    }
+
     public void eliminar(Integer id) {
         publicacionRepository.deleteById(id);
     }

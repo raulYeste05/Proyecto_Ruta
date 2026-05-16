@@ -67,3 +67,15 @@
     border-left: 4px solid #3880ff;
     margin-bottom: 15px;
   }
+
+  .acciones-ruta {
+  ion-button {
+    font-size: 0.8em; // Ajuste fino para que quepan bien los 3 botones en móviles
+    --padding-start: 4px;
+    --padding-end: 4px;
+    
+    ion-icon {
+      margin-inline-end: 4px;
+    }
+  }
+}
