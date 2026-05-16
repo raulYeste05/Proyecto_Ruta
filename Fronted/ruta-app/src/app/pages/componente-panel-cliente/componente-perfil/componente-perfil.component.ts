@@ -75,7 +75,7 @@ export class ComponentePerfilPage implements OnInit {
         apellido2: data.apellido2,
         telefono: data.telefono,
         provincia: codProv,
-        password: ''
+        localidad: data.localidad
       });
 
       if (codProv) {

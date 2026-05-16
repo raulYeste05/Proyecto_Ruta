@@ -43,8 +43,7 @@
         <input
           formControlName="password"
           type="password"
-          placeholder="Para actualiza introduce la nueva contraseña"
-          autocomplete="new-password">
+          placeholder="Dejar en blanco para mantener la actual">
       </div>
       <div
         class="error-texto"
@@ -131,7 +130,7 @@
     <ion-button
       type="submit"
       expand="block"
-      [disabled]="perfilForm.pending"
+      [disabled]="perfilForm.invalid"
       class="ion-margin-top">
       Actualizar Perfil
     </ion-button>
