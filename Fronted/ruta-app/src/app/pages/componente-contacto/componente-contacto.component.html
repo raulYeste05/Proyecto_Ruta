@@ -1,4 +1,4 @@
-<ion-menu contentId="main-content" side="end">
+<ion-menu contentId="contacto-content" side="end">
   <ion-header>
     <ion-toolbar color="primary">
       <ion-title>Menú</ion-title>
@@ -6,15 +6,15 @@
   </ion-header>
   <ion-content class="menu-mobile-content">
     <ion-list lines="none">
-      <ion-item button>
+      <ion-item button routerLink="/landing">
         <ion-icon slot="start" name="home-outline"></ion-icon>
         <ion-label>INICIO</ion-label>
       </ion-item>
-      <ion-item button>
+      <ion-item button routerLink="/como-funciona">
         <ion-icon slot="start" name="help-circle-outline"></ion-icon>
         <ion-label>CÓMO FUNCIONA</ion-label>
       </ion-item>
-      <ion-item button>
+      <ion-item button routerLink="/contacto">
         <ion-icon slot="start" name="mail-outline"></ion-icon>
         <ion-label>CONTACTO</ion-label>
       </ion-item>
@@ -26,33 +26,56 @@
   </ion-content>
 </ion-menu>
 
-<section class="contacto-section">
-  <div class="contacto-wrapper">
-    <div class="contacto-info">
-      <h2>Ponte en contacto</h2>
-      <p>¿Tienes dudas o quieres colaborar con nosotros? Estamos en Jaén.</p>
-      
-      <ion-list lines="none">
-        <ion-item>
-          <ion-icon slot="start" name="location-outline"></ion-icon>
-          <ion-label>Jaén, España</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-icon slot="start" name="mail-outline"></ion-icon>
-          <ion-label>rutaApp&#64;gmail.com</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-icon slot="start" name="call-outline"></ion-icon>
-          <ion-label>+34 123 454 6789</ion-label>
-        </ion-item>
-      </ion-list>
+<ion-header class="ion-no-border" id="contacto-content">
+  <ion-toolbar class="nav-toolbar">
+    <div class="contenedor-nav">
+      <div class="nav-izquierda" routerLink="/landing" style="cursor: pointer;">
+        <img src="assets/Logo-ruta.png" class="logo">
+        <span class="marca">RutaApp</span>
+      </div>
+
+      <div class="nav-centro ion-hide-md-down">
+        <ion-button fill="clear" class="btn-nav" routerLink="/landing">INICIO</ion-button>
+        <ion-button fill="clear" class="btn-nav" routerLink="/como-funciona">COMO FUNCIONA</ion-button>
+        <ion-button fill="clear" class="btn-nav active" routerLink="/contacto">CONTACTO</ion-button>
+      </div>
+
+      <div class="nav-derecha">
+        <ion-button variant="outline" class="btn-login ion-hide-md-down" routerLink="/login">LOGIN</ion-button>
+        <ion-menu-button class="ion-hide-md-up" color="light"></ion-menu-button>
+      </div>
     </div>
-  </div>
-</section>
-<!-- FOOTER OSCURO -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section class="contacto-section">
+    <div class="contacto-wrapper">
+      <div class="contacto-info">
+        <h2>Ponte en contacto</h2>
+        <p>¿Tienes dudas o quieres colaborar con nosotros? Estamos en Jaén.</p>
+        
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon slot="start" name="location-outline"></ion-icon>
+            <ion-label>Jaén, España</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="mail-outline"></ion-icon>
+            <ion-label>rutaApp&#64;gmail.com</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="call-outline"></ion-icon>
+            <ion-label>+34 123 454 6789</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer-dark">
     <div class="footer-content">
-      <div class="footer-brand">
+      <div class="footer-brand" routerLink="/landing" style="cursor: pointer;">
         <div class="logo-placeholder">
           <img src="assets/Logo-ruta.png" class="logo">
         </div>
@@ -60,7 +83,8 @@
       </div>
       <div class="footer-links">
         <h4>Soporte</h4>
-        <a href="#" routerLink="/privacidad">Privacidad</a>
+        <a routerLink="/privacidad" style="cursor: pointer;">Privacidad</a>
       </div>
     </div>
   </footer>
+</ion-content>
