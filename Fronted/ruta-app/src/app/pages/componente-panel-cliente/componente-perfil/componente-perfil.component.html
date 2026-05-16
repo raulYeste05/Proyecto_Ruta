@@ -2,227 +2,137 @@
 
   <h2>Editar mis datos personales</h2>
 
-  <form [formGroup]="perfilForm">
+  <form [formGroup]="perfilForm" (ngSubmit)="guardarCambios()">
 
-    <!-- DNI -->
     <div class="grupo">
-
       <label>DNI</label>
-
       <div class="input-html">
-
         <input
           formControlName="dni"
           type="text"
           placeholder="DNI">
-
       </div>
-
       <div
         class="error-texto"
-        *ngIf="perfilForm.get('dni')?.touched && perfilForm.get('dni')?.hasError('dniInvalido')">
-
-        <p>DNI incorrecto</p>
-
+        *ngIf="perfilForm.get('dni')?.invalid && (perfilForm.get('dni')?.dirty || perfilForm.get('dni')?.touched)">
+        <p *ngIf="perfilForm.get('dni')?.hasError('dniInvalido')">DNI incorrecto</p>
+        <p *ngIf="perfilForm.get('dni')?.hasError('dniDuplicado')">Ya existe un cliente con ese DNI</p>
+        <p *ngIf="perfilForm.get('dni')?.hasError('required')">El DNI es obligatorio</p>
       </div>
-
-      <div
-        class="error-texto"
-        *ngIf="perfilForm.get('dni')?.touched && perfilForm.get('dni')?.hasError('dniDuplicado')">
-
-        <p>Ya existe un cliente con ese DNI</p>
-
-      </div>
-
     </div>
 
-    <!-- NOMBRE -->
     <div class="grupo">
-
       <label>Nombre</label>
-
       <div class="input-html">
-
         <input
           formControlName="nombre"
           type="text"
           placeholder="Nombre">
-
       </div>
-
       <div
         class="error-texto"
-        *ngIf="perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.hasError('soloTexto')">
-
-        <p>Solo letras permitidas</p>
-
+        *ngIf="perfilForm.get('nombre')?.invalid && (perfilForm.get('nombre')?.dirty || perfilForm.get('nombre')?.touched)">
+        <p *ngIf="perfilForm.get('nombre')?.hasError('soloTexto')">Solo letras permitidas</p>
+        <p *ngIf="perfilForm.get('nombre')?.hasError('required')">El nombre es obligatorio</p>
       </div>
-
     </div>
 
-    <!-- PASSWORD -->
     <div class="grupo">
-
       <label>Nueva Contraseña</label>
-
       <div class="input-html">
-
         <input
           formControlName="password"
           type="password"
           placeholder="Dejar en blanco para mantener la actual">
-
       </div>
-
       <div
         class="error-texto"
-        *ngIf="perfilForm.get('password')?.touched && perfilForm.get('password')?.hasError('contrasena')">
-
+        *ngIf="perfilForm.get('password')?.invalid && perfilForm.get('password')?.value !== ''">
         <p>
           La contraseña debe tener al menos 6 caracteres e incluir una mayúscula y un número.
         </p>
-
       </div>
-
     </div>
 
-    <!-- APELLIDO 1 -->
     <div class="grupo">
-
       <label>Primer Apellido</label>
-
       <div class="input-html">
-
         <input
           formControlName="apellido1"
           type="text"
           placeholder="Primer apellido">
-
       </div>
-
       <div
         class="error-texto"
-        *ngIf="perfilForm.get('apellido1')?.touched && perfilForm.get('apellido1')?.hasError('soloTexto')">
-
-        <p>Solo letras permitidas</p>
-
+        *ngIf="perfilForm.get('apellido1')?.invalid && (perfilForm.get('apellido1')?.dirty || perfilForm.get('apellido1')?.touched)">
+        <p *ngIf="perfilForm.get('apellido1')?.hasError('soloTexto')">Solo letras permitidas</p>
+        <p *ngIf="perfilForm.get('apellido1')?.hasError('required')">El primer apellido es obligatorio</p>
       </div>
-
     </div>
 
-    <!-- APELLIDO 2 -->
     <div class="grupo">
-
       <label>Segundo Apellido</label>
-
       <div class="input-html">
-
         <input
           formControlName="apellido2"
           type="text"
           placeholder="Segundo apellido">
-
       </div>
-
       <div
         class="error-texto"
-        *ngIf="perfilForm.get('apellido2')?.touched && perfilForm.get('apellido2')?.hasError('soloTexto')">
-
-        <p>Solo letras permitidas</p>
-
+        *ngIf="perfilForm.get('apellido2')?.invalid && (perfilForm.get('apellido2')?.dirty || perfilForm.get('apellido2')?.touched)">
+        <p *ngIf="perfilForm.get('apellido2')?.hasError('soloTexto')">Solo letras permitidas</p>
       </div>
-
     </div>
 
-    <!-- TELEFONO -->
     <div class="grupo">
-
       <label>Teléfono</label>
-
       <div class="input-html">
-
         <input
           formControlName="telefono"
           type="tel"
           placeholder="Teléfono">
-
       </div>
-
       <div
         class="error-texto"
-        *ngIf="perfilForm.get('telefono')?.touched && perfilForm.get('telefono')?.hasError('telefonoInvalido')">
-
-        <p>Debe tener 9 dígitos</p>
-
+        *ngIf="perfilForm.get('telefono')?.invalid && (perfilForm.get('telefono')?.dirty || perfilForm.get('telefono')?.touched)">
+        <p *ngIf="perfilForm.get('telefono')?.hasError('telefonoInvalido')">Debe tener 9 dígitos</p>
+        <p *ngIf="perfilForm.get('telefono')?.hasError('required')">El teléfono es obligatorio</p>
       </div>
-
     </div>
 
-    <!-- PROVINCIA -->
     <div class="grupo">
-
       <label>Provincia</label>
-
       <div class="select-html">
-
         <select
           formControlName="provincia"
           (change)="onProvinciaChangeNative($event)">
-
-          <option value="" disabled selected>
-            Selecciona Provincia
-          </option>
-
-          <option
-            *ngFor="let p of provincias"
-            [value]="p.CPRO">
-
+          <option value="" disabled selected>Selecciona Provincia</option>
+          <option *ngFor="let p of provincias" [value]="p.CPRO">
             {{ p.PRO || p.NOMBRE_PROVINCIA }}
-
           </option>
-
         </select>
-
       </div>
-
     </div>
 
-    <!-- LOCALIDAD -->
     <div class="grupo">
-
       <label>Localidad</label>
-
       <div class="select-html">
-
         <select formControlName="localidad">
-
-          <option value="" disabled selected>
-            Selecciona Localidad
-          </option>
-
-          <option
-            *ngFor="let m of localidades"
-            [value]="m.DMUN50 || m.NOMBRE_MUNICIPIO">
-
+          <option value="" disabled selected>Selecciona Localidad</option>
+          <option *ngFor="let m of localidades" [value]="m.DMUN50 || m.NOMBRE_MUNICIPIO">
             {{ m.DMUN50 || m.NOMBRE_MUNICIPIO }}
-
           </option>
-
         </select>
-
       </div>
-
     </div>
 
-    <!-- BOTÓN -->
     <ion-button
+      type="submit"
       expand="block"
-      (click)="guardarCambios()"
       [disabled]="perfilForm.invalid"
       class="ion-margin-top">
-
       Actualizar Perfil
-
     </ion-button>
 
   </form>
@@ -230,20 +140,12 @@
 </div>
 
 <div class="ion-padding">
-
   <ion-button
     expand="block"
     fill="outline"
     color="secondary"
     (click)="irAMisRutas()">
-
-    <ion-icon
-      slot="start"
-      name="list-outline">
-    </ion-icon>
-
+    <ion-icon slot="start" name="list-outline"></ion-icon>
     Ver Historial de Rutas
-
   </ion-button>
-
 </div>

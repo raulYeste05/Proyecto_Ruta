@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,  } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ClienteService } from '../../../services/cliente.service';
 import { GeoService } from '../../../services/geo.service';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   templateUrl: './componente-perfil.component.html',
   styleUrls: ['./componente-perfil.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule]
+  imports: [CommonModule, IonicModule, ReactiveFormsModule,]
 })
 export class ComponentePerfilPage implements OnInit {
   perfilForm: FormGroup;
@@ -29,7 +29,7 @@ export class ComponentePerfilPage implements OnInit {
     private router: Router
   ) {
     this.perfilForm = this.fb.group({
-      password: ['', [Validators.required, validaciones.contrasena]],
+      password: ['', [validaciones.contrasena]],
       dni: ['', [Validators.required, validaciones.dni]],
       nombre: ['', [Validators.required, validaciones.soloTexto]],
       apellido1: ['', [Validators.required, validaciones.soloTexto]],
