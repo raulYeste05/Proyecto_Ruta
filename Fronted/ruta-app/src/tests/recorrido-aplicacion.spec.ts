@@ -27,8 +27,7 @@ test('test', async ({ page }) => {
 
 
   // 4. Salida ROBUSTA
-  // En lugar de un IF, vamos a forzar la navegación a la landing
-  // Esto es un truco legal en testing para asegurar el estado final
+ 
   await page.goto('https://proyecto-ruta.vercel.app/landing');
 
   // 5. Verificación final (Ahora sí funcionará porque acabamos de ir allí)

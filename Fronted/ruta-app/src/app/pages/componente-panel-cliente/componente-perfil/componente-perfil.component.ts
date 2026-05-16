@@ -55,36 +55,53 @@ export class ComponentePerfilPage implements OnInit {
   }
 
   cargarPerfil() {
-  this.clienteService.getPerfil().subscribe({
-    next: (data) => {
-      console.log('Datos recibidos del perfil:', data); // Revisa esto en la consola
-      this.clienteOriginal = data;
+    this.clienteService.getPerfil().subscribe({
+      next: (data) => {
+        console.log('Datos recibidos del perfil:', data);
+        this.clienteOriginal = data;
+        
+        this.id_cliente_actual = data.id_cliente || data.idCliente; 
+
+        const provEncontrada = this.provincias.find(p => 
+          (p.PRO || p.NOMBRE_PROVINCIA) === data.provincia
+        );
+        const codProv = provEncontrada ? provEncontrada.CPRO : '';
+
+        // 1. Rellenamos los datos básicos primero
+        this.perfilForm.patchValue({
+          dni: data.dni,
+          nombre: data.nombre,
+          apellido1: data.apellido1,
+          apellido2: data.apellido2,
+          telefono: data.telefono,
+          provincia: codProv
+        });
+
+        // 2. Si hay provincia, cargamos municipios y le pasamos la localidad para que se seleccione correctamente
+        if (codProv) {
+          this.cargarMunicipios(codProv, data.localidad);
+        }
+      },
+      error: (err) => console.error('Error al cargar perfil', err)
+    });
+  }
+
+  // CAMBIO AQUÍ: Añadimos 'localidadSeleccionada' como parámetro opcional
+  cargarMunicipios(codProv: string, localidadSeleccionada?: string) {
+    this.geoService.getMunicipios(codProv).subscribe(res => {
+      this.localidades = Array.isArray(res) ? res : (res.data || []);
       
-      // CAMBIO AQUÍ: Prueba con idCliente si id_cliente falla
-      this.id_cliente_actual = data.id_cliente || data.idCliente; 
-
-      const provEncontrada = this.provincias.find(p => 
-        (p.PRO || p.NOMBRE_PROVINCIA) === data.provincia
-      );
-      const codProv = provEncontrada ? provEncontrada.CPRO : '';
-
-      this.perfilForm.patchValue({
-        dni: data.dni,
-        nombre: data.nombre,
-        apellido1: data.apellido1,
-        apellido2: data.apellido2,
-        telefono: data.telefono,
-        provincia: codProv,
-        localidad: data.localidad
-      });
-
-      if (codProv) {
-        this.cargarMunicipios(codProv);
+      // Si venimos de cargar el perfil, le metemos el valor de la localidad guardada ahora que ya existe la lista
+      if (localidadSeleccionada) {
+        this.perfilForm.patchValue({
+          localidad: localidadSeleccionada
+        });
+        
+        // Forzamos a Angular a comprobar todo el formulario y marcarlo como VÁLIDO
+        this.perfilForm.updateValueAndValidity();
       }
-    },
-    error: (err) => console.error('Error al cargar perfil', err)
-  });
-}
+    });
+  }
 
   onProvinciaChangeNative(event: any) {
     const codProv = event.target.value; // Importante: en nativo usamos event.target.value
@@ -98,12 +115,7 @@ export class ComponentePerfilPage implements OnInit {
     }
   }
 
-  cargarMunicipios(codProv: string) {
-    this.geoService.getMunicipios(codProv).subscribe(res => {
-      // Ajuste para evitar el error de [object Object] en el *ngFor
-      this.localidades = Array.isArray(res) ? res : (res.data || []);
-    });
-  }
+
 
   guardarCambios() {
     if (this.perfilForm.invalid) return;
