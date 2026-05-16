@@ -50,13 +50,12 @@
                 </ion-button>
               </ion-col>
               <ion-col size="4">
-                <ion-button expand="block" fill="outline" color="success" (click)="publicarRuta(ruta)">
+                <ion-button *ngIf="!ruta.publicada || ruta.publicada === 0" expand="block" fill="outline" color="success" (click)="publicarRuta(ruta)">
                   <ion-icon slot="start" name="share-social-outline"></ion-icon>
                   Publicar
                 </ion-button>
-              </ion-col>
-              <ion-col size="4">
-                <ion-button expand="block" fill="outline" color="warning" (click)="confirmarQuitarPublicacion(ruta)" [disabled]="!ruta.publicada">
+
+                <ion-button *ngIf="ruta.publicada === true || ruta.publicada === 1" expand="block" fill="outline" color="warning" (click)="confirmarQuitarPublicacion(ruta)">
                   <ion-icon slot="start" name="close-circle-outline"></ion-icon>
                   No publicar
                 </ion-button>
