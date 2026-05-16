@@ -1,12 +1,13 @@
 import { ClienteService } from './../../../services/cliente.service';
 import { RutasService } from '../../../services/rutas.service';
 import { AuthService } from '../../../services/auth.service';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Tramo } from '../../../interfaces/ruta.models';
 import { ActivatedRoute } from '@angular/router';
+
 
 import { AlertController } from '@ionic/angular';
 import * as L from 'leaflet';
@@ -68,7 +69,8 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
               private toastController: ToastController,
               private alertController: AlertController,
               private route: ActivatedRoute,
-              private router: Router
+              private router: Router,
+              private zone: NgZone
   ) {
     // Registramos los iconos para evitar errores en consola
     addIcons({ car, walk, bicycle, trashOutline, flagOutline, locateOutline, timeOutline, resizeOutline, checkmarkDoneOutline, pizza, leaf, water, cafe, arrowBackOutline });
@@ -389,7 +391,9 @@ async mostrarToastSuccess(msj: string) {
   }
 
     async finalizarViaje() {
-    // 1. Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
+    
+    this.zone.run(async () => {
+      // 1. Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
     // lo procesamos automáticamente para que no se pierda esa distancia/tiempo.
     if (this.datosTramoActual) {
       const confirmarAutomatico = confirm("Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?");
@@ -455,6 +459,7 @@ async mostrarToastSuccess(msj: string) {
         }
       });
     });
+    });
   }
 
   private generarResumenTexto(volverMismoCamino: boolean): string {
@@ -510,8 +515,10 @@ async mostrarToastSuccess(msj: string) {
           
           guardados++;
           if (guardados === this.tramosConfirmados.length) {
-            this.mostrarToastSuccess('¡Viaje y paradas guardadas correctamente!');
-            this.resetearMapaYTotales();
+            this.zone.run(() => {
+              this.mostrarToastSuccess('¡Viaje y paradas guardadas correctamente!');
+              this.resetearMapaYTotales();
+            });
           }
         },
         error: (err) => console.error("Error al guardar tramo:", err)
