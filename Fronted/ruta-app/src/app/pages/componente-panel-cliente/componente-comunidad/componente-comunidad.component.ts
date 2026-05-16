@@ -34,11 +34,15 @@ export class ComponenteComunidad implements OnInit {
     this.cargarPublicaciones();
   }
 
+  // NUEVO: Este método se ejecuta CADA VEZ que la pantalla de la comunidad se pone en primer plano
+  ionViewWillEnter() {
+    this.cargarPublicaciones();
+  }
+
   cargarPublicaciones() {
     this.pubService.listarTodas().subscribe({
       next: (data) => {
         this.publicaciones = data.reverse();
-        // Una vez cargadas las publicaciones, pedimos los conteos
         this.publicaciones.forEach(post => {
           this.obtenerConteo(post.id);
         });
@@ -65,19 +69,18 @@ export class ComponenteComunidad implements OnInit {
     this.router.navigate(['/componente-panel-cliente/mapa'], { queryParams: { idRuta: rutaId } });
   }
 
-  //Abrir Comentarios
-    async abrirComentarios(publicacionId: number) {
+  async abrirComentarios(publicacionId: number) {
     const modal = await this.modalCtrl.create({
       component: ComponenteComentariosComponent,
       componentProps: { publicacionId: publicacionId },
-      initialBreakpoint: 0.75, // Se abre al 75% de la pantalla
+      initialBreakpoint: 0.75,
       breakpoints: [0, 0.5, 0.75, 1]
     });
     await modal.present();
 
     const { data } = await modal.onDidDismiss();
     if (data?.actualizado) {
-      this.obtenerConteo(publicacionId); // Refrescamos solo ese contador
+      this.obtenerConteo(publicacionId);
     }
   }
 }

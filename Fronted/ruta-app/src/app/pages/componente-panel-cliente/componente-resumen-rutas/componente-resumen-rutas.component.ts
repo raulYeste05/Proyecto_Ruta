@@ -194,9 +194,8 @@ export class ComponenteResumenRutas implements OnInit {
   }
 
   private quitarPublicacion(rutaId: number) {
-    // Usamos el servicio para eliminar la publicación. 
-    // Si tu backend elimina usando el ID de la ruta en vez del ID de la publicación, usa rutaId directamente.
-    this.publicacionesService.eliminarPublicacion(rutaId).subscribe({
+    // CAMBIO AQUÍ: Llamamos a eliminarPublicacionPorRuta en lugar de eliminarPublicacion
+    this.publicacionesService.eliminarPublicacionPorRuta(rutaId).subscribe({
       next: () => {
         this.zone.run(async () => {
           const toast = await this.toastCtrl.create({
@@ -207,7 +206,7 @@ export class ComponenteResumenRutas implements OnInit {
           });
           await toast.present();
           
-          // Refrescamos los datos para cambiar el estado de los botones visualmente
+          // Refrescamos los datos locales para cambiar el estado de los botones
           this.cargarMisRutas();
         });
       },
