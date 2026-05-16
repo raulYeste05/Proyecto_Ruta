@@ -118,9 +118,10 @@ export class ComponentePerfilPage implements OnInit {
 
 
   guardarCambios() {
-    if (this.perfilForm.invalid) return;
 
-      if (this.perfilForm.invalid) {
+    console.log(this.perfilForm);
+
+  if (this.perfilForm.invalid) {
     console.log(this.perfilForm.errors);
     console.log(this.perfilForm.get('dni')?.errors);
     console.log(this.perfilForm.get('nombre')?.errors);
@@ -133,6 +134,9 @@ export class ComponentePerfilPage implements OnInit {
 
     return;
   }
+  
+    if (this.perfilForm.invalid) return;
+    
 
   const values = this.perfilForm.value;
   const provSeleccionada = this.provincias.find(p => p.CPRO === values.provincia);
