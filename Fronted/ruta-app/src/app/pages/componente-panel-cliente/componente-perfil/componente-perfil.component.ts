@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,  } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';import { IonicModule } from '@ionic/angular';
 import { ClienteService } from '../../../services/cliente.service';
 import { GeoService } from '../../../services/geo.service';
 import { ComponenteResumenRutas } from '../componente-resumen-rutas/componente-resumen-rutas.component';
@@ -13,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './componente-perfil.component.html',
   styleUrls: ['./componente-perfil.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule,]
+  imports : [CommonModule, IonicModule, ReactiveFormsModule]
 })
 export class ComponentePerfilPage implements OnInit {
   perfilForm: FormGroup;
@@ -22,14 +21,21 @@ export class ComponentePerfilPage implements OnInit {
   id_cliente_actual: number | null = null;
   clienteOriginal: any;
 
-  constructor(
+
+ constructor(
     private fb: FormBuilder,
     private clienteService: ClienteService,
     private geoService: GeoService,
     private router: Router
   ) {
     this.perfilForm = this.fb.group({
-      password: ['', [validaciones.contrasena]],
+      // CAMBIO AQUÍ: Añadimos explícitamente el tipo ': AbstractControl'
+      password: ['', (control: AbstractControl) => {
+        if (!control.value || control.value.trim() === '') {
+          return null; // Si está vacío es totalmente válido
+        }
+        return validaciones.contrasena(control); // Si tiene texto, aplica tu regla
+      }],
       dni: ['', [Validators.required, validaciones.dni]],
       nombre: ['', [Validators.required, validaciones.soloTexto]],
       apellido1: ['', [Validators.required, validaciones.soloTexto]],
