@@ -110,21 +110,29 @@ public class PublicacionService {
     // ELIMINAR PUBLICACIÓN USANDO EL RUTA ID Y REVERTIR ESTADO
     @org.springframework.transaction.annotation.Transactional
     public void eliminarPorRutaId(Integer rutaId) {
-        // 1. Buscamos la publicación por el ID de la ruta
-        Publicacion publicacion = publicacionRepository.findByRutaId(rutaId)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No existe ninguna publicación para esta ruta"));
+        // 1. Buscamos la publicación usando el ID de la ruta
+        List<Publicacion> publicaciones = publicacionRepository.findByRutaId(rutaId);
+        
+        if (publicaciones.isEmpty()) {
+            throw new RuntimeException("No existe ninguna publicación asociada a la ruta con ID: " + rutaId);
+        }
+        
+        // Obtenemos la publicación que vamos a destruir
+        Publicacion publicacion = publicaciones.get(0);
 
-        // 2. Localizamos la ruta asociada y forzamos el bit a false
-        Ruta ruta = publicacion.getRuta();
+        // 2. Buscamos la ruta de forma independiente para romper el lazo de Foreign Key
+        Ruta ruta = rutaRepository.findById(rutaId).orElse(null);
         if (ruta != null) {
             ruta.setPublicada(false);
-            // CAMBIO AQUÍ: Usamos saveAndFlush para escribir en la BD inmediatamente
-            rutaRepository.saveAndFlush(ruta); 
+            rutaRepository.saveAndFlush(ruta); // Cambiamos el bit en la BD a 0
         }
 
-        // 3. Eliminamos la publicación físicamente
+        // 3. Rompemos explícitamente la relación en la entidad antes de borrar
+        publicacion.setRuta(null);
+        publicacion.setUser(null);
+        publicacionRepository.saveAndFlush(publicacion);
+
+        // 4. Ahora que está completamente suelta, la borramos físicamente
         publicacionRepository.delete(publicacion);
     }
 
