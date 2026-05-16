@@ -120,6 +120,20 @@ export class ComponentePerfilPage implements OnInit {
   guardarCambios() {
     if (this.perfilForm.invalid) return;
 
+      if (this.perfilForm.invalid) {
+    console.log(this.perfilForm.errors);
+    console.log(this.perfilForm.get('dni')?.errors);
+    console.log(this.perfilForm.get('nombre')?.errors);
+    console.log(this.perfilForm.get('apellido1')?.errors);
+    console.log(this.perfilForm.get('apellido2')?.errors);
+    console.log(this.perfilForm.get('telefono')?.errors);
+    console.log(this.perfilForm.get('provincia')?.errors);
+    console.log(this.perfilForm.get('localidad')?.errors);
+    console.log(this.perfilForm.get('password')?.errors);
+
+    return;
+  }
+
   const values = this.perfilForm.value;
   const provSeleccionada = this.provincias.find(p => p.CPRO === values.provincia);
 
