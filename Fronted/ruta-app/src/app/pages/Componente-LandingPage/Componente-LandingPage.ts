@@ -24,7 +24,7 @@ import {
   styleUrls: ['./Componente-LandingPage.scss'],
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule, IonicModule, 
-    IonHeader, IonToolbar, IonButtons, IonMenuButton, IonMenu, 
+    IonHeader, IonToolbar,  IonMenuButton, IonMenu, 
     IonContent, IonList, IonItem, IonIcon, IonLabel, IonTitle, IonButton
   ]
 })
