@@ -110,30 +110,31 @@ public class PublicacionService {
     // ELIMINAR PUBLICACIÓN USANDO EL RUTA ID Y REVERTIR ESTADO
     @org.springframework.transaction.annotation.Transactional
     public void eliminarPorRutaId(Integer rutaId) {
-        // 1. Buscamos la publicación usando el ID de la ruta
+        // 1. Buscamos las publicaciones vinculadas a la ruta
         List<Publicacion> publicaciones = publicacionRepository.findByRutaId(rutaId);
         
         if (publicaciones.isEmpty()) {
             throw new RuntimeException("No existe ninguna publicación asociada a la ruta con ID: " + rutaId);
         }
         
-        // Obtenemos la publicación que vamos a destruir
+        // Obtenemos la publicación original
         Publicacion publicacion = publicaciones.get(0);
 
-        // 2. Buscamos la ruta de forma independiente para romper el lazo de Foreign Key
+        // 2. Rompemos las relaciones en el objeto publicacion y sincronizamos inmediatamente
+        publicacion.setRuta(null);
+        publicacion.setUser(null);
+        publicacionRepository.saveAndFlush(publicacion); 
+
+        // 3. Ahora que está libre, borramos la publicación de la base de datos y forzamos el volcado
+        publicacionRepository.delete(publicacion);
+        publicacionRepository.flush(); // <--- OBLIGAMOS a MySQL a eliminar la fila YA
+
+        // 4. Por último, buscamos y actualizamos de forma limpia el estado de la Ruta
         Ruta ruta = rutaRepository.findById(rutaId).orElse(null);
         if (ruta != null) {
             ruta.setPublicada(false);
-            rutaRepository.saveAndFlush(ruta); // Cambiamos el bit en la BD a 0
+            rutaRepository.saveAndFlush(ruta); // Cambia el bit 0x01 a 0x00 sin conflictos
         }
-
-        // 3. Rompemos explícitamente la relación en la entidad antes de borrar
-        publicacion.setRuta(null);
-        publicacion.setUser(null);
-        publicacionRepository.saveAndFlush(publicacion);
-
-        // 4. Ahora que está completamente suelta, la borramos físicamente
-        publicacionRepository.delete(publicacion);
     }
 
     public void eliminar(Integer id) {
