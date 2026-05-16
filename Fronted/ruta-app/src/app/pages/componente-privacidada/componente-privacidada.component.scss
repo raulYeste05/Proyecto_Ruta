@@ -1,19 +1,147 @@
+/* VARIABLES GENERALES */
+$verde-principal: rgb(5, 150, 105);
+$azul-secundario: rgb(37, 99, 235);
+$gris-apoyo: rgb(86, 80, 80);
+$fondo-footer: #111827; 
+$verde-accent: #10b981;
 
-.logo{
-  width: 50px;
+/* --- NAVBAR SUPERIOR --- */
+.nav-toolbar {
+  --background: #0f172a;
+  --color: white;
+  padding: 10px 20px;
 }
 
+.contenedor-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-izquierda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .logo { 
+    height: 35px; 
+    width: auto; 
+  }
+  .marca { 
+    font-weight: bold; 
+    font-size: 1.2rem; 
+    color: white;
+  }
+}
+
+.nav-centro {
+  display: flex;
+  gap: 10px;
+  .btn-nav {
+    --background: transparent;
+    --color: #94a3b8; 
+    font-size: 0.85rem;
+    font-weight: 600;
+    
+    &.active {
+      --color: #{$verde-accent}; 
+    }
+  }
+}
+
+/* --- SECCIÓN PRIVACIDAD (TEXTO LEGAL) --- */
 .privacidad-section {
-  padding: 60px 20px;
+  padding: 80px 20px;
   background: white;
+  min-height: 65vh; // Mantiene el footer abajo si el texto es corto en pantallas grandes
 
   .texto-legal {
-    max-width: 800px;
+    max-width: 750px; // Un ancho ligeramente más estrecho mejora la lectura de textos largos
     margin: 0 auto;
-    color: #374151;
+    color: #374151; // Gris oscuro muy suave para la vista
     line-height: 1.8;
 
-    h1 { color: #111827; margin-bottom: 30px; }
-    h3 { color: #059669; margin-top: 25px; }
+    h1 { 
+      color: #111827; 
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 10px; 
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 25px;
+    }
+    
+    h3 { 
+      color: $verde-principal; 
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 35px; 
+      margin-bottom: 10px;
+    }
+  }
+}
+
+/* --- FOOTER OSCURO --- */
+.footer-dark {
+  background: $fondo-footer;
+  color: white;
+  padding: 40px 20px;
+  width: 100%;
+  
+  .footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-brand {
+    .logo-placeholder {
+      width: auto;
+      height: 45px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+
+      .logo { 
+        height: 100%; 
+        width: auto; 
+        max-height: 45px;
+      }
+    }
+
+    p {
+      max-width: 300px;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  .footer-links {
+    h4 { 
+      margin: 0 0 15px 0; 
+      font-size: 1rem; 
+      font-weight: 700;
+      color: white;
+    }
+    
+    a { 
+      display: block; 
+      color: #9ca3af; 
+      text-decoration: none; 
+      font-size: 0.9rem;
+      transition: color 0.2s;
+      
+      &:hover {
+        color: white;
+      }
+    }
   }
 }

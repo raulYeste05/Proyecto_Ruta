@@ -1,21 +1,168 @@
-.contacto-section {
-  padding: 80px 20px;
-  background: #0f172a; // Fondo oscuro para variar
-  color: white;
+/* VARIABLES GENERALES */
+$verde-principal: rgb(5, 150, 105);
+$azul-secundario: rgb(37, 99, 235);
+$gris-apoyo: rgb(86, 80, 80);
+$fondo-footer: #111827; 
+$verde-accent: #10b981;
 
-  .logo{
-    width: 50px;
+/* --- NAVBAR SUPERIOR --- */
+.nav-toolbar {
+  --background: #0f172a;
+  --color: white;
+  padding: 10px 20px;
+}
+
+.contenedor-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-izquierda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .logo { 
+    height: 35px; 
+    width: auto; 
   }
+  .marca { 
+    font-weight: bold; 
+    font-size: 1.2rem; 
+    color: white;
+  }
+}
+
+.nav-centro {
+  display: flex;
+  gap: 10px;
+  .btn-nav {
+    --background: transparent;
+    --color: #94a3b8; 
+    font-size: 0.85rem;
+    font-weight: 600;
+    
+    &.active {
+      --color: #{$verde-accent}; // Resalta "CONTACTO" en esta página
+    }
+  }
+}
+
+/* --- SECCIÓN CONTACTO (FONDO OSCURO) --- */
+.contacto-section {
+  padding: 90px 20px;
+  background: #0f172a; 
+  color: white;
+  min-height: 60vh; // Le da una buena altura para que el footer no quede flotando en medio
+  display: flex;
+  align-items: center;
 
   .contacto-wrapper {
-    max-width: 800px;
+    max-width: 600px;
+    width: 100%;
     margin: 0 auto;
+    background: rgba(255, 255, 255, 0.03); // Una tarjeta sutil de fondo
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .contacto-info {
+    h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #94a3b8; // Gris claro muy legible sobre oscuro
+      font-size: 1.05rem;
+      margin-bottom: 30px;
+    }
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
   }
 
   ion-item {
     --background: transparent;
     --color: white;
-    margin-bottom: 10px;
-    ion-icon { color: #10b981; margin-right: 15px; }
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+    --padding-start: 0px; // Alinea los elementos perfectamente a la izquierda
+
+    ion-icon { 
+      color: $verde-accent; 
+      font-size: 1.5rem;
+      margin-right: 15px; 
+    }
+  }
+}
+
+/* --- FOOTER OSCURO --- */
+.footer-dark {
+  background: $fondo-footer;
+  color: white;
+  padding: 40px 20px;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.05); // Separador sutil
+  
+  .footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-brand {
+    .logo-placeholder {
+      width: auto;
+      height: 45px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+
+      .logo { 
+        height: 100%; 
+        width: auto; 
+        max-height: 45px;
+      }
+    }
+
+    p {
+      max-width: 300px;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  .footer-links {
+    h4 { 
+      margin: 0 0 15px 0; 
+      font-size: 1rem; 
+      font-weight: 700;
+      color: white;
+    }
+    
+    a { 
+      display: block; 
+      color: #9ca3af; 
+      text-decoration: none; 
+      font-size: 0.9rem;
+      transition: color 0.2s;
+      
+      &:hover {
+        color: white;
+      }
+    }
   }
 }
