@@ -319,7 +319,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     this.mostrarToastSuccess('Tramo añadido. Buscando servicios cercanos...');
 
     if (this.isModoLibre) {
-      this.presentarAlertaSiguientePaso();
+      this.reiniciarTramoLibre(this.tipoTransporte);
     }
   }
 
@@ -709,49 +709,26 @@ async mostrarToastSuccess(msj: string) {
 }
 
 
-  async presentarAlertaSiguientePaso() {
-    // Detenemos el GPS momentáneamente para que no siga sumando distancia mientras el usuario decide
-    if (this.watchId) navigator.geolocation.clearWatch(this.watchId);
-
-    const alert = await this.alertController.create({
-      header: '¡Parada Guardada!',
-      subHeader: '¿Cómo vas a continuar el viaje?',
-      backdropDismiss: false, // Obligamos a elegir una opción
-      buttons: [
-        {
-          text: '🚗 En Coche',
-          handler: () => { this.reiniciarTramoLibre('driving-car'); }
-        },
-        {
-          text: '🚶 Andando',
-          handler: () => { this.reiniciarTramoLibre('foot-walking'); }
-        },
-        {
-          text: '🚲 En Bici',
-          handler: () => { this.reiniciarTramoLibre('cycling-regular'); }
-        },
-        {
-          text: '🏁 Finalizar Ruta',
-          cssClass: 'alert-button-confirm',
-          handler: () => { this.finalizarViaje(); }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
   private reiniciarTramoLibre(nuevoModo: string) {
     this.tipoTransporte = nuevoModo;
     
-    // Limpiamos datos del tramo anterior pero mantenemos la línea en el mapa
-    const ultimaPosicion = this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1];
-    this.puntosTrayectoLibre = [ultimaPosicion]; // El nuevo tramo empieza donde acabó el anterior
+    // Si venías registrando posiciones, tomamos la última para que sea el inicio del nuevo tramo
+    if (this.puntosTrayectoLibre.length > 0) {
+      const ultimaPosicion = this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1];
+      this.puntosTrayectoLibre = [ultimaPosicion]; 
+    } else {
+      this.puntosTrayectoLibre = [];
+    }
+
     this.distanciaAcumuladaTramo = 0;
     this.tiempoInicioTramo = Date.now();
-    this.polylineActual = null; // Para que dibuje una línea nueva de este tramo
+    this.polylineActual = null; // Para que empiece a dibujar la línea del nuevo tramo libre
 
-    // Volvemos a activar el GPS
+    // Limpiamos rastreos anteriores por seguridad antes de volver a encenderlo
+    if (this.watchId) navigator.geolocation.clearWatch(this.watchId);
+    if (this.intervalRef) clearInterval(this.intervalRef);
+
+    // Volvemos a activar el GPS de forma fluida
     this.iniciarRastreo(); 
   }
 
