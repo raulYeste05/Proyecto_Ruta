@@ -29,11 +29,15 @@ ion-toast {
 .botones-contenedor {
   padding: 0 16px;
   margin-bottom: 20px;
+  z-index: 10;
+  margin-bottom: 35px;
 }
 
 // Estilo para el botón de obtener ubicación
 
 .leyenda-servicios {
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: space-around;
   background: white;
