@@ -153,7 +153,7 @@ export class ComponenteResumenRutas implements OnInit {
   async confirmarQuitarPublicacion(ruta: any) {
     const alert = await this.alertCtrl.create({
       header: 'Retirar del foro',
-      message: '¿Seguro que quieres quitar esta ruta de la sección de la comunidad?',
+      message: '¿Seguro que quieres quitar esta publicación de la sección de la comunidad?',
       cssClass: 'custom-alert',
       buttons: [
         {

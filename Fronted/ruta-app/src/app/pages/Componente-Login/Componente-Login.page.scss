@@ -91,30 +91,6 @@ ion-content {
 
 
 /* BOTÓN PRINCIPAL */
-.btn-acceder {
-  --background: linear-gradient(90deg, $verde-principal 0%, $azul-secundario 100%);
-  --border-radius: 12px;
-  --box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
-  height: 50px;
-  font-weight: bold;
-  margin-top: 10px;
-  text-transform: none;
-}
-
-.alerta-error {
-  background-color: #ffebee;
-  color: #c62828;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid #ffcdd2;
-  animation: shake 0.5s ease-in-out; 
-}
-
 /* LINKS Y FOOTER */
 .footer-login {
   margin-top: 25px;
@@ -134,10 +110,16 @@ ion-content {
   }
 
   .btn-volver {
-    --color: $gris-texto;
+    --color: #{$gris-texto}; /* Asegura que el texto use el gris correcto */
+    --background: transparent; /* Forzamos transparente para fill="clear" */
     font-size: 0.85rem;
     text-transform: none;
-    background-color: #1a1a1a;
+    margin-top: 5px;
+    
+    // Si quieres que resalte un poco más en el móvil cuando se pulsa
+    &:active {
+      --color: #{$verde-principal};
+    }
   }
 }
 
