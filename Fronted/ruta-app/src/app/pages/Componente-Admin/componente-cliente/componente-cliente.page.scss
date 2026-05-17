@@ -9,45 +9,69 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  gap: 10px;
 
   h2 {
     font-weight: 700;
     color: #1e293b;
     margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  ion-button {
+    --border-radius: 10px;
+    font-weight: 600;
+    margin: 0;
   }
 }
 
+/* CONTENEDOR CON SCROLL HORIZONTAL */
 .tabla-contenedor {
-  background: rgb(56, 54, 54);
+  background: #ffffff; /* Cambiado a blanco para mejor legibilidad, cámbialo si prefieres oscuro */
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  overflow: hidden; // Para que las esquinas de las filas no se salgan
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  
+  /* Activación del deslizamiento lateral */
+  overflow-x: auto; 
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* Scroll suave en dispositivos iOS */
+}
+
+/* LA TABLA INTERNA */
+.tabla-clientes {
+  /* Forzamos un ancho mínimo para que las columnas no se achiquen en pantallas móviles */
+  min-width: 850px; 
+  width: 100%;
 }
 
 .fila {
   display: grid;
-  // Ajustamos las columnas: Email y Apellidos tienen más peso
-  grid-template-columns: 2fr 1fr 1.5fr 1fr 1.5fr 120px;
-  gap: 10px;
+  /* Configuración proporcional perfecta de las columnas */
+  grid-template-columns: 2fr 1.2fr 1.8fr 1.2fr 1.5fr 110px;
+  gap: 12px;
   align-items: center;
-  padding: 12px 20px;
+  padding: 14px 20px;
+  box-sizing: border-box;
 }
 
 /* CABECERA */
 .tabla-cabecera {
-  background: #f1f5f9;
-  font-weight: 600;
-  color: #475569;
+  background: #f8fafc;
+  font-weight: 700;
+  color: #64748b;
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
 }
 
-/* FILAS */
+/* FILAS DE DATOS */
 .tabla-fila {
   border-top: 1px solid #f1f5f9;
   transition: background-color 0.2s ease;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  color: #334155;
 
   &:hover {
     background-color: #f8fafc;
@@ -55,20 +79,45 @@
 
   .email-text {
     font-weight: 500;
-    color: #3b82f6;
+    color: #2563eb;
+    word-break: break-all; /* Evita que correos muy largos destruyan la celda */
+  }
+  
+  small {
+    color: #64748b;
+    font-size: 0.8rem;
   }
 }
 
 .col-acciones {
   display: flex;
   justify-content: flex-end;
-  gap: 5px;
+  gap: 4px;
+  
+  ion-button {
+    height: 36px;
+    width: 36px;
+    margin: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
 }
 
-/* Ajustes para móviles */
-@media (max-width: 900px) {
-  .fila {
-    grid-template-columns: 1fr 1fr 100px; // Ocultamos lo menos importante
-    .col:nth-child(3), .col:nth-child(4), .col:nth-child(5) { display: none; }
+/* ==========================================================================
+   AJUSTES FINOS PARA PANTALLAS PEQUEÑAS
+   ========================================================================== */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 10px; /* Aprovechar mejor los bordes físicos del teléfono */
+  }
+
+  .header-seccion {
+    flex-direction: column; /* El botón pasa abajo del título */
+    align-items: flex-start;
+    gap: 12px;
+    
+    ion-button {
+      width: 100%; /* Botón de añadir a lo ancho en móvil facilita el click */
+    }
   }
 }
