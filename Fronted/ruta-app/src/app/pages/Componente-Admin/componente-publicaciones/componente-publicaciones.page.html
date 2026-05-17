@@ -4,13 +4,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding pagina-publicaciones">
+<ion-content class="ion-padding">
   <ion-list *ngIf="listaPublicaciones.length > 0; else noPubs">
-    <ion-card *ngFor="let pub of listaPublicaciones" class="tarjeta-moderacion">
+    <ion-card *ngFor="let pub of listaPublicaciones">
       <ion-card-header>
-        <div class="cabecera-tarjeta">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
           <ion-card-title>{{ pub.titulo }}</ion-card-title>
-          <ion-button fill="clear" color="danger" (click)="confirmarEliminar(pub.id)" class="btn-eliminar">
+          <ion-button fill="clear" color="danger" (click)="confirmarEliminar(pub.id)">
             <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </div>
@@ -20,9 +20,9 @@
       </ion-card-header>
 
       <ion-card-content>
-        <p class="contenido-texto">{{ pub.contenido }}</p>
+        <p>{{ pub.contenido }}</p>
         
-        <div class="contenedor-badges">
+        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
           <ion-badge color="medium">
             <ion-icon name="person-outline"></ion-icon> 
             Autor: {{ pub.emailUsuario || pub.user?.email || 'Anónimo' }}
@@ -34,22 +34,23 @@
           </ion-badge>
         </div>
 
-        <div class="ion-margin-top contenedor-acciones">
-          <ion-button fill="outline" size="small" expand="block" (click)="verComentarios(pub.id)" class="btn-gestionar">
+        <div class="ion-margin-top">
+          <!-- BOTÓN PARA VER COMENTARIOS -->
+          <ion-button fill="outline" size="small" (click)="verComentarios(pub.id)">
             <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
             Gestionar Comentarios ({{ (pub.listaComentariosCargados?.length || pub.comentarios?.length || 0) }})
           </ion-button>
         </div>
 
-        <ion-list *ngIf="pub.mostrarComentariosAdmin" class="lista-comentarios-admin">
-          <ion-item *ngFor="let com of pub.listaComentariosCargados" class="item-comentario">
-            <ion-label class="ion-text-wrap">
-              <h3><strong>{{ com.emailUsuario }}</strong></h3>
-              <p class="texto-comentario">{{ com.contenido }}</p>
-              <small>{{ com.fecha | date:'short' }}</small>
+        <!-- LISTA RÁPIDA DE COMENTARIOS (Opcional, si quieres verlos directamente) -->
+        <ion-list *ngIf="pub.mostrarComentariosAdmin">
+          <ion-item *ngFor="let com of pub.listaComentariosCargados">
+            <ion-label>
+              <h3>{{ com.emailUsuario }}: {{ com.contenido }}</h3>
+              <p>{{ com.fecha | date:'short' }}</p>
             </ion-label>
-            <ion-button color="danger" slot="end" fill="clear" (click)="eliminarComentario(com.id, pub.id)">
-              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            <ion-button color="danger" slot="end" (click)="eliminarComentario(com.id, pub.id)">
+              <ion-icon name="trash-outline"></ion-icon>
             </ion-button>
           </ion-item>
         </ion-list>
@@ -59,8 +60,8 @@
   </ion-list>
 
   <ng-template #noPubs>
-    <div class="sin-datos-contenedor">
-      <ion-icon name="chatbubbles-outline" class="icono-sin-datos"></ion-icon>
+    <div style="text-align: center; margin-top: 50px; color: #666;">
+      <ion-icon name="chatbubbles-outline" style="font-size: 64px; opacity: 0.3;"></ion-icon>
       <p>No hay publicaciones en el foro para moderar.</p>
     </div>
   </ng-template>
