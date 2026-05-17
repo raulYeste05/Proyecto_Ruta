@@ -1,46 +1,44 @@
-<ion-content class="contenido-modulo-admin">
-  <div class="bloque-contenedor">
+<div class="bloque-contenedor">
 
-    <div class="titulo-seccion-movil">
-      <h2>Gestión Global de Rutas</h2>
-    </div>
-
-    <ion-list *ngIf="todasLasRutas.length > 0; else noRutas" class="lista-transparente">
-      <ion-card *ngFor="let ruta of todasLasRutas" class="tarjeta-adaptativa">
-        <ion-card-header>
-          <div class="cabecera-flex">
-            <ion-card-title>{{ ruta.titulo }}</ion-card-title>
-            <ion-button fill="clear" color="danger" (click)="confirmarEliminar(ruta.id)" class="btn-accion-mini">
-              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-          </div>
-          
-          <div class="info-autor-ruta">
-            <ion-card-subtitle>
-              <ion-icon name="time-outline"></ion-icon> {{ ruta.fechaCreacion | date:'short' }}
-            </ion-card-subtitle>
-            <ion-badge color="medium" class="badge-usuario">
-              Usuario: {{ ruta.emailUsuario ? ruta.emailUsuario : 'Sin email' }}
-            </ion-badge>
-          </div>
-        </ion-card-header>
-
-        <ion-card-content>
-          <p class="texto-principal">{{ ruta.descripcion }}</p>
-          <ion-button expand="block" (click)="verRuta(ruta.id)" class="ion-margin-top btn-visualizar">
-            <ion-icon slot="start" name="map-outline"></ion-icon>
-            Visualizar en Mapa
-          </ion-button>
-        </ion-card-content>
-      </ion-card>
-    </ion-list>
-
-    <ng-template #noRutas>
-      <div class="zona-vacia">
-        <ion-icon name="trail-sign-outline"></ion-icon>
-        <p>No hay rutas registradas en el sistema.</p>
-      </div>
-    </ng-template>
-
+  <div class="titulo-seccion-movil">
+    <h2>Gestión Global de Rutas</h2>
   </div>
-</ion-content>
+
+  <ion-list *ngIf="todasLasRutas.length > 0; else noRutas" class="lista-transparente">
+    <ion-card *ngFor="let ruta of todasLasRutas" class="tarjeta-adaptativa">
+      <ion-card-header>
+        <div class="cabecera-flex">
+          <ion-card-title>{{ ruta.titulo }}</ion-card-title>
+          <ion-button fill="clear" color="danger" (click)="confirmarEliminar(ruta.id)" class="btn-accion-mini">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+        
+        <div class="info-autor-ruta">
+          <ion-card-subtitle>
+            <ion-icon name="time-outline"></ion-icon> {{ ruta.fechaCreacion | date:'short' }}
+          </ion-card-subtitle>
+          <ion-badge color="medium" class="badge-usuario">
+            Usuario: {{ ruta.emailUsuario ? ruta.emailUsuario : 'Sin email' }}
+          </ion-badge>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p class="texto-principal">{{ ruta.descripcion }}</p>
+        <ion-button expand="block" (click)="verRuta(ruta.id)" class="ion-margin-top btn-visualizar">
+          <ion-icon slot="start" name="map-outline"></ion-icon>
+          Visualizar en Mapa
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <ng-template #noRutas>
+    <div class="zona-vacia">
+      <ion-icon name="trail-sign-outline"></ion-icon>
+      <p>No hay rutas registradas en el sistema.</p>
+    </div>
+  </ng-template>
+
+</div>
