@@ -3,9 +3,14 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RutasService } from '../../../services/rutas.service';
 import { ClienteService } from '../../../services/cliente.service';
+
+import { IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonIcon, IonBadge, IonCardContent, IonRow, IonCol, IonAlert } from '@ionic/angular/standalone';
+import { ToastController } from '@ionic/angular/standalone';
+
+
 import { PublicacionesService } from '../../../services/publicaciones.service';
 import { Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 
 import { addIcons } from 'ionicons';
 import { trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline, closeCircleOutline } from 'ionicons/icons';
@@ -15,7 +20,27 @@ import { trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOut
   templateUrl: './componente-resumen-rutas.component.html',
   styleUrls: ['./componente-resumen-rutas.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [
+    CommonModule, 
+    IonHeader, 
+    IonToolbar, 
+    IonButtons, 
+    IonBackButton, 
+    IonTitle, 
+    IonContent, 
+    IonList, 
+    IonCard, 
+    IonCardHeader, 
+    IonCardTitle, 
+    IonCardSubtitle, 
+    IonButton, 
+    IonIcon, 
+    IonBadge, 
+    IonCardContent, 
+    IonRow, 
+    IonCol, 
+    IonAlert
+  ]
 })
 export class ComponenteResumenRutas implements OnInit {
   misRutas: any[] = [];
@@ -69,7 +94,6 @@ export class ComponenteResumenRutas implements OnInit {
     private clienteService: ClienteService,
     private publicacionesService: PublicacionesService,
     private router: Router,
-    private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private zone: NgZone
 
