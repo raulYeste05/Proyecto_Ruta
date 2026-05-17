@@ -25,7 +25,7 @@ $verde-accent: #10b981;
   gap: 10px;
   .logo { 
     height: 35px; 
-    width: auto; // Evita que se deforme
+    width: auto; 
   }
   .marca { 
     font-weight: bold; 
@@ -39,12 +39,12 @@ $verde-accent: #10b981;
   gap: 10px;
   .btn-nav {
     --background: transparent;
-    --color: #94a3b8; // Gris claro apagado por defecto
+    --color: #94a3b8; 
     font-size: 0.85rem;
     font-weight: 600;
     
     &.active {
-      --color: #{$verde-accent}; // Color verde destacado para la página activa
+      --color: #{$verde-accent}; 
     }
   }
 }
@@ -132,21 +132,21 @@ $verde-accent: #10b981;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    flex-wrap: wrap; // Por si se abre en pantallas muy pequeñas
+    flex-wrap: wrap; 
     gap: 20px;
   }
 
   .footer-brand {
     .logo-placeholder {
       width: auto;
-      height: 45px; // Controla la altura fija del logo aquí
+      height: 45px; 
       margin-bottom: 15px;
       display: flex;
       align-items: center;
 
       .logo { 
         height: 100%; 
-        width: auto; // El logo ya no se estira de forma masiva
+        width: auto; 
         max-height: 45px;
       }
     }
@@ -154,18 +154,17 @@ $verde-accent: #10b981;
     p {
       max-width: 300px;
       font-size: 0.9rem;
-      color: #9ca3af; // Gris intermedio para que sea legible sobre el fondo oscuro
+      color: #9ca3af; 
       line-height: 1.5;
       margin: 0;
     }
   }
 
 
-  /* --- NUEVO APARTADO DE DESCARGA APK --- */
   .download-cta {
     margin-top: 80px;
     padding: 50px 30px;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); // Degradado oscuro elegante
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
     border-radius: 24px;
     color: white;
     max-width: 900px;

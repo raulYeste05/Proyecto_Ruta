@@ -50,7 +50,7 @@ public class Ruta {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"rutas", "publicaciones", "password"}) // Esto evita el bucle y protege datos sensibles
+    @JsonIgnoreProperties({"rutas", "publicaciones", "password"}) 
     private User user;
 
     // Al borrar la Ruta, se borran todas sus Paradas automáticamente

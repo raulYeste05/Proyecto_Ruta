@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // <-- 1. IMPORTANTE PARA EL ROUTERLINK
+import { RouterModule } from '@angular/router'; 
 import { IonicModule } from '@ionic/angular'; 
 import { addIcons } from 'ionicons'; 
 import { 
   personAddOutline, searchOutline, navigateOutline,
-  homeOutline, helpCircleOutline, mailOutline, logInOutline // <-- 2. ICONOS DEL MENÚ MÓVIL
+  homeOutline, helpCircleOutline, mailOutline, logInOutline 
 } from 'ionicons/icons';
 
 @Component({
@@ -16,13 +16,12 @@ import {
   imports: [
     CommonModule, 
     IonicModule, 
-    RouterModule // <-- 3. AÑADIDO AQUÍ PARA QUE FUNCIONE EL ROUTER
+    RouterModule 
   ] 
 })
 export class ComponenteComoFuncionaComponent implements OnInit {
 
   constructor() {
-    // Registramos absolutamente todos los iconos que se usan en la página
     addIcons({ 
       personAddOutline, 
       searchOutline, 

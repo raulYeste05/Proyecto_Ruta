@@ -29,7 +29,7 @@ public class RutaService {
 
     }
 
-    // 🔥 CREAR RUTA
+    //  CREAR RUTA
     public RutaResponseDTO crearRuta(RutaRequestDTO RutaDTO) {
 
         User user = userRepository.findById(RutaDTO.getUserId())

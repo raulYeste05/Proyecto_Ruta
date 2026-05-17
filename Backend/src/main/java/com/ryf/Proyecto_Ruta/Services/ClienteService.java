@@ -39,25 +39,25 @@ public class ClienteService {
     }
 
     //  CREAR PERFIL CLIENTE
-    @Transactional // 👈 IMPORTANTE: Si algo falla, no se guarda nada
+    @Transactional 
     public ClienteResponseDTO registrarClienteCompleto(RegistroClienteDTO dto) {
         
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("El email " + dto.getEmail() + " ya está en uso.");
         }
 
-        // 1. Crear y Guardar el Usuario
+        //  Crear y Guardar el Usuario
         User nuevoUsuario = new User();
         nuevoUsuario.setEmail(dto.getEmail());
         nuevoUsuario.setPassword(passwordEncoder.encode(dto.getPassword()));
         
-        Rol rol = rolRepository.findById(dto.getRolId() != null ? dto.getRolId() : 2) // Por defecto rol 2 (Cliente)
+        Rol rol = rolRepository.findById(dto.getRolId() != null ? dto.getRolId() : 2) 
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
         nuevoUsuario.setRol(rol);
         
         User usuarioGuardado = userRepository.save(nuevoUsuario);
 
-        // 2. Crear y Guardar el Cliente vinculado a ese Usuario
+        // Crear y Guardar el Cliente vinculado a ese Usuario
         Cliente nuevoCliente = new Cliente();
         nuevoCliente.setDni(dto.getDni());
         nuevoCliente.setNombre(dto.getNombre());
@@ -67,7 +67,7 @@ public class ClienteService {
         nuevoCliente.setProvincia(dto.getProvincia());
         nuevoCliente.setLocalidad(dto.getLocalidad());
         
-        //  Aquí hacemos la conexión usando el ID recién creado
+        
         nuevoCliente.setUser(usuarioGuardado); 
 
         Cliente clienteGuardado = clienteRepository.save(nuevoCliente);
@@ -96,11 +96,11 @@ public class ClienteService {
     }
 
     public ClienteResponseDTO actualizar(Integer id, ClienteRequestDTO ClienteDTO) {
-    // 1. Buscamos el cliente existente en la DB
+    // Buscamos el cliente existente en la DB
     Cliente cliente = clienteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
-    // 2. ✅ ACTUALIZAMOS con los datos que vienen del DTO (Angular)
+    // ACTUALIZAMOS con los datos que vienen del DTO 
     cliente.setDni(ClienteDTO.getDni());
     cliente.setNombre(ClienteDTO.getNombre());
     cliente.setApellido1(ClienteDTO.getApellido1());
@@ -108,9 +108,7 @@ public class ClienteService {
     cliente.setTelefono(ClienteDTO.getTelefono()); 
     cliente.setProvincia(ClienteDTO.getProvincia());
     cliente.setLocalidad(ClienteDTO.getLocalidad());
-    // El email suele estar en el objeto User, si quieres actualizarlo 
-    // asegúrate de que ClienteDTO lo traiga y el Mapper lo gestione.
-
+ 
      if(ClienteDTO.getPassword()!=null && !ClienteDTO.getPassword().isEmpty()){
 
         User user = cliente.getUser();
@@ -118,7 +116,7 @@ public class ClienteService {
         userRepository.save(user);
     }
 
-    // 3. Guardamos los cambios
+    // Guardamos los cambios
     Cliente actualizado = clienteRepository.save(cliente);
 
     return clienteMapper.toDTO(actualizado);
@@ -126,12 +124,11 @@ public class ClienteService {
 
     //Buscar cliente por email
     public ClienteResponseDTO obtenerPorEmail(String email) {
-        // 1. Buscamos el usuario por su email
+       
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // 2. Buscamos el cliente que tiene ese usuario asignado
-        // Nota: Asegúrate de que tu repositorio tenga este método findByUserIdUser
+      
         Cliente cliente = clienteRepository.findByUserIdUser(user.getIdUser())
                 .orElseThrow(() -> new RuntimeException("Datos de cliente no encontrados"));
 

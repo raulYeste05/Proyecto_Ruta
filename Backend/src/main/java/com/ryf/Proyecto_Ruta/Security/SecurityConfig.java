@@ -39,8 +39,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); // Constructor vacío
-        provider.setUserDetailsService(userDetailsService); // Se pasa aquí
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); 
+        provider.setUserDetailsService(userDetailsService); 
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
@@ -69,7 +69,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/api/geo/**").permitAll()
                 .requestMatchers("/api/paradas/**").permitAll() 
-                .requestMatchers("/api/servicio_cercano/**").permitAll() // Prueba dejarlo en permitAll para testear
+                .requestMatchers("/api/servicio_cercano/**").permitAll() 
                 .requestMatchers("/api/comentarios/**").permitAll()
             
                 .anyRequest().authenticated()
@@ -86,16 +86,16 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
             "http://localhost:8100",
             "http://localhost:4200",
-            "https://proyecto-ruta.vercel.app", // Tu dominio principal
-            "https://proyecto-ruta-aaaltp50l-raulyeste05s-projects.vercel.app", // Tu dominio de deployment
-            "http://localhost",               // <-- OBLIGATORIO PARA CAPACITOR ANDROID
+            "https://proyecto-ruta.vercel.app", 
+            "https://proyecto-ruta-aaaltp50l-raulyeste05s-projects.vercel.app", 
+            "http://localhost",               
             "https://localhost",
             "capacitor://localhost"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
-        config.setExposedHeaders(List.of("Authorization")); // Importante para leer el Token
+        config.setExposedHeaders(List.of("Authorization")); 
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

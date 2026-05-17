@@ -49,7 +49,7 @@ public class PublicacionService {
         if (dto.getRutaId() != null) {
             Ruta ruta = rutaRepository.findById(dto.getRutaId()).orElseThrow();
             entity.setRuta(ruta);
-            ruta.setPublicada(true); // No olvides marcarla como publicada
+            ruta.setPublicada(true); 
         }
         
         entity.setFecha(LocalDateTime.now());
@@ -110,30 +110,25 @@ public class PublicacionService {
     // ELIMINAR PUBLICACIÓN USANDO EL RUTA ID Y REVERTIR ESTADO
     @org.springframework.transaction.annotation.Transactional
     public void eliminarPorRutaId(Integer rutaId) {
-        // 1. Buscamos las publicaciones vinculadas a la ruta
         List<Publicacion> publicaciones = publicacionRepository.findByRutaId(rutaId);
         
         if (publicaciones.isEmpty()) {
             throw new RuntimeException("No existe ninguna publicación asociada a la ruta con ID: " + rutaId);
         }
         
-        // Obtenemos la publicación original
         Publicacion publicacion = publicaciones.get(0);
 
-        // 2. Rompemos las relaciones en el objeto publicacion y sincronizamos inmediatamente
         publicacion.setRuta(null);
         publicacion.setUser(null);
         publicacionRepository.saveAndFlush(publicacion); 
 
-        // 3. Ahora que está libre, borramos la publicación de la base de datos y forzamos el volcado
         publicacionRepository.delete(publicacion);
-        publicacionRepository.flush(); // <--- OBLIGAMOS a MySQL a eliminar la fila YA
+        publicacionRepository.flush(); // 
 
-        // 4. Por último, buscamos y actualizamos de forma limpia el estado de la Ruta
         Ruta ruta = rutaRepository.findById(rutaId).orElse(null);
         if (ruta != null) {
             ruta.setPublicada(false);
-            rutaRepository.saveAndFlush(ruta); // Cambia el bit 0x01 a 0x00 sin conflictos
+            rutaRepository.saveAndFlush(ruta);
         }
     }
 

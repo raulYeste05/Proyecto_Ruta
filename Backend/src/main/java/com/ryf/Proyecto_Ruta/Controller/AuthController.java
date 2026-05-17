@@ -41,7 +41,7 @@ public class AuthController {
     }
 
 
-    // 🔐 LOGIN
+    //  LOGIN
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
 
@@ -61,7 +61,7 @@ public class AuthController {
         );
     }
 
-    // 🆕 REGISTRO
+    //  REGISTRO
     @PostMapping("/registro")
     public ResponseEntity<TokenResponse> registro(@RequestBody @Valid RegisterRequestDTO request) {
 

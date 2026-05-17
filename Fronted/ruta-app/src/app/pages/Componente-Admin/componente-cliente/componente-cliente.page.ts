@@ -21,7 +21,7 @@ export class ComponenteClientePage implements OnInit {
   constructor(
     private adminService: AdminService,
     private router: Router,
-    private toastController: ToastController // Inyectamos el controlador de avisos
+    private toastController: ToastController 
   ) {
     addIcons({ addOutline, createOutline, trashOutline });
   }
@@ -50,15 +50,13 @@ export class ComponenteClientePage implements OnInit {
   async eliminarcliente(id: number) {
     if (!id) return;
 
-    // IMPORTANTE: Si el error persiste, en el servicio admin.service.ts 
-    // podrías añadir { responseType: 'text' } en el delete.
+    
     this.adminService.eliminarCliente(id).subscribe({
       next: () => {
         // Éxito normal
         this.procesarEliminacionLocal(id);
       },
       error: (err) => {
-        // Si el error es solo de formato (Status 200) pero el borrado fue real
         if (err.status === 200) {
           this.procesarEliminacionLocal(id);
         } else {

@@ -37,7 +37,7 @@ public class ComentarioService {
         this.emailService = emailService;
     }
 
-    // 🔥 CREAR
+    // CREAR
     public ComentarioResponseDTO crear(ComentarioRequestDTO dto) {
 
         User user = userRepository.findById(dto.getUserId())
@@ -54,11 +54,11 @@ public class ComentarioService {
 
         Comentario guardado = comentarioRepository.save(comentario);
         // Enviar correo de notificación
-        // Enviar correo de notificación
+     
         try {
             User autorOriginal = publicacion.getUser();
             
-            // Obtenemos el nombre del cliente que comenta (usamos la lógica que ya tenías)
+      
             String nombreQuienComenta = (user.getCliente() != null) 
                                         ? user.getCliente().getNombre() 
                                         : user.getEmail();
@@ -73,7 +73,7 @@ public class ComentarioService {
                 );
             }
 
-            // 2. NOTIFICACIÓN AL ADMINISTRADOR 
+            // NOTIFICACIÓN AL ADMINISTRADOR 
             emailService.avisarAdminNuevoComentario(
                 nombreQuienComenta, 
                 user.getEmail(), 
@@ -118,10 +118,8 @@ public class ComentarioService {
         return comentarioMapper.toDTO(comentarioRepository.save(comentario));
     }
 
-    // Método para contar el número de comentarios de una publicación
     
     public Long contarPorPublicacion(Integer publicacionId) {
-        // Usamos el repositorio para contar directamente en la BD (más eficiente)
         return comentarioRepository.countByPublicacionId(publicacionId);
     }
 

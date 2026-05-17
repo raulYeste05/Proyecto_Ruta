@@ -89,7 +89,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    // Añade esto para que al borrar User se borre su Cliente, sus Rutas y sus Publicaciones
+    // Al borrar User se borre su Cliente, sus Rutas y sus Publicaciones
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Cliente cliente;

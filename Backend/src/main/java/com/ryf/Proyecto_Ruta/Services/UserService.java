@@ -39,13 +39,12 @@ public class UserService {
             throw new RuntimeException("El email ya está registrado");
         }
 
-        //DTO a ENTITY
         User user = userMapper.toEntity(UserDTO);
         
-        // 🔐 encriptar password
+        //  encriptar password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // 🔐 asignar rol
+        //  asignar rol
         Rol rol = rolRepository.findById(UserDTO.getRolId())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 

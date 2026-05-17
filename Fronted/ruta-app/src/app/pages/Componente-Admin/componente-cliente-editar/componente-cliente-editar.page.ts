@@ -26,8 +26,7 @@ export class ComponenteClienteEditarPage implements OnInit {
     private adminService: AdminService,
     private router: Router
   ) {
-    // NOTA: Quitamos la validación estricta de contraseña aquí si es opcional,
-    // o asegúrate de que tu validador 'validaciones.contrasena' permita strings vacíos.
+   
     this.fg = this.fb.group({
       email: ['', [Validators.required, validaciones.email]],
       password: [''], // Opcional al editar
@@ -44,21 +43,21 @@ export class ComponenteClienteEditarPage implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
 
-    // 1. Cargar Provincias Primero
+    // Cargar Provincias Primero
     this.adminService.getProvincias().subscribe(resProvincias => {
       this.provincias = Array.isArray(resProvincias) ? resProvincias : resProvincias.data;
 
-      // 2. Cargar datos del Cliente
+      // Cargar datos del Cliente
       this.adminService.getClientes().subscribe(clientes => {
         const clienteEncontrado = clientes.find(c => c.idCliente == id);
         
         if (clienteEncontrado) {
           this.clienteOriginal = clienteEncontrado;
           
-          // 3. Rellenar el formulario ANTES de poner los validadores de duplicados
+          // Rellenar el formulario ANTES de poner los validadores de duplicados
           this.rellenarFormulario(clienteEncontrado);
 
-          // 4. Añadir validadores de duplicados EXCLUYENDO al usuario actual
+          // Añadir validadores de duplicados EXCLUYENDO al usuario actual
           this.adminService.getUsuarios().subscribe(users => {
             const otrosUsuarios = users.filter(u => u.idUser !== clienteEncontrado.userId);
             this.fg.get('email')?.addValidators(validaciones.emailRepetido(otrosUsuarios, 'email'));

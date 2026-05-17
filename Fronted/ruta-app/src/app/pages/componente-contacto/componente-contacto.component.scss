@@ -44,7 +44,7 @@ $verde-accent: #10b981;
     font-weight: 600;
     
     &.active {
-      --color: #{$verde-accent}; // Resalta "CONTACTO" en esta página
+      --color: #{$verde-accent}; 
     }
   }
 }
@@ -54,7 +54,7 @@ $verde-accent: #10b981;
   padding: 90px 20px;
   background: #0f172a; 
   color: white;
-  min-height: 60vh; // Le da una buena altura para que el footer no quede flotando en medio
+  min-height: 60vh; 
   display: flex;
   align-items: center;
 
@@ -62,7 +62,7 @@ $verde-accent: #10b981;
     max-width: 600px;
     width: 100%;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.03); // Una tarjeta sutil de fondo
+    background: rgba(255, 255, 255, 0.03); 
     padding: 40px;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -77,7 +77,7 @@ $verde-accent: #10b981;
     }
 
     p {
-      color: #94a3b8; // Gris claro muy legible sobre oscuro
+      color: #94a3b8; 
       font-size: 1.05rem;
       margin-bottom: 30px;
     }
@@ -93,7 +93,7 @@ $verde-accent: #10b981;
     --color: white;
     margin-bottom: 15px;
     font-size: 1.05rem;
-    --padding-start: 0px; // Alinea los elementos perfectamente a la izquierda
+    --padding-start: 0px;
 
     ion-icon { 
       color: $verde-accent; 
@@ -109,7 +109,7 @@ $verde-accent: #10b981;
   color: white;
   padding: 40px 20px;
   width: 100%;
-  border-top: 1px solid rgba(255, 255, 255, 0.05); // Separador sutil
+  border-top: 1px solid rgba(255, 255, 255, 0.05); 
   
   .footer-content {
     max-width: 1100px;
