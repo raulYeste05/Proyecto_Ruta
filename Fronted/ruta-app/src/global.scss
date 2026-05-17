@@ -71,12 +71,18 @@ ion-toast {
 
 // Corrección definitiva y compatible con Modo Oscuro para alertas declarativas
 // Corrección adaptativa para Modo Claro y Modo Oscuro
+// ==========================================
+// CORRECCIÓN DEFINITIVA PARA ION-ALERT (COMPATIBLE CON MODO OSCURO)
+// ==========================================
 ion-alert.custom-alert {
   --width: 90%;
   --max-width: 400px;
+  
+  // Fondo adaptativo automático de la alerta (Oscuro o Claro según el sistema)
+  --background: var(--ion-overlay-background, var(--ion-background-color, #ffffff));
 
   &::part(header) {
-    color: #eb445a !important; // Mantiene el título rojo de peligro
+    color: #eb445a !important; // Mantiene el título rojo de peligro/acción
     font-weight: bold;
     text-align: center;
     padding-top: 20px;
@@ -85,22 +91,28 @@ ion-alert.custom-alert {
   &::part(sub-header) {
     text-align: center;
     font-weight: 600;
+    // Texto adaptativo: Gris oscuro en modo claro, gris claro en modo oscuro
+    color: var(--ion-color-step-600, #555555) !important;
   }
 
   &::part(message) {
     text-align: center;
+    // Texto adaptativo automático para el cuerpo del mensaje
+    color: var(--ion-text-color, #333333) !important;
     padding-bottom: 15px;
   }
 
-  /* Contenedor del Textarea/Inputs */
+  /* Asegurar visibilidad del Textarea/Inputs en la alerta de Publicar */
   &::part(input) {
-    border: 1px solid #cccccc !important;
+    background-color: var(--ion-color-step-100, #f4f5f8) !important;
+    color: var(--ion-text-color, #111111) !important;
+    border: 1px solid var(--ion-color-step-300, #cccccc) !important;
     border-radius: 8px;
     padding: 10px !important;
     margin: 10px 0;
   }
 
-  /* Forzar diseño horizontal de los botones */
+  /* Asegurar que los botones se distribuyan de forma horizontal */
   &::part(button-group) {
     display: flex !important;
     flex-direction: row !important;
@@ -112,14 +124,16 @@ ion-alert.custom-alert {
   &::part(button) {
     font-weight: bold;
     text-transform: uppercase;
-    min-height: 44px !important;
-    color: var(--ion-color-primary, #3880ff); /* Forzar color de texto visible */
+    min-height: 44px !important; 
+    // Fuerza a que los botones normales (como Cancelar) usen el color azul de Ionic visible
+    color: var(--ion-color-primary, #3880ff) !important; 
   }
 
-  /* Forzar el botón destructivo en rojo usando la parte nativa */
+  /* Forzar el botón con rol destructivo (Eliminar o Quitar) a color rojo */
   &::part(button-role-destructive) {
     color: #eb445a !important;
   }
+
 
   // Forzamos el color del botón que tenga rol destructivo (Eliminar o Quitar)
   .alert-button-role-destructive {
