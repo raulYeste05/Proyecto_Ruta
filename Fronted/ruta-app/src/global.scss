@@ -67,51 +67,54 @@ ion-toast {
 
 
 //Estilo para el botón de cancelar en alertas
-// Corrección para las alertas globales y personalizadas
+// Corrección para las alertas globales y personalizadas con Shadow DOM
+
 ion-alert {
   z-index: 99999 !important;
 }
 
 .custom-alert {
-  // Usamos las variables nativas de Ionic para alterar el comportamiento de la alerta de forma segura
+  /* 1. Control de tamaño y capas */
   --width: 90%;
   --max-width: 400px;
+
+  /* 2. Colores base del contenedor utilizando variables nativas */
   --background: #ffffff;
-  --z-index: 99999 !important;
   
-  // ¡Quitamos el display: flex !important de aquí arriba!
-  z-index: 99999 !important;
-
-  .alert-wrapper {
-    background: white !important;
-    border-radius: 15px !important;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.3) !important;
-  }
-
-  .alert-title {
-    color: #eb445a !important;
-    text-align: center;
+  /* 3. Estilos de fuentes y contenidos cruzando el Shadow DOM */
+  &::part(header) {
+    color: #eb445a;
     font-weight: bold;
-  }
-
-  .alert-message {
     text-align: center;
-    color: #333333 !important; // Nos aseguramos de que se lea bien en fondos blancos
+    padding-top: 20px;
   }
 
-  // Si querías centrar el contenido interno de la alerta, se hace en el contenedor del botón
-  .alert-button-group {
-    justify-content: center !important;
-    padding: 10px;
-    
-    .alert-button {
-      color: #3880ff;
-      font-weight: bold;
-    }
-    
-    .alert-button-role-destructive {
-      color: #eb445a;
-    }
+  &::part(sub-header) {
+    text-align: center;
+    font-weight: 600;
+    color: #666666;
+  }
+
+  &::part(message) {
+    text-align: center;
+    color: #333333;
+    padding-bottom: 15px;
+  }
+
+  /* 4. Estilos para los botones usando las partes nativas expuestas */
+  &::part(button-group) {
+    justify-content: center;
+    padding: 8px;
+  }
+
+  &::part(button) {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  /* Forzamos el color del botón destructivo (Eliminar/Quitar) */
+  .alert-button-role-destructive {
+    color: #eb445a !important;
   }
 }
 
