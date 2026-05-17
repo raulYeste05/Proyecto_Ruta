@@ -74,6 +74,9 @@ ion-toast {
 // ==========================================
 // CORRECCIÓN DEFINITIVA PARA ION-ALERT (COMPATIBLE CON MODO OSCURO)
 // ==========================================
+// ==========================================
+// CORRECCIÓN DEFINITIVA PARA ION-ALERT (COMPATIBLE CON MODO OSCURO)
+// ==========================================
 ion-alert.custom-alert {
   --width: 90%;
   --max-width: 400px;
@@ -112,33 +115,19 @@ ion-alert.custom-alert {
     margin: 10px 0;
   }
 
-  /* Asegurar que los botones se distribuyan de forma horizontal */
-  &::part(button-group) {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    gap: 12px !important;
-    padding: 12px !important;
-  }
-
+  /* Estilos para CUALQUIER botón dentro de la alerta */
   &::part(button) {
     font-weight: bold;
     text-transform: uppercase;
     min-height: 44px !important; 
-    // Fuerza a que los botones normales (como Cancelar) usen el color azul de Ionic visible
-    color: var(--ion-color-primary, #3880ff) !important; 
+    color: var(--ion-color-primary, #3880ff) !important; // Botón normal (Cancelar) en Azul
   }
 
-  /* Forzar el botón con rol destructivo (Eliminar o Quitar) a color rojo */
-  &::part(button-role-destructive) {
-    color: #eb445a !important;
-  }
-
-
-  // Forzamos el color del botón que tenga rol destructivo (Eliminar o Quitar)
+  /* Capturar el botón que tiene rol destructivo (Eliminar/Quitar) a través de su clase nativa */
   .alert-button-role-destructive {
-    color: #eb445a !important; /* Botón de acción en rojo */
+    color: #eb445a !important; // Fuerza el texto de acción a Rojo
   }
+
 }
 
   /* Estilo para centrar el Toast de éxito de borrado de la rutaS */
