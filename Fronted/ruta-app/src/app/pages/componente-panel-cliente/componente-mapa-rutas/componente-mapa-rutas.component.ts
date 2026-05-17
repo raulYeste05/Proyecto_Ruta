@@ -17,7 +17,7 @@ import { pizza, cafe, leaf, water } from 'ionicons/icons';
 
 // Importación necesaria para que los iconos funcionen en Standalone
 import { addIcons } from 'ionicons';
-import { car, walk, trashOutline, flagOutline, locateOutline, timeOutline, resizeOutline, bicycle, checkmarkDoneOutline } from 'ionicons/icons';
+import { car, walk, trashOutline, flagOutline, locateOutline, timeOutline, resizeOutline, bicycle, checkmarkDoneOutline, playOutline, stopCircle  } from 'ionicons/icons';
 
 @Component({
   selector: 'app-mapa-rutas',
@@ -73,7 +73,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
               private zone: NgZone
   ) {
     // Registramos los iconos para evitar errores en consola
-    addIcons({ car, walk, bicycle, trashOutline, flagOutline, locateOutline, timeOutline, resizeOutline, checkmarkDoneOutline, pizza, leaf, water, cafe, arrowBackOutline });
+    addIcons({ car, walk, bicycle, trashOutline, flagOutline, locateOutline, timeOutline, resizeOutline, checkmarkDoneOutline, pizza, leaf, water, cafe, arrowBackOutline, playOutline, stopCircle });
   }
 
  ngOnInit() {
