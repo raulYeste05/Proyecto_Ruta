@@ -87,7 +87,10 @@ export class ComponenteResumenRutas implements OnInit {
           header: '¿Eliminar ruta?',
           message: 'Esta acción borrará la ruta y todas sus paradas de forma permanente.',
           cssClass: 'custom-alert',
-          backdropDismiss: true, // Permite cerrar haciendo clic fuera si se queda colgado
+          // ESTO FUERZA AL NAVEGADOR A PONERLO POR ENCIMA DE CUALQUIER MODAL O MENÚ
+          htmlAttributes: {
+            style: 'z-index: 99999999 !important; position: fixed !important;'
+          },
           buttons: [
             { text: 'Cancelar', role: 'cancel' },
             {
@@ -136,6 +139,9 @@ export class ComponenteResumenRutas implements OnInit {
         header: 'Publicar en Comunidad',
         subHeader: `Ruta: ${ruta.titulo}`,
         cssClass: 'custom-alert',
+        htmlAttributes: {
+          style: 'z-index: 99999999 !important; position: fixed !important;'
+        },
         inputs: [
           {
             name: 'contenido',
@@ -202,6 +208,10 @@ export class ComponenteResumenRutas implements OnInit {
       const alert = await this.alertCtrl.create({
         header: 'Retirar del foro',
         message: '¿Seguro que quieres quitar esta ruta de la sección de la comunidad?',
+        cssClass: 'custom-alert',
+        htmlAttributes: {
+          style: 'z-index: 99999999 !important; position: fixed !important;'
+        },
         buttons: [
           { text: 'Cancelar', role: 'cancel' },
           {
