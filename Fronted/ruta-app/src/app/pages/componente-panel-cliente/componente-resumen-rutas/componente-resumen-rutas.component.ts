@@ -1,16 +1,20 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { RutasService } from '../../../services/rutas.service';
 import { ClienteService } from '../../../services/cliente.service';
-
-import { IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonList, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonIcon, IonBadge, IonCardContent, IonRow, IonCol, IonAlert } from '@ionic/angular/standalone';
-import { ToastController } from '@ionic/angular/standalone';
-
-
 import { PublicacionesService } from '../../../services/publicaciones.service';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+
+// Controladores nativos de Ionic
+import { AlertController, ToastController } from '@ionic/angular/standalone';
+
+// Componentes Standalone (Sin IonAlert porque ya no se usa en el HTML)
+import { 
+  IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, 
+  IonContent, IonList, IonCard, IonCardHeader, IonCardTitle, 
+  IonCardSubtitle, IonButton, IonIcon, IonBadge, IonCardContent, 
+  IonRow, IonCol 
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline, closeCircleOutline } from 'ionicons/icons';
@@ -38,56 +42,13 @@ import { trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOut
     IonBadge, 
     IonCardContent, 
     IonRow, 
-    IonCol, 
-    IonAlert
+    IonCol
   ]
 })
 export class ComponenteResumenRutas implements OnInit {
   misRutas: any[] = [];
-  userIdActual!: number; // Para guardar el ID del usuario logueado
-
-
-  // Variables de control para las alertas del HTML
-  isAlertEliminarOpen = false;
-  isAlertPublicarOpen = false;
-  isAlertQuitarOpen = false;
+  userIdActual!: number; 
   rutaSeleccionada: any = null;
-
-  // Configuración de botones de acción
-  alertEliminarButtons = [
-    { text: 'Cancelar', role: 'cancel' },
-    {
-      text: 'Eliminar',
-      role: 'destructive',
-      handler: () => { 
-        if (this.rutaSeleccionada) this.eliminarRuta(this.rutaSeleccionada.id); 
-      }
-    }
-  ];
-
-  alertPublicarButtons = [
-    { text: 'Cancelar', role: 'cancel' },
-    {
-      text: 'Publicar',
-      handler: (data: any) => { 
-        if (this.rutaSeleccionada) {
-          this.enviarPublicacion(this.rutaSeleccionada.id, this.rutaSeleccionada.titulo, data.contenido); 
-        }
-      }
-    }
-  ];
-
-  alertQuitarButtons = [
-    { text: 'Cancelar', role: 'cancel' },
-    {
-      text: 'Quitar',
-      role: 'destructive',
-      handler: () => { 
-        if (this.rutaSeleccionada) this.quitarPublicacion(this.rutaSeleccionada.id); 
-      }
-    }
-  ];
-
 
   constructor(
     private rutasService: RutasService,
@@ -95,10 +56,10 @@ export class ComponenteResumenRutas implements OnInit {
     private publicacionesService: PublicacionesService,
     private router: Router,
     private toastCtrl: ToastController,
+    private alertCtrl: AlertController, // Inyectamos el controlador para las alertas
     private zone: NgZone
-
   ) {
-    addIcons({trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline, closeCircleOutline});
+    addIcons({ trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline, closeCircleOutline });
   }
 
   ngOnInit() {
@@ -106,31 +67,24 @@ export class ComponenteResumenRutas implements OnInit {
   }
 
   cargarMisRutas() {
-    // 1. Obtenemos el perfil para saber quién es el usuario
     this.clienteService.getPerfil().subscribe({
       next: (perfil) => {
         this.zone.run(() => {
-        this.userIdActual = perfil.userId; // Guardamos el ID del usuario para usarlo en el método POST
-        // 2. Llamamos al método listarPorUser que tienes en Spring Boot
-        // Asegúrate de que en rutas.service.ts tengas: listarRutasUsuario(userId: number)
-        this.rutasService.getHistorialUsuario(perfil.userId).subscribe({
-          next: (rutas) => {
-            this.misRutas = rutas;
-          }
-        });
+          this.userIdActual = perfil.userId; 
+          this.rutasService.getHistorialUsuario(perfil.userId).subscribe({
+            next: (routes) => {
+              this.misRutas = routes;
+            }
+          });
         });
       }
     });
   }
 
-
-  // Método para convertir minutos a formato legible
   formatearTiempo(minutosTotales: number): string {
     if (!minutosTotales || minutosTotales <= 0) return '0 min';
-    
     const horas = Math.floor(minutosTotales / 60);
     const minutos = Math.round(minutosTotales % 60);
-
     if (horas > 0) {
       return `${horas}h ${minutos > 0 ? minutos + 'min' : ''}`;
     }
@@ -138,35 +92,97 @@ export class ComponenteResumenRutas implements OnInit {
   }
 
   verRuta(id: number) {
-    this.router.navigate(['/componente-panel-cliente/mapa'], {queryParams: {idRuta: id}});
+    this.router.navigate(['/componente-panel-cliente/mapa'], { queryParams: { idRuta: id } });
   }
 
-  // Método para confirmar la eliminación de una ruta
-  // Método para confirmar la eliminación de una ruta
-  // MÉTODOS DE CORRECCIÓN: Ahora solo activan los toggles del HTML
-  confirmarEliminar(id: number) {
-    this.rutaSeleccionada = { id };
-    this.isAlertEliminarOpen = true;
+  // ==========================================
+  // DISPARADORES DINÁMICOS DE ALERTAS (NATIVOS)
+  // ==========================================
+
+  async confirmarEliminar(id: number) {
+    const alert = await this.alertCtrl.create({
+      header: '¿Eliminar ruta?',
+      message: 'Esta acción borrará la ruta y todas sus paradas de forma permanente.',
+      cssClass: 'custom-alert',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.eliminarRuta(id);
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async publicarRuta(ruta: any) {
     this.rutaSeleccionada = ruta;
-    this.isAlertPublicarOpen = true;
+    const alert = await this.alertCtrl.create({
+      header: 'Publicar en Comunidad',
+      subHeader: 'Ruta: ' + (ruta.titulo || ''),
+      cssClass: 'custom-alert',
+      inputs: [
+        {
+          name: 'contenido',
+          type: 'textarea',
+          placeholder: 'Cuéntales a otros qué tiene de especial esta ruta...'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Publicar',
+          handler: (data) => {
+            this.enviarPublicacion(ruta.id, ruta.titulo, data.contenido);
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async confirmarQuitarPublicacion(ruta: any) {
-    this.rutaSeleccionada = ruta;
-    this.isAlertQuitarOpen = true;
+    const alert = await this.alertCtrl.create({
+      header: 'Retirar del foro',
+      message: '¿Seguro que quieres quitar esta ruta de la sección de la comunidad?',
+      cssClass: 'custom-alert',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Quitar',
+          role: 'destructive',
+          handler: () => {
+            this.quitarPublicacion(ruta.id);
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
+
+  // ==========================================
+  // LÓGICA DE PROCESAMIENTO DE PETICIONES
+  // ==========================================
 
   eliminarRuta(id: number) {
     this.rutasService.deleteRuta(id).subscribe({
       next: () => {
-        // Ejecutamos la actualización de la lista y el Toast en la zona activa
         this.zone.run(async () => {
           this.misRutas = this.misRutas.filter(r => r.id !== id);
           const toast = await this.toastCtrl.create({
-            message: 'Ruta eliminada correctamente',
+            message: 'Ruta eliminado correctamente',
             duration: 2000,
             color: 'success',
             cssClass: 'custom-toast'
@@ -178,11 +194,7 @@ export class ComponenteResumenRutas implements OnInit {
     });
   }
 
-  
-
   private enviarPublicacion(rutaId: number, titulo: string, contenido: string) {
-    console.log("Publicando con UserID:", this.userIdActual);
-    
     if (!this.userIdActual) {
       console.error("No se puede publicar: ID de usuario no encontrado");
       return;
@@ -197,7 +209,6 @@ export class ComponenteResumenRutas implements OnInit {
 
     this.publicacionesService.crearPublicacion(datos).subscribe({
       next: () => {
-        // Forzamos a Angular a mostrar el Toast de éxito y refrescar de inmediato
         this.zone.run(async () => {
           const toast = await this.toastCtrl.create({
             message: '¡Ruta compartida en la comunidad!',
@@ -207,7 +218,6 @@ export class ComponenteResumenRutas implements OnInit {
             cssClass: 'toast-centrado'
           });
           await toast.present();
-          
           this.cargarMisRutas();
         });
       },
@@ -215,10 +225,7 @@ export class ComponenteResumenRutas implements OnInit {
     });
   }
 
- 
-
   private quitarPublicacion(rutaId: number) {
-    // CAMBIO AQUÍ: Llamamos a eliminarPublicacionPorRuta en lugar de eliminarPublicacion
     this.publicacionesService.eliminarPublicacionPorRuta(rutaId).subscribe({
       next: () => {
         this.zone.run(async () => {
@@ -229,14 +236,10 @@ export class ComponenteResumenRutas implements OnInit {
             position: 'middle'
           });
           await toast.present();
-          
-          // Refrescamos los datos locales para cambiar el estado de los botones
           this.cargarMisRutas();
         });
       },
       error: (err) => console.error("Error al retirar la publicación", err)
     });
   }
-
-
 }
