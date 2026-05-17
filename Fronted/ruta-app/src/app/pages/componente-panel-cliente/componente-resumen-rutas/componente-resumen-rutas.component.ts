@@ -118,6 +118,7 @@ export class ComponenteResumenRutas implements OnInit {
       const alert = await this.alertCtrl.create({
         header: 'Publicar en Comunidad',
         subHeader: `Ruta: ${ruta.titulo}`,
+        cssClass: 'custom-alert',
         inputs: [
           {
             name: 'contenido',

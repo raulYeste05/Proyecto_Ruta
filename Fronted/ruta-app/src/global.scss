@@ -67,19 +67,25 @@ ion-toast {
 
 
 //Estilo para el botón de cancelar en alertas
+// Corrección para las alertas globales y personalizadas
+ion-alert {
+  z-index: 99999 !important;
+}
+
 .custom-alert {
+  // Usamos las variables nativas de Ionic para alterar el comportamiento de la alerta de forma segura
   --width: 90%;
   --max-width: 400px;
   --background: #ffffff;
-
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
+  --z-index: 99999 !important;
+  
+  // ¡Quitamos el display: flex !important de aquí arriba!
+  z-index: 99999 !important;
 
   .alert-wrapper {
     background: white !important;
     border-radius: 15px !important;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.3) !important;
   }
 
   .alert-title {
@@ -90,11 +96,12 @@ ion-toast {
 
   .alert-message {
     text-align: center;
-    color: #333;
+    color: #333333 !important; // Nos aseguramos de que se lea bien en fondos blancos
   }
 
+  // Si querías centrar el contenido interno de la alerta, se hace en el contenedor del botón
   .alert-button-group {
-    justify-content: center;
+    justify-content: center !important;
     padding: 10px;
     
     .alert-button {
