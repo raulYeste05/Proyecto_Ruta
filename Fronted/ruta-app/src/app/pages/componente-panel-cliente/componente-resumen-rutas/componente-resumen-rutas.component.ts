@@ -75,22 +75,35 @@ export class ComponenteResumenRutas implements OnInit {
   }
 
   // Método para confirmar la eliminación de una ruta
+  // Método para confirmar la eliminación de una ruta
   async confirmarEliminar(id: number) {
+    // Aseguramos que la ejecución comience limpia en la zona de Angular
     this.zone.run(async () => {
-    const alert = await this.alertCtrl.create({
-      header: '¿Eliminar ruta?',
-      message: 'Esta acción borrará la ruta y todas sus paradas de forma permanente.',
-      cssClass: 'custom-alert',
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        {
-          text: 'Eliminar',
-          role: 'destructive',
-          handler: () => { this.eliminarRuta(id); }
-        }
-      ]
-    });
-    await alert.present();
+      try {
+        // Destruimos cualquier alerta previa duplicada en el DOM que bloquee la pantalla
+        await this.alertCtrl.dismiss().catch(() => {});
+
+        const alert = await this.alertCtrl.create({
+          header: '¿Eliminar ruta?',
+          message: 'Esta acción borrará la ruta y todas sus paradas de forma permanente.',
+          cssClass: 'custom-alert',
+          backdropDismiss: true, // Permite cerrar haciendo clic fuera si se queda colgado
+          buttons: [
+            { text: 'Cancelar', role: 'cancel' },
+            {
+              text: 'Eliminar',
+              role: 'destructive',
+              handler: () => { 
+                this.eliminarRuta(id); 
+              }
+            }
+          ]
+        });
+
+        await alert.present();
+      } catch (error) {
+        console.error("Error al presentar el alert de eliminación:", error);
+      }
     });
   }
 
@@ -114,7 +127,11 @@ export class ComponenteResumenRutas implements OnInit {
   }
 
   async publicarRuta(ruta: any) {
-    this.zone.run(async () => {
+  this.zone.run(async () => {
+    try {
+      // Forzamos la limpieza de overlays activos flotantes
+      await this.alertCtrl.dismiss().catch(() => {});
+
       const alert = await this.alertCtrl.create({
         header: 'Publicar en Comunidad',
         subHeader: `Ruta: ${ruta.titulo}`,
@@ -136,9 +153,13 @@ export class ComponenteResumenRutas implements OnInit {
           }
         ]
       });
+
       await alert.present();
-    });
-  }
+    } catch (error) {
+      console.error("Error al presentar el alert de publicación:", error);
+    }
+  });
+}
 
   private enviarPublicacion(rutaId: number, titulo: string, contenido: string) {
     console.log("Publicando con UserID:", this.userIdActual);
