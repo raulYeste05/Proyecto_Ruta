@@ -89,6 +89,7 @@ public class SecurityConfig {
             "https://proyecto-ruta.vercel.app", // Tu dominio principal
             "https://proyecto-ruta-aaaltp50l-raulyeste05s-projects.vercel.app", // Tu dominio de deployment
             "http://localhost",               // <-- OBLIGATORIO PARA CAPACITOR ANDROID
+            "https://localhost",
             "capacitor://localhost"
         ));
 

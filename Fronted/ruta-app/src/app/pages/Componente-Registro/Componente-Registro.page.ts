@@ -9,6 +9,9 @@ import { IonicModule } from '@ionic/angular';
 import { validaciones } from '../../Validators/validaciones';
 import { AuthService } from '../../services/auth.service';
 
+import { addIcons } from 'ionicons';
+import { alertCircleOutline, mailOutline, lockClosedOutline } from 'ionicons/icons';
+
 @Component({
   selector: 'app-registro',
   templateUrl: './Componente-Registro.page.html',
@@ -26,7 +29,14 @@ export class RegistroPage implements OnInit {
     private geoService: GeoService,
     private authService: AuthService,
     private router: Router
-  ) {}
+  )  {
+  addIcons({
+    'alert-circle-outline': alertCircleOutline,
+    'mail-outline': mailOutline,
+    'lock-closed-outline': lockClosedOutline
+  });
+  }
+  
 
   ngOnInit(): void {
     this.registroUsuario = new FormGroup({
