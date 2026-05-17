@@ -69,26 +69,17 @@ ion-toast {
 //Estilo para el botón de cancelar en alertas
 // Corrección para las alertas globales y personalizadas con Shadow DOM
 
-ion-alert {
-  z-index: 99999 !important;
-}
-
-// Corrección definitiva para las alertas con Shadow DOM en Modo Oscuro/Claro
-ion-alert {
-  z-index: 99999 !important;
-}
-
-.custom-alert {
-  /* 1. Control de tamaño y capas */
+// Corrección definitiva y compatible con Modo Oscuro para alertas declarativas
+ion-alert.custom-alert {
   --width: 90%;
   --max-width: 400px;
-
-  /* 2. Forzamos el fondo blanco de la alerta siempre */
   --background: #ffffff;
-  
-  /* 3. Estilos de cabeceras, títulos y mensajes */
+
+  /* Colores de los botones nativos expuestos por Ionic */
+  --button-color: #3880ff; 
+
   &::part(header) {
-    color: #eb445a !important; /* Título en rojo */
+    color: #eb445a !important;
     font-weight: bold;
     text-align: center;
     padding-top: 20px;
@@ -97,44 +88,45 @@ ion-alert {
   &::part(sub-header) {
     text-align: center;
     font-weight: 600;
-    color: #444444 !important; /* Subtítulo gris oscuro legible */
+    color: #555555 !important;
   }
 
   &::part(message) {
     text-align: center;
-    color: #222222 !important; /* Mensaje gris oscuro/negro legible */
+    color: #333333 !important;
     padding-bottom: 15px;
   }
 
-  /* 4. Estilos para los Inputs (Textarea de publicar) */
-  &::part(input-group) {
-    padding-left: 16px;
-    padding-right: 16px;
-    margin-bottom: 10px;
-  }
-
-  // Atacamos directamente al textarea/input nativo inyectado en el Shadow DOM
-  input.alert-input, 
-  textarea.alert-input {
-    color: #111111 !important;        /* Texto escrito en negro */
-    background: #f4f5f8 !important;   /* Fondo gris claro para que se vea el recuadro */
-    border: 1px solid #ccc !important;
+  /* Forzar visibilidad del Textarea/Inputs en modo oscuro */
+  &::part(input) {
+    background-color: #f4f5f8 !important;
+    color: #111111 !important;
+    border: 1px solid #cccccc !important;
     border-radius: 8px;
     padding: 10px !important;
+    margin: 10px 0;
   }
 
-  /* 5. Estilos para el contenedor de botones y botones individuales */
+  /* Forzar diseño del grupo de botones */
   &::part(button-group) {
-    justify-content: center;
-    padding: 8px;
-    gap: 10px;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    padding: 12px !important;
   }
 
   &::part(button) {
     font-weight: bold;
     text-transform: uppercase;
-    color: #3880ff !important; /* Forzamos color azul por defecto para los botones (como Cancelar) */
+    min-height: 44px !important; /* Asegura un tamaño táctil mínimo */
   }
+
+  /* Botón con rol destructivo en rojo */
+  &::part(button-destructive) {
+    color: #eb445a !important;
+  }
+
 
   // Forzamos el color del botón que tenga rol destructivo (Eliminar o Quitar)
   .alert-button-role-destructive {
