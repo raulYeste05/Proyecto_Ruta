@@ -595,18 +595,17 @@ async mostrarToastSuccess(msj: string) {
   }
 
   iniciarRastreo() {
-    this.limpiarMapa();
-    this.isModoLibre = true;
-    this.puntosTrayectoLibre = [];
-    this.distanciaAcumuladaTramo = 0;
-    this.tiempoInicioTramo = Date.now();
+  this.limpiarMapa();
+  this.isModoLibre = true;
+  this.puntosTrayectoLibre = [];
+  this.distanciaAcumuladaTramo = 0;
+  this.tiempoInicioTramo = Date.now();
 
-    // Función que procesa la posición (la sacamos fuera para reutilizarla)
-    const procesarPosicion = (pos: GeolocationPosition) => {
-      const latlng = L.latLng(pos.coords.latitude, pos.coords.longitude);
-      
-      if (this.puntosTrayectoLibre.length === 0) {
-      // Es el primer punto detectado por el GPS
+  const procesarPosicion = (pos: GeolocationPosition) => {
+    const latlng = L.latLng(pos.coords.latitude, pos.coords.longitude);
+    
+    if (this.puntosTrayectoLibre.length === 0) {
+      // Primer punto detectado: Guardamos el origen del viaje libre
       const puntoOrigenLibre = {
         orden: 1,
         latitud: latlng.lat,
@@ -616,29 +615,57 @@ async mostrarToastSuccess(msj: string) {
         distanciaEstimada: 0
       };
       this.tramosConfirmados.push(puntoOrigenLibre);
+    } else {
+      // ¡AQUÍ ESTÁ EL CÁLCULO QUE FALTABA!
+      // Tomamos el último punto donde estuvimos justo antes de este
+      const ultimoPunto = this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1];
+      
+      // Leaflet calcula matemáticamente la distancia real en metros en línea recta entre ambos puntos
+      const metrosNuevos = ultimoPunto.distanceTo(latlng); 
+
+      // FILTRO DE PRECISIÓN SEGÚN EL TRANSPORTE:
+      // El GPS en estático fluctúa y puede simular que te mueves. 
+      // Si vas andando, un paso son más de 1 metro. Si vas en coche, avanza mucho más rápido.
+      let margenRuido = 1.5; // Margen para 'andando'
+      if (this.tipoTransporte === 'driving-car') {
+        margenRuido = 4; // Filtramos saltos pequeños de interferencia en coche
+      } else if (this.tipoTransporte === 'cycling-regular') {
+        margenRuido = 2.5;
+      }
+
+      // Si el movimiento supera el ruido real del GPS, lo sumamos al total de la ruta
+      if (metrosNuevos > margenRuido && metrosNuevos < 200) { // El < 200 evita saltos locos si el GPS pierde señal
+        this.distanciaAcumuladaTramo += metrosNuevos;
+      }
     }
 
-      this.puntosTrayectoLibre.push(latlng);
-      this.actualizarMapaLibre(latlng);
-      this.actualizarInfoTramoLibre();
-    };
+    // Guardamos este punto para que sea el "anterior" en la próxima lectura del GPS
+    this.puntosTrayectoLibre.push(latlng);
+    this.actualizarMapaLibre(latlng);
+    this.actualizarInfoTramoLibre();
+  };
 
-    // 1. El rastreador nativo (reacciona al movimiento)
-    this.watchId = navigator.geolocation.watchPosition(
-      (pos) => procesarPosicion(pos),
-      (err) => console.warn("Espera de señal GPS..."),
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+  // CONFIGURACIÓN CLAVE PARA EL APK EN DISPOSITIVOS MÓVILES:
+  // Reducimos los tiempos para que el móvil sea muy agresivo buscando cambios de posición
+  this.watchId = navigator.geolocation.watchPosition(
+    (pos) => this.zone.run(() => procesarPosicion(pos)), // Forzamos a Angular a enterarse del cambio de datos
+    (err) => console.warn("Esperando señal GPS precisa...", err),
+    { 
+      enableHighAccuracy: true, // Obligatorio para activar el chip GPS real del móvil y no las antenas telefónicas
+      maximumAge: 0,            // No queremos posiciones cacheadas o viejas
+      timeout: 3000             // Si en 3 segundos no responde, vuelve a intentar
+    }
+  );
+
+  // El despertador en segundo plano (Fuerza la actualización si el watchPosition se congela en el bolsillo)
+  this.intervalRef = setInterval(() => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => this.zone.run(() => procesarPosicion(pos)),
+      null,
+      { enableHighAccuracy: true }
     );
-
-    // 2. El "despertador" (fuerza la lectura cada 20 segundos por si el anterior se duerme)
-    this.intervalRef = setInterval(() => {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => procesarPosicion(pos),
-        null,
-        { enableHighAccuracy: true }
-      );
-    }, 20000); // 20 segundos es un buen equilibrio entre fluidez y batería
-  }
+  }, 10000); // Bajado a 10 segundos para que responda mucho más rápido en coche/bici
+}
 
   detenerRastreo() {
     if (this.watchId) navigator.geolocation.clearWatch(this.watchId);
@@ -660,20 +687,26 @@ async mostrarToastSuccess(msj: string) {
   }
 
   actualizarInfoTramoLibre() {
-    const ahora = Date.now();
-    const diffMinutos = Math.round((ahora - this.tiempoInicioTramo) / 60000);
-    
-    this.distancia = (this.distanciaAcumuladaTramo / 1000).toFixed(2) + ' km';
-    this.duracion = diffMinutos + ' min';
+  const ahora = Date.now();
+  // Calculamos los segundos reales transcurridos desde que pulsaste el botón
+  const diffSegundos = Math.round((ahora - this.tiempoInicioTramo) / 1000);
+  const diffMinutos = Math.floor(diffSegundos / 60);
+  const segundosRestantes = diffSegundos % 60;
+  
+  // Convertimos los metros acumulados a Kilómetros (con 2 decimales)
+  this.distancia = (this.distanciaAcumuladaTramo / 1000).toFixed(2) + ' km';
+  
+  // Mostramos minutos y segundos en la pantalla para ver el cronómetro correr en tiempo real
+  this.duracion = diffMinutos > 0 ? `${diffMinutos} min ${segundosRestantes} s` : `${segundosRestantes} s`;
 
-    // Seteamos el objeto temporal para que "Confirmar Parada" funcione igual que antes
-    this.datosTramoActual = {
-      modo: this.tipoTransporte as any,
-      coordenadas: this.puntosTrayectoLibre.map(p => [p.lng, p.lat]),
-      distancia: this.distanciaAcumuladaTramo,
-      duracion: (ahora - this.tiempoInicioTramo) / 1000 // segundos
-    };
-  }
+  // Seteamos el objeto temporal para que cuando pulses "Confirmar Parada" guarde los datos exactos del odómetro
+  this.datosTramoActual = {
+    modo: this.tipoTransporte as any,
+    coordenadas: this.puntosTrayectoLibre.map(p => [p.lng, p.lat]),
+    distancia: this.distanciaAcumuladaTramo, // En metros para tu base de datos
+    duracion: diffSegundos                  // En segundos
+  };
+}
 
 
   async presentarAlertaSiguientePaso() {
