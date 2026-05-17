@@ -70,16 +70,13 @@ ion-toast {
 // Corrección para las alertas globales y personalizadas con Shadow DOM
 
 // Corrección definitiva y compatible con Modo Oscuro para alertas declarativas
+// Corrección adaptativa para Modo Claro y Modo Oscuro
 ion-alert.custom-alert {
   --width: 90%;
   --max-width: 400px;
-  --background: #ffffff;
-
-  /* Colores de los botones nativos expuestos por Ionic */
-  --button-color: #3880ff; 
 
   &::part(header) {
-    color: #eb445a !important;
+    color: #eb445a !important; // Mantiene el título rojo de peligro
     font-weight: bold;
     text-align: center;
     padding-top: 20px;
@@ -88,26 +85,22 @@ ion-alert.custom-alert {
   &::part(sub-header) {
     text-align: center;
     font-weight: 600;
-    color: #555555 !important;
   }
 
   &::part(message) {
     text-align: center;
-    color: #333333 !important;
     padding-bottom: 15px;
   }
 
-  /* Forzar visibilidad del Textarea/Inputs en modo oscuro */
+  /* Contenedor del Textarea/Inputs */
   &::part(input) {
-    background-color: #f4f5f8 !important;
-    color: #111111 !important;
     border: 1px solid #cccccc !important;
     border-radius: 8px;
     padding: 10px !important;
     margin: 10px 0;
   }
 
-  /* Forzar diseño del grupo de botones */
+  /* Forzar diseño horizontal de los botones */
   &::part(button-group) {
     display: flex !important;
     flex-direction: row !important;
@@ -119,14 +112,14 @@ ion-alert.custom-alert {
   &::part(button) {
     font-weight: bold;
     text-transform: uppercase;
-    min-height: 44px !important; /* Asegura un tamaño táctil mínimo */
+    min-height: 44px !important;
+    color: var(--ion-color-primary, #3880ff); /* Forzar color de texto visible */
   }
 
-  /* Botón con rol destructivo en rojo */
-  &::part(button-destructive) {
+  /* Forzar el botón destructivo en rojo usando la parte nativa */
+  &::part(button-role-destructive) {
     color: #eb445a !important;
   }
-
 
   // Forzamos el color del botón que tenga rol destructivo (Eliminar o Quitar)
   .alert-button-role-destructive {
