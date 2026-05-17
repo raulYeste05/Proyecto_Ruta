@@ -81,9 +81,9 @@ ion-alert {
   
   // ¡Quitamos el display: flex !important de aquí arriba!
   z-index: 99999 !important;
+  --background: var(--ion-overlay-background, #ffffff);
 
   .alert-wrapper {
-    background: white !important;
     border-radius: 15px !important;
     box-shadow: 0 5px 25px rgba(0,0,0,0.3) !important;
   }
@@ -96,7 +96,7 @@ ion-alert {
 
   .alert-message {
     text-align: center;
-    color: #333333 !important; // Nos aseguramos de que se lea bien en fondos blancos
+    color: var(--ion-text-color, #333333) !important;
   }
 
   // Si querías centrar el contenido interno de la alerta, se hace en el contenedor del botón
@@ -105,12 +105,12 @@ ion-alert {
     padding: 10px;
     
     .alert-button {
-      color: #3880ff;
+      color: var(--ion-color-primary, #3880ff);
       font-weight: bold;
     }
     
     .alert-button-role-destructive {
-      color: #eb445a;
+      color: #eb445a !important;
     }
   }
 }
