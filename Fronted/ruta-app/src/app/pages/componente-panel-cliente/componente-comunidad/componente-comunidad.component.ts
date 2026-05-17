@@ -34,7 +34,6 @@ export class ComponenteComunidad implements OnInit {
     this.cargarPublicaciones();
   }
 
-  // NUEVO: Este método se ejecuta CADA VEZ que la pantalla de la comunidad se pone en primer plano
   ionViewWillEnter() {
     this.cargarPublicaciones();
   }

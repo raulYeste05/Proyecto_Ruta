@@ -30,7 +30,7 @@ export class RegistroPage implements OnInit {
     private geoService: GeoService,
     private authService: AuthService,
     private router: Router,
-    private toastCtrl: ToastController // Inyectamos el controlador de notificaciones
+    private toastCtrl: ToastController 
   ) {
     addIcons({
       'alert-circle-outline': alertCircleOutline,
@@ -55,12 +55,10 @@ export class RegistroPage implements OnInit {
       localidad: new FormControl('', Validators.required)
     });
 
-    // 1. Cargar Provincias
     this.geoService.getProvincias().subscribe(res => {
       this.provincias = res.data || res;
     });
 
-    // 2. Cargar listas para validaciones de repetidos
     this.cargarValidacionesDuplicados();
   }
 
@@ -112,7 +110,6 @@ export class RegistroPage implements OnInit {
 
     this.authService.registro(datosFinales).subscribe({
       next: async (res) => {
-        // Clics o autocierre: configuramos el Toast de confirmación elegante
         const toast = await this.toastCtrl.create({
           message: '¡Registro completado con éxito! Redirigiendo...',
           duration: 2500,
@@ -128,7 +125,6 @@ export class RegistroPage implements OnInit {
 
         await toast.present();
 
-        // Esperamos a que el Toast termine o el usuario pulse el botón para redirigir al login
         await toast.onDidDismiss();
         this.router.navigate(['/login']);
       },

@@ -36,10 +36,9 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
   duracion: string = '';
   cargandoUbicacion: boolean = false;
 
-  idRutaActual: number | null = null; // Para rastrear la ruta en curso
+  idRutaActual: number | null = null; 
   tramosConfirmados: any[] = [];
   datosTramoActual: Tramo | null = null;
-  // Añadimos un array para limpiar los marcadores de servicios si fuera necesario
   marcadoresServicios: L.Marker[] = [];
 
 
@@ -53,7 +52,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
   };
 
  //Variables para el modo libre
- private intervalRef: any; // Intervalo para actualizar la posición
+ private intervalRef: any; 
  isModoLibre: boolean = false;
  watchId: any;
  puntosTrayectoLibre: L.LatLng[] = [];
@@ -72,13 +71,12 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
               private router: Router,
               private zone: NgZone
   ) {
-    // Registramos los iconos para evitar errores en consola
     addIcons({ car, walk, bicycle, trashOutline, flagOutline, locateOutline, timeOutline, resizeOutline, checkmarkDoneOutline, pizza, leaf, water, cafe, arrowBackOutline, playOutline, stopCircle });
   }
 
  ngOnInit() {
     const rol = this.AuthService.getUserRole(); 
-    console.log("El rol detectado es:", rol); // <--- AÑADE ESTO PARA DEPURAR
+    console.log("El rol detectado es:", rol); 
     this.esAdmin = (rol === 'ADMIN');
   }
 
@@ -95,7 +93,6 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
 
     this.route.queryParams.subscribe(params => {
       if (params['idRuta']) {
-        // Usamos un pequeño timeout para asegurar que Leaflet está listo
         setTimeout(() => {
           this.cargarRutaGuardada(Number(params['idRuta']));
         }, 500);
@@ -123,10 +120,9 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     const nuevoMarcador = L.marker([coords.lat, coords.lng]).addTo(this.map);
     this.marcadores.push(nuevoMarcador);
 
-    // --- LÓGICA PARA EL PUNTO DE ORIGEN ---
     if (this.puntosRuta.length === 1) {
       const puntoOrigen = {
-        orden: 1, // Será la primera parada en la DB
+        orden: 1, 
         latitud: coords.lat,
         longitud: coords.lng,
         tipoTransporte: this.obtenerTipoEnum(),
@@ -186,7 +182,6 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
   calcularYDibujarRuta() {
     this.RutasService.getRoute(this.puntosRuta, this.tipoTransporte).subscribe({
       next: (res: any) => {
-        // CORRECCIÓN 1: Limpiar antes de procesar nada nuevo
         if (this.polylineActual) {
           this.map.removeLayer(this.polylineActual);
           this.polylineActual = null;
@@ -194,7 +189,6 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
 
         try {
           if (res.type === 'FeatureCollection' && res.features.length > 0) {
-            // Dibujamos la polilínea
             this.polylineActual = L.geoJSON(res, {
               style: { color: '#3880ff', weight: 6, opacity: 0.8 }
             }).addTo(this.map);
@@ -231,10 +225,10 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
   async mostrarErrorRuta() {
     const toast = await this.toastController.create({
       message: '📍 Ruta inaccesible. No hay caminos disponibles en esta zona.',
-      duration: 3500, // Un poquito más de tiempo para que de tiempo a leer
+      duration: 3500, 
       position: 'middle', 
       color: 'danger',
-      cssClass: 'custom-toast', // Opcional por si quieres darle más estilo
+      cssClass: 'custom-toast', 
       buttons: [
         {
           text: 'ENTENDIDO',
@@ -299,7 +293,6 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     
     this.RutasService.getServiciosPorCoordenadas(lat, lng).subscribe({
     next: (servicios) => {
-      // Llamamos al método que ya tenías para pintar los círculos en el mapa
       this.pintarServiciosEnMapa(servicios); 
     },
     error: (err) => console.error("Error buscando servicios temporales", err)
@@ -391,12 +384,10 @@ async mostrarToastSuccess(msj: string) {
     async finalizarViaje() {
     
     this.zone.run(async () => {
-      // Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
-    // lo procesamos automáticamente para que no se pierda esa distancia/tiempo.
+     
     if (this.datosTramoActual) {
       const confirmarAutomatico = confirm("Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?");
       if (confirmarAutomatico) {
-        // Reutilizamos la lógica de confirmar para que sume a los totales
         const lat = this.isModoLibre 
           ? this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1].lat 
           : this.puntosRuta[this.puntosRuta.length - 1][1];
@@ -551,7 +542,7 @@ async mostrarToastSuccess(msj: string) {
           const tipoUpper = tipoOriginal.toUpperCase();
 
           // Configuración de colores según el tipo
-          let color = '#737373'; // Gris por defecto
+          let color = '#737373'; 
           if (tipoOriginal === 'gasolinera') color = '#f04141'; // Rojo
           else if (tipoOriginal === 'restaurante') color = '#3880ff'; // Azul
           else if (tipoOriginal === 'area_descanso') color = '#2dd36f'; // Verde
@@ -629,12 +620,11 @@ async mostrarToastSuccess(msj: string) {
       }
 
       // Si el movimiento supera el ruido real del GPS, lo sumamos al total de la ruta
-      if (metrosNuevos > margenRuido && metrosNuevos < 200) { // El < 200 evita saltos locos si el GPS pierde señal
+      if (metrosNuevos > margenRuido && metrosNuevos < 200) { 
         this.distanciaAcumuladaTramo += metrosNuevos;
       }
     }
 
-    // Guardamos este punto para que sea el "anterior" en la próxima lectura del GPS
     this.puntosTrayectoLibre.push(latlng);
     this.actualizarMapaLibre(latlng);
     this.actualizarInfoTramoLibre();
@@ -642,12 +632,12 @@ async mostrarToastSuccess(msj: string) {
 
   // CONFIGURACIÓN CLAVE PARA EL APK EN DISPOSITIVOS MÓVILES:
   this.watchId = navigator.geolocation.watchPosition(
-    (pos) => this.zone.run(() => procesarPosicion(pos)), // Forzamos a Angular a enterarse del cambio de datos
+    (pos) => this.zone.run(() => procesarPosicion(pos)), 
     (err) => console.warn("Esperando señal GPS precisa...", err),
     { 
-      enableHighAccuracy: true, // Obligatorio para activar el chip GPS real del móvil y no las antenas telefónicas
-      maximumAge: 0,            // No queremos posiciones cacheadas o viejas
-      timeout: 3000             // Si en 3 segundos no responde, vuelve a intentar
+      enableHighAccuracy: true, 
+      maximumAge: 0,            
+      timeout: 3000             
     }
   );
 
@@ -658,12 +648,12 @@ async mostrarToastSuccess(msj: string) {
       null,
       { enableHighAccuracy: true }
     );
-  }, 10000); // Bajado a 10 segundos para que responda mucho más rápido en coche/bici
+  }, 10000); 
 }
 
   detenerRastreo() {
     if (this.watchId) navigator.geolocation.clearWatch(this.watchId);
-    if (this.intervalRef) clearInterval(this.intervalRef); // <--- IMPORTANTE limpiar el intervalo
+    if (this.intervalRef) clearInterval(this.intervalRef); 
     this.watchId = null;
     this.isModoLibre = false;
   }
@@ -713,7 +703,7 @@ async mostrarToastSuccess(msj: string) {
 
     this.distanciaAcumuladaTramo = 0;
     this.tiempoInicioTramo = Date.now();
-    this.polylineActual = null; // Para que empiece a dibujar la línea del nuevo tramo libre
+    this.polylineActual = null; 
 
     // Limpiamos rastreos anteriores por seguridad antes de volver a encenderlo
     if (this.watchId) navigator.geolocation.clearWatch(this.watchId);
@@ -743,10 +733,9 @@ async mostrarToastSuccess(msj: string) {
       paradas.sort((a, b) => a.orden - b.orden);
 
       paradas.forEach((p, index) => {
-        // NORMALIZACIÓN: Java (CamelCase) vs MySQL (snake_case)
         const lat = p.latitud;
         const lng = p.longitud;
-        const tipoActual = p.tipo_transporte || p.tipoTransporte; // <--- CLAVE PARA EL ERROR
+        const tipoActual = p.tipo_transporte || p.tipoTransporte; 
         
         console.log(`Procesando parada ${p.orden}:`, { lat, lng, tipoActual });
 
@@ -759,7 +748,6 @@ async mostrarToastSuccess(msj: string) {
         //  Pintar servicios guardados (Gasolineras, etc.)
         this.dibujarServiciosCercanos(p.id);
 
-        // Dibujar el camino (Polyline) hacia la siguiente parada
         if (index < paradas.length - 1) {
           const pSiguiente = paradas[index + 1];
           const tipoSiguiente = pSiguiente.tipo_transporte || pSiguiente.tipoTransporte;
@@ -799,7 +787,7 @@ async mostrarToastSuccess(msj: string) {
   // Función auxiliar para que ORS entienda tus tipos de transporte
  private mapearTransporteORS(tipo: any): string {
   if (!tipo) return 'foot-walking';
-  const t = String(tipo).toLowerCase().trim(); // Forzamos a String por si viene el objeto Enum
+  const t = String(tipo).toLowerCase().trim(); 
   
   if (t === 'coche') return 'driving-car';
   if (t === 'bicicleta' || t === 'bici') return 'cycling-regular';
@@ -810,13 +798,13 @@ async mostrarToastSuccess(msj: string) {
     const t = tipo.toLowerCase();
     switch (t) {
       case 'coche':
-        return '#3880ff'; // Azul
+        return '#3880ff'; 
       case 'bicicleta':
-        return '#ffa500'; // Naranja 
+        return '#ffa500'; 
       case 'andando':
-        return '#2dd36f'; // Verde
+        return '#2dd36f'; 
       default:
-        return '#3880ff'; // Color por defecto
+        return '#3880ff'; 
     }
   }
   

@@ -41,18 +41,17 @@ export class ComponenteComentariosComponent  implements OnInit {
 
   // Método para enviar un comentario
     enviarComentario() {
-    // 1. Obtenemos el ID real desde el token
+    // Obtenemos el ID real desde el token
     const userIdReal = this.authService.getUserId();
 
     if (!userIdReal === null || userIdReal === undefined) {
-      // Si no hay ID, quizás la sesión expiró
       console.error("No se pudo identificar al usuario.");
       return;
     }
 
     const body = {
       publicacionId: this.publicacionId,
-      userId: userIdReal, // <--- ID DINÁMICO RECIÉN EXTRAÍDO
+      userId: userIdReal, 
       contenido: this.nuevoComentario
     };
 

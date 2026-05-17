@@ -1,6 +1,5 @@
 /* componente-resumen-rutas.component.scss */
 
-// Contenedor de la leyenda para que se vean los colores
 .leyenda-container {
   background: #ffffff;
   padding: 15px;
@@ -35,7 +34,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  display: block; // Cambiado de inline-block a block para asegurar visibilidad
+  display: block; 
   border: 1px solid rgba(0,0,0,0.1);
   
   &.azul { background-color: #3880ff !important; }
@@ -52,7 +51,7 @@
 
 .header-flex {
   display: flex;
-  justify-content: space-between; // Esto separa el título del botón de basura
+  justify-content: space-between; 
   align-items: center;
   width: 100%;
 }

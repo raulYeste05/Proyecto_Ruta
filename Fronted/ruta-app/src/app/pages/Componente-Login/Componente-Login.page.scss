@@ -4,7 +4,7 @@ $azul-secundario: rgb(37, 99, 235);
 $gris-texto: rgb(86, 80, 80);
 
 ion-content {
-  --background: #f4f7f6; /* Un gris casi blanco para dar contraste */
+  --background: #f4f7f6; 
 }
 
 .contenedor-login {
@@ -110,8 +110,8 @@ ion-content {
   }
 
   .btn-volver {
-    --color: #{$gris-texto}; /* Asegura que el texto use el gris correcto */
-    --background: transparent; /* Forzamos transparente para fill="clear" */
+    --color: #{$gris-texto}; 
+    --background: transparent; 
     font-size: 0.85rem;
     text-transform: none;
     margin-top: 5px;

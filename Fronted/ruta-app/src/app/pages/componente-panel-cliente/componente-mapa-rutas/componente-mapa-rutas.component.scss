@@ -1,15 +1,15 @@
 // mapa-rutas.component.scss
 
 #mapId {
-  height: 50vh; // Altura razonable para que quepan los botones debajo
-  width: 100%;  // ¡Importante! Estaba al 200%
+  height: 50vh; 
+  width: 100%; 
   display: block;
   z-index: 1; 
 }
 
 // Estilo específico para el Toast en el centro
 .custom-toast {
-  --background: #eb445a; // Color rojo suave
+  --background: #eb445a; 
   --color: white;
   --button-color: white;
   --border-radius: 12px;

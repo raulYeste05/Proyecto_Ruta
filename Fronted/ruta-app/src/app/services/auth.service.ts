@@ -44,19 +44,15 @@ export class AuthService {
     return this.decodeToken();
   }
 
-  // Ahora tus otros métodos son más cortos
   getUserId(): number | null {
     const decoded = this.decodeToken();
     return decoded ? Number(decoded.id) : null;
   }
 
-  // Método extra para obtener el ROL directamente
  getUserRole(): string | null {
-  // En lugar de decodificar el token, leemos la llave 'rol' que vimos en tu imagen
   return localStorage.getItem('rol'); 
 }
 
-  // Obtener el ID del usuario desde el Token
 
   isLogged() {
     return !!this.getToken();

@@ -25,9 +25,7 @@ export class RutasService {
     return this.http.post(`${this.apiUrlORS}/${transporte}/geojson`, body, { headers });
   }
 
-  // Guardar la cabecera de la ruta
   guardarRuta(ruta: any): Observable<any> {
-    // No necesitamos pasar el token aquí, el AuthInterceptor lo inyecta solo
     return this.http.post<any>(this.apiRuta, ruta);
   }
 
@@ -37,7 +35,7 @@ export class RutasService {
   }
   //Metodo para obtener todas las rutas
   getAllRutas(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiRuta); // GET /api/rutas
+    return this.http.get<any[]>(this.apiRuta); 
   }
 
 

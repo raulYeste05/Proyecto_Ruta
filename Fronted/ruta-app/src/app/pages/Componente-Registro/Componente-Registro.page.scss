@@ -81,7 +81,6 @@ ion-content { --background: #{$fondo}; }
   }
 }
 
-/* ELIMINAR FONDO GRIS/AZUL DE AUTOCOMPLETADO (Edge/Chrome) */
 ion-input input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px #f1f5f9 inset !important;
   -webkit-text-fill-color: #1e293b !important;

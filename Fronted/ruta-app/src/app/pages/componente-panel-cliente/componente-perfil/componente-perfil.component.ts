@@ -28,12 +28,11 @@ export class ComponentePerfilPage implements OnInit {
     private router: Router
   ) {
     this.perfilForm = this.fb.group({
-      // CAMBIO AQUÍ: Añadimos explícitamente el tipo ': AbstractControl'
       password: ['', (control: AbstractControl) => {
         if (!control.value || control.value.trim() === '') {
-          return null; // Si está vacío es totalmente válido
+          return null; 
         }
-        return validaciones.contrasena(control); // Si tiene texto, aplica tu regla
+        return validaciones.contrasena(control); 
       }],
       dni: ['', [Validators.required, validaciones.dni]],
       nombre: ['', [Validators.required, validaciones.soloTexto]],
@@ -46,7 +45,7 @@ export class ComponentePerfilPage implements OnInit {
   }
 
   ngOnInit() {
-    // 1. Primero cargamos provincias, luego el perfil
+    // Primero cargamos provincias, luego el perfil
     this.geoService.getProvincias().subscribe(data => {
       this.provincias = Array.isArray(data) ? data : data.data;
       this.cargarPerfil();
@@ -56,10 +55,9 @@ export class ComponentePerfilPage implements OnInit {
   cargarPerfil() {
   this.clienteService.getPerfil().subscribe({
     next: (data) => {
-      console.log('Datos recibidos del perfil:', data); // Revisa esto en la consola
+      console.log('Datos recibidos del perfil:', data); 
       this.clienteOriginal = data;
       
-      // CAMBIO AQUÍ: Prueba con idCliente si id_cliente falla
       this.id_cliente_actual = data.id_cliente || data.idCliente; 
 
       const provEncontrada = this.provincias.find(p => 
@@ -86,7 +84,7 @@ export class ComponentePerfilPage implements OnInit {
 }
 
   onProvinciaChangeNative(event: any) {
-    const codProv = event.target.value; // Importante: en nativo usamos event.target.value
+    const codProv = event.target.value; 
     
     // Limpiamos localidad al cambiar provincia
     this.perfilForm.get('localidad')?.setValue('');
@@ -99,7 +97,6 @@ export class ComponentePerfilPage implements OnInit {
 
   cargarMunicipios(codProv: string) {
     this.geoService.getMunicipios(codProv).subscribe(res => {
-      // Ajuste para evitar el error de [object Object] en el *ngFor
       this.localidades = Array.isArray(res) ? res : (res.data || []);
     });
   }
@@ -110,10 +107,9 @@ export class ComponentePerfilPage implements OnInit {
   const values = this.perfilForm.value;
   const provSeleccionada = this.provincias.find(p => p.CPRO === values.provincia);
 
-    // Mapeamos el objeto para que el Backend lo reciba perfecto
-    // Importante: Usamos los nombres de campos que espera tu Entity de Java
+
     const clienteEditado: any = {
-      id_cliente: this.id_cliente_actual, // ID clave para el UPDATE
+      id_cliente: this.id_cliente_actual, 
       dni: values.dni,
       nombre: values.nombre,
       apellido1: values.apellido1,
@@ -124,8 +120,7 @@ export class ComponentePerfilPage implements OnInit {
       user_id: this.clienteOriginal?.userId || this.clienteOriginal?.user_id // Mantenemos el usuario vinculado
     };
 
-    // Agregamos la contraseña si es que se ha cambiado
-    // SOLO añadimos la contraseña si el usuario ha escrito algo
+   
     if (values.password && values.password.trim() !== '') {
       clienteEditado.password = values.password;
       console.log("Se detectó cambio de contraseña");

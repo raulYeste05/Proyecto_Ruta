@@ -89,13 +89,11 @@ export class ComponentePublicacionesPage implements OnInit {
   // Buscamos la publicación en nuestra lista local
   const pub = this.listaPublicaciones.find(p => p.id === publicacionId);
 
-  // Si ya están abiertos, los cerramos (tipo acordeón)
   if (pub.mostrarComentariosAdmin) {
     pub.mostrarComentariosAdmin = false;
     return;
   }
 
-  // Si no, los cargamos del servicio
   this.comentariosService.listarPorPublicacion(publicacionId).subscribe({
     next: (comentarios) => {
       pub.listaComentariosCargados = comentarios;
@@ -105,16 +103,13 @@ export class ComponentePublicacionesPage implements OnInit {
   });
 }
 
-// Modificamos el eliminar para que actualice la lista visual inmediatamente
   async eliminarComentario(comentarioId: number, publicacionId: number) {
     this.comentariosService.eliminarComentario(comentarioId).subscribe({
       next: () => {
         const pub = this.listaPublicaciones.find(p => p.id === publicacionId);
         if (pub && pub.listaComentariosCargados) {
-          // Filtramos el comentario borrado de la lista visual
           pub.listaComentariosCargados = pub.listaComentariosCargados.filter((c: any) => c.id !== comentarioId);
           
-          // Opcional: Actualizar el contador de la burbuja (badge)
           if (pub.comentarios) {
             pub.comentarios.length--;
           }

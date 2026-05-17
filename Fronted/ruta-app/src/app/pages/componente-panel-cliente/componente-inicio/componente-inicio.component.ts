@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
 })
 export class ComponenteInicioComponent implements OnInit {
   
-  cliente: any = null; // Aquí guardaremos los datos que vengan de Spring
+  cliente: any = null; 
 
   constructor(private clienteService: ClienteService) { }
 

@@ -5,10 +5,8 @@ import { ClienteService } from '../../../services/cliente.service';
 import { PublicacionesService } from '../../../services/publicaciones.service';
 import { Router } from '@angular/router';
 
-// Controladores nativos de Ionic
 import { AlertController, ToastController } from '@ionic/angular/standalone';
 
-// Componentes Standalone (Sin IonAlert porque ya no se usa en el HTML)
 import { 
   IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, 
   IonContent, IonList, IonCard, IonCardHeader, IonCardTitle, 
@@ -56,7 +54,7 @@ export class ComponenteResumenRutas implements OnInit {
     private publicacionesService: PublicacionesService,
     private router: Router,
     private toastCtrl: ToastController,
-    private alertCtrl: AlertController, // Inyectamos el controlador para las alertas
+    private alertCtrl: AlertController, 
     private zone: NgZone
   ) {
     addIcons({ trashOutline, timeOutline, mapOutline, shareSocialOutline, trailSignOutline, closeCircleOutline });
@@ -95,9 +93,7 @@ export class ComponenteResumenRutas implements OnInit {
     this.router.navigate(['/componente-panel-cliente/mapa'], { queryParams: { idRuta: id } });
   }
 
-  // ==========================================
-  // DISPARADORES DINÁMICOS DE ALERTAS (NATIVOS)
-  // ==========================================
+
 
   async confirmarEliminar(id: number) {
     const alert = await this.alertCtrl.create({
