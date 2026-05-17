@@ -160,6 +160,58 @@ $verde-accent: #10b981;
     }
   }
 
+
+  /* --- NUEVO APARTADO DE DESCARGA APK --- */
+  .download-cta {
+    margin-top: 80px;
+    padding: 50px 30px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); // Degradado oscuro elegante
+    border-radius: 24px;
+    color: white;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    .btn-download {
+      --background: #10b981; // Verde llamativo para la descarga
+      --background-hover: #059669;
+      --color: white;
+      font-weight: 700;
+      font-size: 1.05rem;
+      --padding-top: 22px;
+      --padding-bottom: 22px;
+      --padding-start: 32px;
+      --padding-end: 32px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.03);
+      }
+
+      ion-icon {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
   .footer-links {
     h4 { 
       margin: 0 0 15px 0; 

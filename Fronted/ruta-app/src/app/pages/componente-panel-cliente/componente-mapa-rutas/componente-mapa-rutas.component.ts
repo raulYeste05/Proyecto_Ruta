@@ -93,7 +93,6 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     }, 400);
 
 
-    // Comprobamos los parámetros aquí, DESPUÉS de initMap()
     this.route.queryParams.subscribe(params => {
       if (params['idRuta']) {
         // Usamos un pequeño timeout para asegurar que Leaflet está listo
@@ -211,7 +210,6 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
               this.actualizarDatosTramoTemporal(summary);
             }
 
-            // CORRECCIÓN 2: Asegurar que la polilínea existe antes de pedir sus bordes
             const bounds = this.polylineActual.getBounds();
             if (bounds && bounds.isValid()) {
               this.map.fitBounds(bounds, { padding: [50, 50] });
@@ -234,7 +232,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     const toast = await this.toastController.create({
       message: '📍 Ruta inaccesible. No hay caminos disponibles en esta zona.',
       duration: 3500, // Un poquito más de tiempo para que de tiempo a leer
-      position: 'middle', // <--- CAMBIADO A MIDDLE PARA MÁS VISIBILIDAD
+      position: 'middle', 
       color: 'danger',
       cssClass: 'custom-toast', // Opcional por si quieres darle más estilo
       buttons: [
@@ -298,7 +296,7 @@ export class MapaRutasPage implements OnInit, AfterViewInit {
     this.tramosConfirmados.push(nuevaParada);
     this.acumularTotales();
 
-    // --- NUEVA LÓGICA: BUSCAR SERVICIOS SIN GUARDAR EN DB ---
+    
     this.RutasService.getServiciosPorCoordenadas(lat, lng).subscribe({
     next: (servicios) => {
       // Llamamos al método que ya tenías para pintar los círculos en el mapa
@@ -393,7 +391,7 @@ async mostrarToastSuccess(msj: string) {
     async finalizarViaje() {
     
     this.zone.run(async () => {
-      // 1. Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
+      // Si el usuario tiene un tramo en el mapa pero no le dio a "Añadir", 
     // lo procesamos automáticamente para que no se pierda esa distancia/tiempo.
     if (this.datosTramoActual) {
       const confirmarAutomatico = confirm("Tienes un tramo sin añadir, ¿quieres incluirlo en el resumen final?");
@@ -420,7 +418,7 @@ async mostrarToastSuccess(msj: string) {
       }
     }
 
-    // 2. Verificación de seguridad
+    // Verificación de seguridad
     if (this.tramosConfirmados.length === 0) {
       alert("No hay tramos confirmados para guardar.");
       return;
@@ -539,7 +537,7 @@ async mostrarToastSuccess(msj: string) {
   }
 
 
-  // 2. Método para buscar y pintar servicios
+  //  Método para buscar y pintar servicios
     dibujarServiciosCercanos(paradaId: number) {
     this.RutasService.getServiciosCercanos(paradaId).subscribe({
       next: (servicios) => {
@@ -616,16 +614,13 @@ async mostrarToastSuccess(msj: string) {
       };
       this.tramosConfirmados.push(puntoOrigenLibre);
     } else {
-      // ¡AQUÍ ESTÁ EL CÁLCULO QUE FALTABA!
-      // Tomamos el último punto donde estuvimos justo antes de este
+      
       const ultimoPunto = this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1];
       
-      // Leaflet calcula matemáticamente la distancia real en metros en línea recta entre ambos puntos
+      
       const metrosNuevos = ultimoPunto.distanceTo(latlng); 
 
-      // FILTRO DE PRECISIÓN SEGÚN EL TRANSPORTE:
-      // El GPS en estático fluctúa y puede simular que te mueves. 
-      // Si vas andando, un paso son más de 1 metro. Si vas en coche, avanza mucho más rápido.
+     
       let margenRuido = 1.5; // Margen para 'andando'
       if (this.tipoTransporte === 'driving-car') {
         margenRuido = 4; // Filtramos saltos pequeños de interferencia en coche
@@ -646,7 +641,6 @@ async mostrarToastSuccess(msj: string) {
   };
 
   // CONFIGURACIÓN CLAVE PARA EL APK EN DISPOSITIVOS MÓVILES:
-  // Reducimos los tiempos para que el móvil sea muy agresivo buscando cambios de posición
   this.watchId = navigator.geolocation.watchPosition(
     (pos) => this.zone.run(() => procesarPosicion(pos)), // Forzamos a Angular a enterarse del cambio de datos
     (err) => console.warn("Esperando señal GPS precisa...", err),
@@ -696,10 +690,8 @@ async mostrarToastSuccess(msj: string) {
   // Convertimos los metros acumulados a Kilómetros (con 2 decimales)
   this.distancia = (this.distanciaAcumuladaTramo / 1000).toFixed(2) + ' km';
   
-  // Mostramos minutos y segundos en la pantalla para ver el cronómetro correr en tiempo real
   this.duracion = diffMinutos > 0 ? `${diffMinutos} min ${segundosRestantes} s` : `${segundosRestantes} s`;
 
-  // Seteamos el objeto temporal para que cuando pulses "Confirmar Parada" guarde los datos exactos del odómetro
   this.datosTramoActual = {
     modo: this.tipoTransporte as any,
     coordenadas: this.puntosTrayectoLibre.map(p => [p.lng, p.lat]),
@@ -712,7 +704,6 @@ async mostrarToastSuccess(msj: string) {
   private reiniciarTramoLibre(nuevoModo: string) {
     this.tipoTransporte = nuevoModo;
     
-    // Si venías registrando posiciones, tomamos la última para que sea el inicio del nuevo tramo
     if (this.puntosTrayectoLibre.length > 0) {
       const ultimaPosicion = this.puntosTrayectoLibre[this.puntosTrayectoLibre.length - 1];
       this.puntosTrayectoLibre = [ultimaPosicion]; 
@@ -759,16 +750,16 @@ async mostrarToastSuccess(msj: string) {
         
         console.log(`Procesando parada ${p.orden}:`, { lat, lng, tipoActual });
 
-        // 1. Dibujar el marcador
+        // Dibujar el marcador
         const marcador = L.marker([lat, lng])
           .addTo(this.map)
           .bindPopup(`<b>Parada ${p.orden}</b><br>Transporte: ${tipoActual}`);
         this.marcadores.push(marcador);
         
-        // 2. Pintar servicios guardados (Gasolineras, etc.)
+        //  Pintar servicios guardados (Gasolineras, etc.)
         this.dibujarServiciosCercanos(p.id);
 
-        // 3. Dibujar el camino (Polyline) hacia la siguiente parada
+        // Dibujar el camino (Polyline) hacia la siguiente parada
         if (index < paradas.length - 1) {
           const pSiguiente = paradas[index + 1];
           const tipoSiguiente = pSiguiente.tipo_transporte || pSiguiente.tipoTransporte;
@@ -793,7 +784,7 @@ async mostrarToastSuccess(msj: string) {
         }
       });
 
-      // 4. Ajustar la vista del mapa para que se vean todos los marcadores
+      //  Ajustar la vista del mapa para que se vean todos los marcadores
       setTimeout(() => {
         if (this.marcadores.length > 0) {
           const group = L.featureGroup(this.marcadores);
@@ -821,7 +812,7 @@ async mostrarToastSuccess(msj: string) {
       case 'coche':
         return '#3880ff'; // Azul
       case 'bicicleta':
-        return '#ffa500'; // Naranja (puedes usar el hex exacto de tu CSS)
+        return '#ffa500'; // Naranja 
       case 'andando':
         return '#2dd36f'; // Verde
       default:
