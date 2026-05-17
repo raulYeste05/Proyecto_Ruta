@@ -78,7 +78,7 @@
   flex: 1;
   padding: 24px;
   box-sizing: border-box;
-  overflow: auto;
+  overflow-y: auto; 
   background: #f1f3f6;
 }
 
@@ -125,3 +125,4 @@
     padding: 12px; /* Reducimos espacios sobrantes en móvil */
   }
 }
+

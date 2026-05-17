@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from "../../../services/auth.service";
 import { Router } from "@angular/router";
 
+import { addIcons } from 'ionicons';
+import { logOutOutline } from 'ionicons/icons';
+
 @Component({
   selector: 'app-componente-layout-admin',
   templateUrl: './componente-layout-admin.page.html',
@@ -23,6 +26,7 @@ export class ComponenteLayoutAdminPage implements OnInit {
   constructor( 
     private authService: AuthService, 
     private router: Router) {
+      addIcons({ logOutOutline });
   }
 
   ngOnInit() {}
