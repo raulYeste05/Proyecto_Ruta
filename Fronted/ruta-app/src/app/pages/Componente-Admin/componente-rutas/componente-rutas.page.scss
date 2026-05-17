@@ -1,0 +1,100 @@
+.contenido-modulo-admin {
+  --background: transparent;
+  background: transparent;
+  height: 100%;
+}
+
+.bloque-contenedor {
+  padding: 16px;
+  padding-bottom: 60px; // Evita el corte inferior en móviles
+}
+
+.titulo-seccion-movil {
+  padding: 8px 4px;
+  margin-bottom: 12px;
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+}
+
+.lista-transparente {
+  background: transparent !important;
+  padding: 0;
+}
+
+.tarjeta-adaptativa {
+  margin: 0 0 16px 0 !important;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+
+  .cabecera-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    ion-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e293b;
+      word-break: break-word;
+    }
+  }
+}
+
+.info-autor-ruta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+
+  ion-card-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .badge-usuario {
+    align-self: flex-start;
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+}
+
+.texto-principal {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.btn-accion-mini {
+  margin: 0;
+  height: 36px;
+  width: 36px;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.btn-visualizar {
+  margin: 16px 0 0 0;
+  font-weight: 600;
+  min-height: 44px;
+}
+
+.zona-vacia {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+  
+  ion-icon {
+    font-size: 64px;
+    opacity: 0.3;
+    margin-bottom: 8px;
+  }
+}

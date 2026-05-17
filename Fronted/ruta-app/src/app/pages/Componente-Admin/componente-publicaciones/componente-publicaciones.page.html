@@ -1,68 +1,69 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Moderación del Foro</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-  <ion-list *ngIf="listaPublicaciones.length > 0; else noPubs">
-    <ion-card *ngFor="let pub of listaPublicaciones">
-      <ion-card-header>
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <ion-card-title>{{ pub.titulo }}</ion-card-title>
-          <ion-button fill="clear" color="danger" (click)="confirmarEliminar(pub.id)">
-            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-          </ion-button>
-        </div>
-        <ion-card-subtitle>
-          <ion-icon name="time-outline"></ion-icon> {{ pub.fecha | date:'short' }}
-        </ion-card-subtitle>
-      </ion-card-header>
-
-      <ion-card-content>
-        <p>{{ pub.contenido }}</p>
-        
-        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-          <ion-badge color="medium">
-            <ion-icon name="person-outline"></ion-icon> 
-            Autor: {{ pub.emailUsuario || pub.user?.email || 'Anónimo' }}
-          </ion-badge>
-          
-          <ion-badge color="tertiary">
-            <ion-icon name="chatbubbles-outline"></ion-icon> 
-            {{ (pub.listaComentariosCargados?.length || pub.comentarios?.length || 0) }} Comentarios
-          </ion-badge>
-        </div>
-
-        <div class="ion-margin-top">
-          <!-- BOTÓN PARA VER COMENTARIOS -->
-          <ion-button fill="outline" size="small" (click)="verComentarios(pub.id)">
-            <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
-            Gestionar Comentarios ({{ (pub.listaComentariosCargados?.length || pub.comentarios?.length || 0) }})
-          </ion-button>
-        </div>
-
-        <!-- LISTA RÁPIDA DE COMENTARIOS (Opcional, si quieres verlos directamente) -->
-        <ion-list *ngIf="pub.mostrarComentariosAdmin">
-          <ion-item *ngFor="let com of pub.listaComentariosCargados">
-            <ion-label>
-              <h3>{{ com.emailUsuario }}: {{ com.contenido }}</h3>
-              <p>{{ com.fecha | date:'short' }}</p>
-            </ion-label>
-            <ion-button color="danger" slot="end" (click)="eliminarComentario(com.id, pub.id)">
-              <ion-icon name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </ion-list>
-        
-      </ion-card-content>
-    </ion-card>
-  </ion-list>
-
-  <ng-template #noPubs>
-    <div style="text-align: center; margin-top: 50px; color: #666;">
-      <ion-icon name="chatbubbles-outline" style="font-size: 64px; opacity: 0.3;"></ion-icon>
-      <p>No hay publicaciones en el foro para moderar.</p>
+<ion-content class="contenido-modulo-admin">
+  <div class="bloque-contenedor">
+    
+    <div class="titulo-seccion-movil">
+      <h2>Moderación del Foro</h2>
     </div>
-  </ng-template>
+
+    <ion-list *ngIf="listaPublicaciones.length > 0; else noPubs" class="lista-transparente">
+      <ion-card *ngFor="let pub of listaPublicaciones" class="tarjeta-adaptativa">
+        <ion-card-header>
+          <div class="cabecera-flex">
+            <ion-card-title>{{ pub.titulo }}</ion-card-title>
+            <ion-button fill="clear" color="danger" (click)="confirmarEliminar(pub.id)" class="btn-accion-mini">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+          <ion-card-subtitle>
+            <ion-icon name="time-outline"></ion-icon> {{ pub.fecha | date:'short' }}
+          </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p class="texto-principal">{{ pub.contenido }}</p>
+          
+          <div class="contenedor-badges">
+            <ion-badge color="medium">
+              <ion-icon name="person-outline"></ion-icon> 
+              Autor: {{ pub.emailUsuario || pub.user?.email || 'Anónimo' }}
+            </ion-badge>
+            
+            <ion-badge color="tertiary">
+              <ion-icon name="chatbubbles-outline"></ion-icon> 
+              {{ (pub.listaComentariosCargados?.length || pub.comentarios?.length || 0) }} Comentarios
+            </ion-badge>
+          </div>
+
+          <div class="ion-margin-top">
+            <ion-button fill="outline" size="small" expand="block" (click)="verComentarios(pub.id)" class="btn-gestion-comentarios">
+              <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
+              Gestionar Comentarios ({{ (pub.listaComentariosCargados?.length || pub.comentarios?.length || 0) }})
+            </ion-button>
+          </div>
+
+          <ion-list *ngIf="pub.mostrarComentariosAdmin" class="sublista-comentarios">
+            <ion-item *ngFor="let com of pub.listaComentariosCargados" class="item-comentario">
+              <ion-label class="ion-text-wrap">
+                <h3><strong>{{ com.emailUsuario }}</strong></h3>
+                <p>{{ com.contenido }}</p>
+                <small>{{ com.fecha | date:'short' }}</small>
+              </ion-label>
+              <ion-button color="danger" slot="end" fill="clear" (click)="eliminarComentario(com.id, pub.id)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-list>
+          
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+
+    <ng-template #noPubs>
+      <div class="zona-vacia">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <p>No hay publicaciones en el foro para moderar.</p>
+      </div>
+    </ng-template>
+
+  </div>
 </ion-content>
