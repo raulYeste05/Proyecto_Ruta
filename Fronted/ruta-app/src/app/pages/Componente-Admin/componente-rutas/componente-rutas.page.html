@@ -1,33 +1,34 @@
+
+
+
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Gestión Global de Rutas</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding pagina-rutas">
+<ion-content class="ion-padding">
   <ion-list *ngIf="todasLasRutas.length > 0; else noRutas">
     <ion-card *ngFor="let ruta of todasLasRutas" class="ruta-card">
       <ion-card-header>
-        <div class="cabecera-ruta">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
           <ion-card-title>{{ ruta.titulo }}</ion-card-title>
-          <ion-button fill="clear" color="danger" (click)="confirmarEliminar(ruta.id)" class="btn-eliminar">
+          <ion-button fill="clear" color="danger" (click)="confirmarEliminar(ruta.id)">
             <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </div>
-        
-        <div class="info-sub">
-          <ion-card-subtitle class="fecha-ruta">
-            <ion-icon name="time-outline"></ion-icon> {{ ruta.fechaCreacion | date:'short' }}
-          </ion-card-subtitle>
-          <ion-badge color="medium" class="badge-autor">
-            Usuario: {{ ruta.emailUsuario ? ruta.emailUsuario : 'Sin email' }}
-          </ion-badge>
-        </div>
+        <ion-card-subtitle>
+          <ion-icon name="time-outline"></ion-icon> {{ ruta.fechaCreacion | date:'short' }}
+        </ion-card-subtitle>
+        <!-- Mostramos el email del dueño para que el admin sepa de quién es -->
+        <ion-badge color="medium">
+          Usuario: {{ ruta.emailUsuario ? ruta.emailUsuario : 'Sin email' }}
+        </ion-badge>
       </ion-card-header>
 
       <ion-card-content>
-        <p class="descripcion-texto">{{ ruta.descripcion }}</p>
-        <ion-button expand="block" (click)="verRuta(ruta.id)" class="ion-margin-top btn-mapa">
+        <p>{{ ruta.descripcion }}</p>
+        <ion-button expand="block" (click)="verRuta(ruta.id)" class="ion-margin-top">
           <ion-icon slot="start" name="map-outline"></ion-icon>
           Visualizar en Mapa
         </ion-button>
@@ -36,8 +37,8 @@
   </ion-list>
 
   <ng-template #noRutas>
-    <div class="sin-rutas-contenedor">
-      <ion-icon name="trail-sign-outline" class="icono-sin-rutas"></ion-icon>
+    <div style="text-align: center; margin-top: 50px;">
+      <ion-icon name="trail-sign-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
       <p>No hay rutas registradas en el sistema.</p>
     </div>
   </ng-template>
