@@ -1,12 +1,14 @@
+// Forzamos a que el elemento nativo pinte el fondo gris y maneje su scroll de forma segura
 .contenido-modulo-admin {
-  --background: transparent;
-  background: transparent;
+  --background: #f1f3f6 !important;
+  background: #f1f3f6 !important;
+  display: block;
   height: 100%;
 }
 
 .bloque-contenedor {
   padding: 16px;
-  padding-bottom: 60px; // Evita el corte inferior en móviles
+  padding-bottom: 80px; // Espacio extra generoso para el scroll del móvil
 }
 
 .titulo-seccion-movil {
@@ -27,7 +29,7 @@
 
 .tarjeta-adaptativa {
   margin: 0 0 16px 0 !important;
-  background: #ffffff;
+  background: #ffffff !important; // Forzamos el color blanco de la tarjeta
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   border: 1px solid #e2e8f0;
