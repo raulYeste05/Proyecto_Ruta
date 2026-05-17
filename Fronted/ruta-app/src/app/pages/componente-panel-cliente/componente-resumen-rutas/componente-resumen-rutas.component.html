@@ -74,3 +74,37 @@
     </ng-template>
   </div>
 </ion-content>
+
+<ion-alert
+  [isOpen]="isAlertEliminarOpen"
+  header="¿Eliminar ruta?"
+  message="Esta acción borrará la ruta y todas sus paradas de forma permanente."
+  cssClass="custom-alert"
+  [buttons]="alertEliminarButtons"
+  (didDismiss)="isAlertEliminarOpen = false">
+</ion-alert>
+
+<ion-alert
+  [isOpen]="isAlertPublicarOpen"
+  header="Publicar en Comunidad"
+  [subHeader]="'Ruta: ' + (rutaSeleccionada?.titulo || '')"
+  cssClass="custom-alert"
+  [inputs]="[
+    {
+      name: 'contenido',
+      type: 'textarea',
+      placeholder: 'Cuéntales a otros qué tiene de especial esta ruta...'
+    }
+  ]"
+  [buttons]="alertPublicarButtons"
+  (didDismiss)="isAlertPublicarOpen = false">
+</ion-alert>
+
+<ion-alert
+  [isOpen]="isAlertQuitarOpen"
+  header="Retirar del foro"
+  message="¿Seguro que quieres quitar esta ruta de la sección de la comunidad?"
+  cssClass="custom-alert"
+  [buttons]="alertQuitarButtons"
+  (didDismiss)="isAlertQuitarOpen = false">
+</ion-alert>

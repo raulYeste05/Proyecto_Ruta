@@ -21,6 +21,49 @@ export class ComponenteResumenRutas implements OnInit {
   misRutas: any[] = [];
   userIdActual!: number; // Para guardar el ID del usuario logueado
 
+
+  // Variables de control para las alertas del HTML
+  isAlertEliminarOpen = false;
+  isAlertPublicarOpen = false;
+  isAlertQuitarOpen = false;
+  rutaSeleccionada: any = null;
+
+  // Configuración de botones de acción
+  alertEliminarButtons = [
+    { text: 'Cancelar', role: 'cancel' },
+    {
+      text: 'Eliminar',
+      role: 'destructive',
+      handler: () => { 
+        if (this.rutaSeleccionada) this.eliminarRuta(this.rutaSeleccionada.id); 
+      }
+    }
+  ];
+
+  alertPublicarButtons = [
+    { text: 'Cancelar', role: 'cancel' },
+    {
+      text: 'Publicar',
+      handler: (data: any) => { 
+        if (this.rutaSeleccionada) {
+          this.enviarPublicacion(this.rutaSeleccionada.id, this.rutaSeleccionada.titulo, data.contenido); 
+        }
+      }
+    }
+  ];
+
+  alertQuitarButtons = [
+    { text: 'Cancelar', role: 'cancel' },
+    {
+      text: 'Quitar',
+      role: 'destructive',
+      handler: () => { 
+        if (this.rutaSeleccionada) this.quitarPublicacion(this.rutaSeleccionada.id); 
+      }
+    }
+  ];
+
+
   constructor(
     private rutasService: RutasService,
     private clienteService: ClienteService,
@@ -76,38 +119,20 @@ export class ComponenteResumenRutas implements OnInit {
 
   // Método para confirmar la eliminación de una ruta
   // Método para confirmar la eliminación de una ruta
-  async confirmarEliminar(id: number) {
-    // Aseguramos que la ejecución comience limpia en la zona de Angular
-    this.zone.run(async () => {
-      try {
-        // Destruimos cualquier alerta previa duplicada en el DOM que bloquee la pantalla
-        await this.alertCtrl.dismiss().catch(() => {});
+  // MÉTODOS DE CORRECCIÓN: Ahora solo activan los toggles del HTML
+  confirmarEliminar(id: number) {
+    this.rutaSeleccionada = { id };
+    this.isAlertEliminarOpen = true;
+  }
 
-        const alert = await this.alertCtrl.create({
-          header: '¿Eliminar ruta?',
-          message: 'Esta acción borrará la ruta y todas sus paradas de forma permanente.',
-          cssClass: 'custom-alert',
-          // ESTO FUERZA AL NAVEGADOR A PONERLO POR ENCIMA DE CUALQUIER MODAL O MENÚ
-          htmlAttributes: {
-            style: 'z-index: 99999999 !important; position: fixed !important;'
-          },
-          buttons: [
-            { text: 'Cancelar', role: 'cancel' },
-            {
-              text: 'Eliminar',
-              role: 'destructive',
-              handler: () => { 
-                this.eliminarRuta(id); 
-              }
-            }
-          ]
-        });
+  async publicarRuta(ruta: any) {
+    this.rutaSeleccionada = ruta;
+    this.isAlertPublicarOpen = true;
+  }
 
-        await alert.present();
-      } catch (error) {
-        console.error("Error al presentar el alert de eliminación:", error);
-      }
-    });
+  async confirmarQuitarPublicacion(ruta: any) {
+    this.rutaSeleccionada = ruta;
+    this.isAlertQuitarOpen = true;
   }
 
   eliminarRuta(id: number) {
@@ -129,43 +154,7 @@ export class ComponenteResumenRutas implements OnInit {
     });
   }
 
-  async publicarRuta(ruta: any) {
-  this.zone.run(async () => {
-    try {
-      // Forzamos la limpieza de overlays activos flotantes
-      await this.alertCtrl.dismiss().catch(() => {});
-
-      const alert = await this.alertCtrl.create({
-        header: 'Publicar en Comunidad',
-        subHeader: `Ruta: ${ruta.titulo}`,
-        cssClass: 'custom-alert',
-        htmlAttributes: {
-          style: 'z-index: 99999999 !important; position: fixed !important;'
-        },
-        inputs: [
-          {
-            name: 'contenido',
-            type: 'textarea',
-            placeholder: 'Cuéntales a otros qué tiene de especial esta ruta...'
-          }
-        ],
-        buttons: [
-          { text: 'Cancelar', role: 'cancel' },
-          {
-            text: 'Publicar',
-            handler: (data) => {
-              this.enviarPublicacion(ruta.id, ruta.titulo, data.contenido);
-            }
-          }
-        ]
-      });
-
-      await alert.present();
-    } catch (error) {
-      console.error("Error al presentar el alert de publicación:", error);
-    }
-  });
-}
+  
 
   private enviarPublicacion(rutaId: number, titulo: string, contenido: string) {
     console.log("Publicando con UserID:", this.userIdActual);
@@ -202,28 +191,7 @@ export class ComponenteResumenRutas implements OnInit {
     });
   }
 
-  // Método para confirmar la eliminación de una publicación
-  async confirmarQuitarPublicacion(ruta: any) {
-    this.zone.run(async () => {
-      const alert = await this.alertCtrl.create({
-        header: 'Retirar del foro',
-        message: '¿Seguro que quieres quitar esta ruta de la sección de la comunidad?',
-        cssClass: 'custom-alert',
-        htmlAttributes: {
-          style: 'z-index: 99999999 !important; position: fixed !important;'
-        },
-        buttons: [
-          { text: 'Cancelar', role: 'cancel' },
-          {
-            text: 'Quitar',
-            role: 'destructive',
-            handler: () => { this.quitarPublicacion(ruta.id); }
-          }
-        ]
-      });
-      await alert.present();
-    });
-  }
+ 
 
   private quitarPublicacion(rutaId: number) {
     // CAMBIO AQUÍ: Llamamos a eliminarPublicacionPorRuta en lugar de eliminarPublicacion

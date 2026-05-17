@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';import { IonicModule } from '@ionic/angular';
 import { ClienteService } from '../../../services/cliente.service';
 import { GeoService } from '../../../services/geo.service';
-import { ComponenteResumenRutas } from '../componente-resumen-rutas/componente-resumen-rutas.component';
 import { validaciones } from '../../../Validators/validaciones';
 import { Router } from '@angular/router';
 
